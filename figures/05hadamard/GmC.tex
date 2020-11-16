@@ -1,0 +1,26 @@
+% !TEX root = ../../report.tex
+\begin{circuitikz}
+
+% OTA
+\node[ota, anchor=south, label={center:$Gm$}](ota) at (2,0) {};
+\draw (2,-0.5) node[](ota in){} node[right]{$-$};
+\draw (2,0.5) node[](ota ip){} node[right]{$+$};
+\draw (3.5,-0.4) node[](ota on){} node[left]{$-$};
+\draw (3.5,0.4) node[](ota op){} node[left]{$+$};
+
+% -
+\draw (ota ip)  to[short, -*] ++(-1,0) node[](inp){};
+\draw (ota in)  to[short, -*] ++(-1,0) node[](inn){};
+
+\draw (inn) to[C, l=$C_{\beta}$] ++(-1, 0) to[short, -o] ++(-1,0) node[left]{$v^-_{i0}$};
+\draw (inp) to[C, l_=$C_{\beta}$] ++(-1, 0) to[short, -o] ++(-1,0) node[left]{$v^+_{i0}$};
+\draw (inp.center) -- ++(0,2) to[C, l_=$C_{\beta}$] ++(-1, 0) to[short, -o] ++(-1,0) node[below, yshift=-0.5cm]{$\vdots$} node[left]{$v^+_{iN}$};
+\draw (inn.center) -- ++(0,-2) to[C, l=$C_{\beta}$] ++(-1, 0) to[short, -o] ++(-1,0) node[above, yshift=0.5cm]{$\vdots$} node[left]{$v^-_{iN}$};
+
+\draw (ota op.center) -- ++(2,0) to[C, l=$C$] ++(0,2) node[tground]{};
+\draw (ota on.center) -- ++(2,0) to[C, l=$C$] ++(0,-2) node[tground]{};
+
+\draw (ota op.center) ++(2,0) to[short, *-o] ++(1,0) node[right]{$v^+_{o}$};
+\draw (ota on.center) ++(2,0) to[short, *-o] ++(1,0) node[right]{$v^-_{o}$};
+
+\end{circuitikz}

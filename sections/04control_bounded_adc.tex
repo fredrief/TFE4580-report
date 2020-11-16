@@ -1,0 +1,239 @@
+% !TEX root = ../report.tex
+
+\chapter{Control-Bounded ADC}
+\label{sec:cbadc}
+\section{History and Background}
+Control-bounded A/D conversion is a conceptually new approach to the problem of creating a digital representation of an analog signal. The conversion technique has developed quite recently over the last years, and the progress is mainly pushed forward by prof. Hans-Andrea Loeliger et al., from the Signal and Information Processing Laboratory (ISI), ETH Zürich. The concept was first introduced at the IEEE Information Theory \& Applications Workshop (ITA), february 2011 \cite{cbc_2011_loeliger}. In this paper, the main building blocks of a control-bounded ADC was presented, but no explicit example of such an ADC was given, and no behavioural analysis presented. The approach was further developed in \cite{cbc_2015_loeliger}, which was published for the same conference in 2015. In this paper, the conversion algorithm is improved and a limited transfer function analysis is presented. The latest publication on control-bounded conversion is from 2020 \cite{cbc_2020_loeliger}. This is a longer paper with the goal of providing the sufficient information for analog designers to experiment with control-bounded ADCs. The paper provides a more details on the implementation and operation of the building blocks, together with a full transfer function analysis. Measurements on a proof-of-concept hardware prototype is also presented.
+
+In addition to the mentioned papers, Hampus Malmberg, co-author of the latest paper \cite{cbc_2020_loeliger}, has recently defended his Ph.D. on Control-Bounded Converters. The author has been given early access to a draft of the thesis that is not yet published \cite{malmberg_thesis}.
+
+In this section, the operating principle of a control-bounded converter is described in detail, and we follow the notation established in \cite{cbc_2020_loeliger}. The theoretical presentation given in this section will be very close to that of \cite{malmberg_thesis}, but less general and limited to what necessary for understanding the presented results. Certain derivations that would normally be cited, will be given in appendices as the reference is not available to the public.
+
+
+\section{Overview}
+The control-bounded ADC approaches the A/D conversion problem differently compared to the conventional converters from section \ref{sec:conventional_adc}. The control bounded ADC consists of three building blocks; an analog system (AS), digital control (DC) and digital estimator (DE). The complete system is illustrated in figure \ref{fig:cbadc}.
+
+\begin{figure}[htbp]
+    \input{figures/03theory/cbadc.tex}
+    \centering
+    \caption{The control-bounded A/D converter}
+    \label{fig:cbadc}
+\end{figure}
+
+The signals $\utv, \utvhat, \stvtilde, \skv$ and $\stv$ are in general vector-valued functions. It is evident that the structure of the continuous time $\sd$ converter from figure \ref{fig:ctsdmod} is very similar to that of figure \ref{fig:cbadc}. The fundamental difference between these converters lies in the interpretation of the intermediate quantity $\skv$. In the conventional view, this signal is a sampled and quantized version of the input signal $\utv$. In the control-bounded perspective, this signal is a control-signal that stabilizes the analog system, and is therefore only indirectly related to the input signal. These two perspectives result in two different ways of estimating $\utvhat$.
+
+The advantage of this approach may not be evident at first sight, as figure \ref{fig:cbadc} looks like a $\sd$ converter with an alternative decimation filter. The main contribution of this approach is that defines a new interface between the analog and digital domain, that enables combinations of ASs and DCs that where previously unimaginable. This will become more clear after the more detailed analysis of the building blocks, given in the following sections.
+
+\section{Analog System}
+\label{subsec:analog_system}
+The analog system (AS), here assumed to be a continuous time filter, sets the frequency response of the overall ADC, and is typically designed to amplify the frequency band of interest. As stability of the AS is controlled by the DC, the analog system itself need not be stable.
+
+\subsection{State Space Model}
+The dynamics of the AS is described using a state space model notation, illustrated in figure \ref{fig:as_state_space_model}.
+
+\begin{figure}[htbp]
+    \input{figures/03theory/as_state_space_model.tex}
+    \centering
+    \caption{State space model of the AS.}
+    \label{fig:as_state_space_model}
+\end{figure}
+
+The relation between a multi-channel input signal
+\begin{equation}
+    \label{eq:def_input_sig}
+    \utv \triangleq \left( u_1(t),..., u_L(t) \right)^\mathsf{T} \in \R^L,
+\end{equation}
+the state vector
+\begin{equation}
+    \label{eq:def_state_vector}
+    \xtv \triangleq \left( s_1(t),..., s_N(t) \right)^\mathsf{T} \in \R^N,
+\end{equation}
+and the control contribution
+\begin{equation}
+    \label{eq:def_control_contribution}
+    \stv \triangleq \left( x_1(t),..., x_M(t) \right)^\mathsf{T} \in \R^M
+\end{equation}
+is given by the differential equation
+\begin{equation}
+    \label{eq:state_space_equations}
+    \dot{\bm{x}}(t) = \Amat\xtv + \Bmat\utv + \Gmat\stv.
+\end{equation}
+
+We say that such a system has $L$ inputs, $M$ controls and $N$ states.
+Furthermore, the system matrix $\Amat \in \R^{N \times N}$, input matrix $\Bmat \in \R^{N \times L}$ and $\Gmat \in \R^{N \times M}$ are all real valued matrices.
+
+The AS additionally has two outputs: the control observation $\stvtilde$ and the signal observation $\ytv$. The former is an actual physical signal that is used by the DC to produce the control signal $\stv$. The latter is a purely conceptual signal, used by the DE when forming the estimate $\utvhat$. Specifically, the DC observes the control observation $\stvtilde$, which is a linear mapping of the state vector via the control observation matrix $\GmattildeT \in \R^{\tilde{M} \times N}$ as
+\begin{equation}
+    \label{eq:def_control_observation}
+    \stvtilde \triangleq \GmattildeT \xtv \in \R^{\tilde{M}}.
+\end{equation}
+Similarly, the DE uses $\tilde{N}$ state linear mappings as
+\begin{equation}
+    \label{eq:def_as_output}
+    \ytv \triangleq \CmatT \xtv
+\end{equation}
+where $\CmatT \in \R^{\tilde{N} \times N}$ is the signal observation matrix.
+
+Note that since both $\ytv$ and $\Cmat$ are purely conceptual quantities, they have no part in the physical design of the AS. This is indicated by dashed lines in figure \ref{fig:as_state_space_model}. Note also that the number of controls $M$ and the number of control observations $\tilde{M}$ are not required to be the same. Finally, note that the control contribution enter the AS in an additive way.
+
+\subsection{Transfer Function and Impulse Response Matrix}
+The set of differential equations (\ref{eq:state_space_equations}) result in the transfer function matrix
+\begin{equation}
+    \label{eq:atf}
+    \Gw = \CmatT (j\omega \eye_N - \Amat)^{-1} \Bmat \in \C^{\tilde{N} \times L}
+\end{equation}
+and impulse response matrix
+\begin{equation}
+    \label{eq:gtv}
+    \gtv = \CmatT \exp(\Amat t)\Bmat \in \R^{\tilde{N} \times L},
+\end{equation}
+where exp(.) denotes the matrix exponential.
+
+We will refer to (\ref{eq:atf}) as the analog transfer function (ATF) matrix and similarly (\ref{eq:gtv}) as the analog impulse response matrix. An element $G_{k,l}$ of $\Gw$ gives the transfer function from the input signal $u_l(t)$ to state $x_k(t)$, and similarly for $\gtv$. This means that for the case of a scalar input signal, the ATF matrix reduces to a column vector.
+
+\section{Digital Control}
+The DC is a discrete time system, synchronized by a clock with period denoted $T$. Its only task is to keep the state vector $\xtv$ bounded within its physical limits. A DC that can maintain a bounded AS state for a bounded input signal is called effective.
+
+The DC operates by observing a sampled and quantized version of the control observation (\ref{eq:def_control_observation}) and producing a control contribution (\ref{eq:def_control_contribution}) in response. The control contribution could in general take any waveform, but will here be assumed to be given by
+\begin{equation}
+    \label{eq:control_contribution_waveform}
+    s_\ell(t) = d(t-kT)s_\ell[k],
+\end{equation}
+where the waveform $d(t)$ is given by
+\begin{equation}
+    \label{eq:def_dac_waveform}
+    d(t) \triangleq
+    \begin{cases}
+        1 &\quad \text{if } t \in [0, T) \\
+        0 &\quad \text{otherwise}.
+    \end{cases}
+\end{equation}
+
+\subsection{Effective digital control?}
+
+\section{Digital Estimator}
+The digital estimator (DE) forms an estimate $\utvhat$ of $\utv$ based on the control signals $\skv$, its corresponding control contribution $\stv$ and the knowledge of the AS system parameters. The purpose of this section is to describe the digital estimation problem, and to derive the optimum linear estimation filter.
+
+Before going into details on the filter, we highlight the difference between the $\sd$- and the control-bounded interpretation of the control signals $\skv$ and $\stv$. In the $\sd$ perspective, $\skv$ represent a sampled and quantized version of some linear mapping of the state vector $\xtv$, cf. (\ref{eq:def_control_observation}). This interpretation results in the estimation filter being a low-pass filter, which constitutes the reconstruction part of a $\sd$ ADC together with a decimation filter.
+
+In the control-bounded perspective, we completely ignore this relation between $\skv$ and $\xtv$. Instead, we focus on the fact that the control contribution $\stv$ result in an effective control. We interpret $\stv$ as the control contribution needed to bound the state vector $\xtv$, triggered by the input signal $\utv$. Thus, the $\stv$ must contain some indirect information about the input signal. How accurately the input can be reconstructed from the control signal depends on the gain of the AS, as will become evident in the following analysis.
+
+\subsection{Statistical Estimation Problem and Transfer Functions}
+In the following analysis, the system described by (\ref{eq:state_space_equations}) is assumed to be invariant and stable. This assumption only applies in the analysis of this section, where the goal is to describe the estimation problem and derive the analytic transfer function expressions. The actual estimation filter will not be limited by these assumptions.
+
+Imagine the fictional signal
+\begin{equation}
+    \label{eq:def_y_breve}
+    \ytvbreve \triangleq (\bm{g} * \bm{u})(t) \in \R^{\tilde{N}},
+\end{equation}
+which is the signal observation that would have result in the absence of a DC. The actual signal observation can then be written as
+\begin{equation}
+    \label{eq:actual_observation}
+    \ytv = \ytvbreve -\qtv,
+\end{equation}
+where $\qtv$ is the control contribution seen at the signal observation, i.e. $\qtv = (\bm{h}*\bm{s})(t)$. (\ref{eq:actual_observation}) holds, because the control contribution enter the AS in an additive way, as indicated in figure \ref{fig:as_state_space_model}. Note at $\qtv$ is fully determined by $\skv$ and is therefore known to the DE.
+
+Given an estimation filter with impulse response matrix $\htv \in \R^{L \times \tilde{N}}$, the continuous time estimate $\utvhat$ of $\utv$ is given by
+\begin{equation}
+    \label{eq:uhat_conv_h_q}
+    \utvhat = (\bm{h} * \bm{q})(t) \in \R^{L}.
+\end{equation}
+This estimation problem is visualized in figure \ref{fig:cbc_estimation_problem}.
+\begin{figure}[htbp]
+    \centering
+    \input{figures/03theory/cbc_estimation_problem.tex}
+    \caption{The estimation problem of a control-bounded converter}
+    \label{fig:cbc_estimation_problem}
+\end{figure}
+
+In order to determine $\htv$, assume $\utv$ and $\ytv$ are both independent, multivariate, centered, and wide-sense stationary stochastic processes. We want the filter to minimize the mean square error between $\utvhat$ and $\utv$. Thus, the impulse response matrix $\htv$ should satisfy
+\begin{align}
+    \htv    & = \argmin_{\bar{\bm{h}}} \E[(\utvhat - \utv)^2] \\
+            & = \argmin_{\bar{\bm{h}}} \E[((\bar{\bm{h}}*\bm{q})(t) - \utv)^2].
+\end{align}
+This is exactly the objective of the Wiener-filter \cite{optimal_filtering}, and the impulse response matrix is given by the solution to the well known Wiener-Hopf equations:
+\begin{equation}
+    \label{eq:wiener_hopf}
+    (\bm{h}* \RqqT)(\tau) = \RuqT(-\tau)
+\end{equation}
+where
+\begin{align}
+    \RqqT & \triangleq \E[\qtv\bm{q}(t+\tau)^\mathsf{T}] \\
+    \RuqT & \triangleq \E[\utv\bm{q}(t+\tau)^\mathsf{T}]
+\end{align}
+are the autocovariance and cross-covariance respectively. By taking the Fourier transform of (\ref{eq:wiener_hopf}) we obtain the frequency response matrix $\Hw$ as
+\begin{equation}
+    \label{eq:Hw}
+    \Hw = \GwH \left( \Gw\GwH + \eta^2\eye_N \right)^{-1}
+\end{equation}
+The parameter $\eta$ is defined as $\eta \triangleq \frac{\sigma_{\bm{y}}^2}{\sigma_{\bm{u}}^2}$, where $\sigma_{\bm{y}}^2$ and $\sigma_{\bm{u}}^2$ are the power spectral densities of $\ytv$ and $\utv$ respectively.
+
+
+\textcolor{red}{Transfer functions? Scalar case? Bandwidth and $\eta$?}
+
+% By (\ref{eq:actual_observation}), this can be written as
+% \begin{align}
+%     \utvhat & = (\bm{h} * \bm{q})(t) \\
+%     & = (\bm{h} * \bm{\breve{y}})(t) - (\bm{h} * \bm{y})(t) \\
+%     & \approx (\bm{h} * \bm{\breve{y}})(t)     \label{eq:approximated_estimate}    \\
+%     & = (\bm{h}*\bm{g}*{u})(t).
+% \end{align}
+% The approximation in (\ref{eq:approximated_estimate}) is based on the
+
+\subsection{Estimation filter implementation}
+With the digital estimation filter described by (\ref{eq:Hw}), the estimation could in principle be carried out by computing $\utvhat$ as in (\ref{eq:uhat_conv_h_q}). This computation is however not straight forward. The signal $\qtv$ is not bounded by $\by$ and might therefore contain unbounded quantities. In addition, the computation of $\qtv$ from $\skv$ might also be computationally expensive.
+
+In \cite{cbc_2011_loeliger} it was shown that the estimate $\utvhat$ can be computed in an alternative way, using a non-standard version of the Kalman smoothing algorithm. This algorithm converges to the the estimate (\ref{eq:uhat_conv_h_q}) as the considered time window extends towards infinity. The algorithm is also indifferent to the stability assumptions made in the previous section. In this section, a concise description of the filter algorithm is given, and the reader is referred to \cite{cbc_2020_loeliger} for the derivation.
+
+The algorithm consist of a forward recursion
+\begin{equation}
+    \label{eq:mf}
+    \mf_{k+1} \triangleq \Af \mf_k +  \Bf\skvin{k},
+\end{equation}
+
+a backward recursion
+\begin{equation}
+    \label{eq:mf}
+    \mf_{k-1} \triangleq \Ab \mf_{k} +  \Bb\skvin{k-1},
+\end{equation}
+and finally the estimate
+\begin{equation}
+    \label{eq:uhat_filter_estimate}
+    \utvhatin{t_k} \triangleq \W{T}(\mb_k - \mf_k)
+\end{equation}
+
+The matrices $\Af, \Ab, \Bf, \Bb$ and $\W{}$ is computed offline, and is given by the following equations.
+\begin{equation}
+    \label{eq:def_Af}
+    \Af \triangleq \exp \left( \left( \bm{A} - \frac{1}{\eta^2} \Vf \right) T \right)
+\end{equation}
+\begin{equation}
+    \label{eq:def_Ab}
+    \Ab \triangleq \exp \left( - \left( \bm{A} + \frac{1}{\eta^2} \Vf \right) T \right)
+\end{equation}
+\begin{equation}
+    \label{eq:def_Bf}
+    \Bf \triangleq \int_0^T \exp \left( \left( \bm{A} - \frac{1}{\eta^2} \Vf \right) (T-\tau) \right)\Gmat d\tau
+\end{equation}
+\begin{equation}
+    \label{eq:def_Bb}
+    \Bb \triangleq -\int_0^T \exp \left( - \left( \bm{A} + \frac{1}{\eta^2} \Vf \right) (T-\tau) \right)\Gmat d\tau
+\end{equation}
+In equations (\ref{eq:def_Af} - \ref{eq:def_Bb}), $\exp(.)$ denotes the matrix exponential, which is not to be confused with the element-wise exponential operation.
+
+The matrices $\Vf$ and $\Vb$ used in (\ref{eq:def_Af} - \ref{eq:def_Bb}) is obtained by solving the continuous-time algebraic Riccati (CARE) equations
+\begin{equation}
+    \label{eq:Vf_care}
+    \Amat\Vf + \left( \Amat\Vf \right)^\mathsf{T} + \Bmat \Bmat^\mathsf{T} - \frac{1}{\eta^2}\Vf\CmatT\Cmat\Vf = \bm{0}_{N \times N}
+\end{equation}
+and
+\begin{equation}
+    \label{eq:Vb_care}
+    \Amat\Vb + \left( \Amat\Vb \right)^\mathsf{T} - \Bmat \Bmat^\mathsf{T} + \frac{1}{\eta^2}\Vb\CmatT\Cmat\Vb = \bm{0}_{N \times N}
+\end{equation}
+The matrix $\W{}$ is obtained by solving the linear equation system
+\begin{equation}
+    \label{eq:W_sys}
+    \left( \Vf + \Vb \right)\W{} = \Bmat
+\end{equation}
+

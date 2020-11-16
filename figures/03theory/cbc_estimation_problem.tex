@@ -1,0 +1,17 @@
+% !TEX root = ../../report.tex
+\begin{tikzpicture}[]
+
+    % --------------------- Nodes --------------------------------
+    \node[box] (Gw) at (1,0) {$\Gw$};
+    \node[circle, draw, inner sep=0.5mm] (add) at (3,0) {\Large+};
+    \node[box] (Hw) at (5,0) {$\Hw$};
+
+
+    % --------------------- Paths --------------------------------
+    \draw[arrow] (Gw.west) ++(-0.5,0) node[left]{$\utv$} -- (Gw.west);
+    \draw[arrow] (Gw.east) node[above, xshift=5mm]{$\ytvbreve$} -- (add.west);
+    \draw[arrow] (add.east) node[above, xshift=5mm]{$\qtv$} -- (Hw.west);
+    \draw[arrow] (add.north) ++(0,0.5) node[above]{$-\ytv$} -- (add.north);
+    \draw[arrow] (Hw.east) -- ++(0.5,0) node[right]{$\utvhat$} ;
+
+    \end{tikzpicture}

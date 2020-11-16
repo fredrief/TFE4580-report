@@ -1,0 +1,48 @@
+% !TEX root = ../report.tex
+
+\chapter{Conventional A/D conversion}
+\label{sec:conventional_adc}
+Conventional A/D converters can generally be divided into two main categories; Nyquist rate- and oversampling converters.
+
+\section{Nyquist Converters}
+\label{subsec:nyquist_adc}
+The classical approach to A/D conversion is to divide the conversion problem into two parts; sampling and quantization.
+\begin{figure}[htbp]
+    \input{figures/03theory/sample_centric_adc.tex}
+    \centering
+    \caption{The sample-centric view on A/D conversion.}
+    \label{fig:sample_centric_adc}
+\end{figure}
+
+\section{Oversampling converters}
+\label{subsec:oversampling_adc}
+Robustness by introducing redundancy in the form of oversampling. Oversampling ration refers to the nyquist rate and defined by
+\begin{equation}
+    \text{OSR} = \frac{f_s}{2f_0}
+\end{equation}
+
+Straight-forward oversampling itself gives an advantage 3dB per doubling of OSR.
+
+By introducing a feedback path with a loop filter, less error and better resolution can be obtained in a certain frequency band. Effect known as noise shaping. Such a system is known as a \sdmod. A discrete time \sdmod is shown in figure \ref{fig:dtsdmod}.
+
+\begin{figure}[htbp]
+    \input{figures/03theory/dtsdm.tex}
+    \centering
+    \caption{The sample-centric view on A/D conversion.}
+    \label{fig:dtsdmod}
+\end{figure}
+
+A continuous time \sdmod is achieved by including the sampling in the feedback loop. In this case, the anti-aliasing filter is part of loop filter $G(e^{j\Omega})$. A continuous time \sdmod is shown in figure \ref{fig:ctsdmod}.
+
+\begin{figure}[htbp]
+    \input{figures/03theory/ctsdm.tex}
+    \centering
+    \caption{The sample-centric view on A/D conversion.}
+    \label{fig:ctsdmod}
+\end{figure}
+
+\sdmod analysis
+
+
+Transfer functions
+

@@ -1,0 +1,23 @@
+% !TEX root = ../../report.tex
+\begin{tikzpicture}[]
+
+    % --------------------- Nodes --------------------------------
+    \node[box] (AS) at (1,0) {AS};
+    % Sampler
+    \draw (2,0) node[anchor=west](sampler-west){} to[short, -*] ++(0.5, 0) -- ++(0.5, 0.2);
+    \draw (3, 0) -- ++(0.5, 0) node[anchor=east](sampler-east){};
+
+    \node[box] (quantizer) at (4.5,0) {\quantizer};
+    \node[box] (DC) at (6.5,0) {DC};
+    \node[box] (DE) at (8.5,0) {DE};
+
+    % --------------------- Paths --------------------------------
+    \draw[arrow] (0, 0) node[left]{$\utv$} -- (AS.west);
+    \draw (AS.east) node[right, yshift=4mm]{$\stvtilde$} -- (sampler-west);
+    \draw[arrow] (sampler-east) -- (quantizer.west);
+    \draw[arrow] (quantizer.east) -- (DC.west);
+    \draw[arrow] (DC.east) node[right, yshift=4mm] {$\skv$} -- (DE.west);
+    \draw[arrow] (DE.east) -- ++(0.5,0) node[right] {$\utvhat$};
+
+    \draw[arrow] (DC.south) -- ++(0,-0.5) -| (AS.south) node[pos=0.25, yshift=-3mm] {$\stv$};
+    \end{tikzpicture}

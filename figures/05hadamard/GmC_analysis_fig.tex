@@ -1,0 +1,24 @@
+% !TEX root = ../../report.tex
+\begin{circuitikz}[transform shape, scale=0.8]
+
+% OTA
+\node[ota, anchor=south, label={center:$Gm$}](ota) at (2,0) {};
+\draw (2,-0.5) coordinate[](ota in){} node[right]{$-$};
+\draw (2,0.5) coordinate[](ota ip){} node[right]{$+$};
+\draw (3.5,0) coordinate[](ota out){};
+
+% -
+\draw (ota in)  -- ++(-0.5, 0) -- ++(0,-1) node[tground]{};
+\draw (ota ip)  to[short, -*] ++(-2,0) node[label={above:$v_{a}$}](inp){};
+
+\draw (inp) to[C, l=$C_{in}$] ++(0,-2) node[tground]{};
+\draw (inp) to[short, -*] ++(-2,0) coordinate[](sin){} to[C, l=$C_{\kappa\beta}$] ++(0,-2) node[tground]{} node[below]{$s$};
+\draw (sin) to[short, -*] ++(-2,0) coordinate[](xn-1){} to[C, l=$C_{\beta}$] ++(0,-2) node[tground]{} node[below]{$v_{i(N-1)}$};
+\draw (xn-1) -- ++(-1,0) node[minimum width=0.5cm, anchor=east](dots){$\cdots$};
+\draw (dots.west) to[short, -*] ++(-1,0) coordinate[](x1){} to[C, l=$C_{\beta}$] ++(0,-2) node[tground]{} node[below]{$v_{1}$};
+\draw (x1) to[C, l=$C_{\beta}$, -o] ++(-2,0) node[left]{$v_{i0}$};
+
+\draw (ota out) to[short, -*] ++(2,0) coordinate[](cint) to[C, l=$C$] ++(0,-2) node[tground]{};
+\draw (cint) to[short, -o] ++(1,0) node[right]{$v_{o0}$};
+
+\end{circuitikz}

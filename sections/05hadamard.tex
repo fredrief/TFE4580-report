@@ -1,0 +1,182 @@
+% !TEX root = ../report.tex
+
+\chapter{Hadamard ADC}
+The main advantage of control-bounded ADCs is flexibility. The only requirement set on the system by the estimation filter is that the it obeys the differential equations (\ref{eq:state_space_equations}). This flexibility allows the designer to taylor the system against the application to a larger degree than what is possible in conventional ADC.
+
+The application of this work is modern high-end ultrasound probes. Such probes has up to 10,000 transducers stacked in a 2D array, and the large number of transducers is used for beamforming. With todays technology, having 10,000 ADCs inside the probe is not possible due to restrictions on area and current consumption. Todays solutions therefore employ combinations of analog and digital beamforming, dividing the transducer array into sub arrays sharing one ADC. The transducers of each sub array are combined with analog delay-and-add techniques. Having full control of each transducer would of course be favorable.
+
+In this work, we want to take advantage of this number of channels. Instead of converting each channel individually we view the problem of converting 10,000 analog signals as one big task, resulting in one huge ADC instead of 10,000 smaller ones. The goal is that the resulting ADC will have a current consumption less than 10,000 times a single state-of-the-art ADC.
+
+The Hadamard ADC is based on the chain-of-integrator ADC and apply the Hadamard matrix, $\Hn{N}$, to rotate the state vector of the analog system. For N being powers of two, the Hadamard matrix is defined recursively as
+\begin{equation}
+    \label{eq:def_Hn}
+    \Hn{N} = \Hn{2} \otimes \Hn{\nicefrac{N}{2}}
+\end{equation}
+where
+\begin{equation}
+    \label{eq:def_H2}
+    \Hn{2} =
+    \begin{pmatrix}
+    1 & 1 \\
+    1 & -1
+    \end{pmatrix}
+\end{equation}
+
+The Hadamard matrix is an orthogonal matrix with the useful properties
+\begin{equation}
+    \label{eq:Hmat_symmetry}
+    \Hn{N} = \Tr{\Hn{N}}
+\end{equation}
+and
+\begin{equation}
+    \label{eq:Hmat_inverse}
+    \Tr{\Hn{N}}\Hn{N} = N\eyen{N}.
+\end{equation}
+
+When transforming the state vector, the energy from all input channels will be equally distributed over all involved components. The consequence of this is that the overall ADC can be scaled towards the average, rather than the maximum signal energy. Depending on the spatial peak-to-average ration of the input channels, this will result in a gain of SNR, as will be further explored the next chapter.
+
+\section{Hardware implementation}
+The Hadamard ADC is described by the equations
+\begin{align}
+    \dot{\bm{x}}(t) & = \Amat_H \xtv + \Bmat_H \utv + \Gmat_H \stv \\
+    \ytv & = \CmatT_H \xtv
+\end{align}
+and
+\begin{align}
+    \stvtilde & = \GmattildeT_H \xtv.
+\end{align}
+
+The state-space matrices $\Amat_H, \Bmat_H, \Gmat_H$ and $\CmatT_H$ must be chosen such that the state-vector rotation is obtained, and at the same time provide an appropriate ATF. The physical implementation of the state vector $\xtv$, i.e. which physical nodes of the system is treated as a state, is also a design choice to be made. The physical implementation of $\xtv$ will influence the choice of state-space matrices.
+
+One such choice of matrices is
+\begin{align}
+    \Amat_H & = \frac{1}{N}\Hn{N}\Amat_{CI}\Tr{\Hn{N}} \\
+    \Bmat_H & = \frac{1}{N}\Hn{N}\Bmat_{CI} \\
+    \Gmat_H & = \frac{1}{N}\Hn{N}\Gmat_{CI} \\
+    \CmatT_H & = \CmatT_{CI} \Tr{\Hn{N}}
+\end{align}
+and
+\begin{equation}
+    \GmattildeT_H = \GmattildeT_{CI} \Tr{\Hn{N}}.
+\end{equation}
+where  $\Amat_{CI}, \Bmat_{CI}, \Gmat_{CI}, \CmatT_{CI}$ and $\GmattildeT_{CI}$ refers to the parametrization of the chain-of-integrator ADC from chapter ??. The corresponding hardware implementation is shown in figure \ref{fig:HCI_AS_00}.
+
+This choice of state space matrices has the convenient feature of resulting in an identical ATF as the the chain-of-integrator ADC. Recalling the expression for the ATF from section \ref{subsec:analog_system} we get
+\begin{align}
+    \bm{G}_H(\omega) & = \CmatT_H \left( j\omega \eyen{N} - \Amat_H \right)^{-1} \Bmat_H \\
+    & = \CmatT_{CI} \Tr{\Hn{N}} \left( j\omega \eyen{N} - \frac{1}{N}\Hn{N}\Amat_{CI}\Tr{\Hn{N}} \right)^{-1} \frac{1}{N}\Hn{N}\Bmat_{CI} \\
+    & = \CmatT_{CI} \Tr{\Hn{N}} \left( \frac{1}{\sqrt{N}}\Hn{N} \left( j\omega \eyen{N} - \Amat_{CI} \right) \frac{1}{\sqrt{N}}\Tr{\Hn{N}} \right)^{-1} \frac{1}{N}\Hn{N}\Bmat_{CI} \\
+    & = \CmatT_{CI} \Tr{\Hn{N}} \left( \frac{1}{\sqrt{N}}\Tr{\Hn{N}} \right)^{-1} \left( j\omega \eyen{N} - \Amat_{CI} \right)^{-1} \left( \frac{1}{\sqrt{N}}\Hn{N} \right)^{-1}\frac{1}{N}\Hn{N}\Bmat_{CI} \\
+    & = \CmatT_{CI} \left( \frac{1}{N}\Tr{\Hn{N}}\Hn{N} \left( j\omega \eyen{N} - \Amat_{CI} \right) \frac{1}{N}\Tr{\Hn{N}}\Hn{N} \right)^{-1} \Bmat_{CI} \\
+    & = \CmatT_{CI} \left( j\omega \eyen{N} - \Amat_{CI} \right)^{-1} \Bmat_{CI} \\
+    & = \bm{G}_{CI}(\omega)
+\end{align}
+
+
+
+\begin{sidewaysfigure}[htbp]
+    \begin{center}
+        \input{figures/05hadamard/HCI_AS_00.tex}
+    \end{center}
+    \caption{One possible hardware implementation of the Hadamard ADC AS for $N=4$}
+    \label{fig:HCI_AS_00}
+\end{sidewaysfigure}
+
+This system has one major disadvantage. The buffers ($K$) has to be implemented using active components, hence contributing considerably to the current consumption without applying any gain. To utilize all active components, we propose the implementation shown in figure \ref{fig:HCI_AS_01}.
+The only difference between the two hardware implementations is that the buffers from figure \ref{fig:HCI_AS_00} is replaced by integrators. This implies that the intermediate states labeled $x'_i$ in figure \ref{fig:HCI_AS_00} now need to be interpreted as independent states.
+
+The state-space matrices for this system can be written as
+\begin{align}
+    \Amat_H & = \bm{H}'_N \Amat'_{CI} \\
+    \Bmat_H & = \bm{H}'_N \Bmat_{CI}
+\end{align}
+and
+
+\begin{equation}
+    \CmatT_H = \CmatT_{CI}
+\end{equation}
+where
+\begin{equation}
+    \bm{H}'_N \triangleq
+    \begin{pmatrix}
+        \Hn{\nicefrac{N}{2}} & \bm{0}_{\nicefrac{N}{2}} \\
+        \bm{0}_{\nicefrac{N}{2}} & \Hn{\nicefrac{N}{2}}
+    \end{pmatrix}
+\end{equation}
+and
+\begin{equation}
+    \Amat'_{CI} =
+    \begin{pmatrix}
+        \bm{0}_{\nicefrac{N}{2}} & \beta \bm{L}_{\nicefrac{N}{2}} \\
+        \beta \eyen{\nicefrac{N}{2}} & \bm{0}_{\nicefrac{N}{2}}
+    \end{pmatrix}.
+\end{equation}
+
+$\Amat'_{CI}$ is system matrix that would have resulted if the Hadamard matrices $\Hn{\nicefrac{N}{2}}$ of figure \ref{fig:HCI_AS_01} was not present.
+The sub-matrix $\Amat_F$ describes the feedback from right to left in figure \ref{fig:HCI_AS_01}. Note that this feedback is only graphical, there is no feedback in the signal path. As an example, the matrix describing the system of figure \ref{fig:HCI_AS_01} is
+
+\begin{equation}
+    \Amat_H = \bm{H}'_8 \Amat'_{CI} =
+    \begin{pmatrix}
+        1 & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\
+        1 & -1 & 1 & -1 & 0 & 0 & 0 & 0 \\
+        1 & 1 & -1 & -1 & 0 & 0 & 0 & 0 \\
+        1 & -1 & -1 & 1 & 0 & 0 & 0 & 0 \\
+        0 & 0 & 0 & 0 & 1 & 1 & 1 & 1 \\
+        0 & 0 & 0 & 0 & 1 & -1 & 1 & -1 \\
+        0 & 0 & 0 & 0 & 1 & 1 & -1 & -1 \\
+        0 & 0 & 0 & 0 & 1 & -1 & -1 & 1
+    \end{pmatrix}
+    \begin{pmatrix}
+        0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+        0 & 0 & 0 & 0 & \beta & 0 & 0 & 0 \\
+        0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+        0 & 0 & 0 & 0 & 0 & 0 & \beta & 0 \\
+        \beta & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+        0 & \beta & 0 & 0 & 0 & 0 & 0 & 0 \\
+        0 & 0 & \beta & 0 & 0 & 0 & 0 & 0 \\
+        0 & 0 & 0 & \beta & 0 & 0 & 0 & 0
+    \end{pmatrix}
+\end{equation}
+
+\begin{sidewaysfigure}[htbp]
+    \centering
+    \input{figures/05hadamard/HCI_AS_01.tex}
+    \caption{Proposed hardware implementation of the Hadamard ADC AS for $N=8$}
+    \label{fig:HCI_AS_01}
+\end{sidewaysfigure}
+
+The resulting ATF from this parameterization is
+\begin{align}
+    \bm{G}_H(\omega) & = \CmatT_H \left( j\omega \eyen{N} - \Amat_H \right)^{-1} \Bmat_H \\
+    & = \CmatT_{CI} \left( j\omega \eyen{N} - \bm{H}'_N \Amat_{CI} \right)^{-1} \bm{H}'_N \Bmat_{CI} \\
+    & = \CmatT_{CI} \left(\bm{H}'^{-1}_N \left( j\omega \eyen{N} - \bm{H}'_N \Amat_{CI} \right) \right)^{-1} \Bmat_{CI} \\
+    & = \CmatT_{CI} \left(j\omega \bm{H}'^{-1}_N \eyen{N} - \bm{H}'^{-1}_N \bm{H}'_N \Amat_{CI} \right)^{-1} \Bmat_{CI} \\
+    & = \CmatT_{CI} \left(j\omega \bm{H}'^{-1}_N \eyen{N} - \Amat_{CI} \right)^{-1} \Bmat_{CI}
+\end{align}
+which does not equal $\bm{G}_{CI} = \CmatT_{CI} \left( j\omega \eyen{N} - \Amat_{CI} \right)^{-1} \Bmat_{CI}$.
+However, it can be shown that
+\begin{equation}
+    ||\bm{G}_H(\omega)||_2 = \left( \frac{N}{2} \right)^{\frac{N}{2}}||\bm{G}_{CI}(\omega)||_2
+\end{equation}
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/05hadamard/GmC.tex}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/05hadamard/GmC_analysis_fig.tex}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/05hadamard/OpampRC.tex}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \input{figures/05hadamard/H4_Z.tex}
+\end{figure}
+

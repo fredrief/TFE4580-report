@@ -1,0 +1,13 @@
+% !TEX root = ../../report.tex
+\begin{tikzpicture}[circuit ee IEC]
+
+\node[box] (lpf) at (0,0) {\lpf};
+\node[box] (quantizer) at (3,0) {\quantizer};
+
+\draw[arrow] (-1.5, 0) node[left]{$u(t)$} -- (lpf.west);
+\draw (lpf.east)  node[right, yshift=-0.4cm]{$\tilde{u}(t)$} -- ++(0.5, 0) to[short, *-] ++(0.5, 0.2);
+\draw[arrow] (1.5, 0) -- (quantizer.west);
+\draw[arrow] (quantizer.east) -- ++(1, 0)  node[right]{$\hat{u}[k]$};
+
+
+\end{tikzpicture}

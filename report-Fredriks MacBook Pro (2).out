@@ -1,0 +1,14 @@
+\BOOKMARK [0][-]{chapter.1}{Introduction}{}% 1
+\BOOKMARK [0][-]{chapter.2}{Control-Bounded ADC}{}% 2
+\BOOKMARK [1][-]{section.2.1}{History and Background}{chapter.2}% 3
+\BOOKMARK [1][-]{section.2.2}{Overview}{chapter.2}% 4
+\BOOKMARK [1][-]{section.2.3}{Analog System}{chapter.2}% 5
+\BOOKMARK [2][-]{subsection.2.3.1}{State Space Model}{section.2.3}% 6
+\BOOKMARK [2][-]{subsection.2.3.2}{Transfer Function and Impulse Response Matrix}{section.2.3}% 7
+\BOOKMARK [1][-]{section.2.4}{Digital Control}{chapter.2}% 8
+\BOOKMARK [2][-]{subsection.2.4.1}{Effective digital control?}{section.2.4}% 9
+\BOOKMARK [1][-]{section.2.5}{Digital Estimator}{chapter.2}% 10
+\BOOKMARK [2][-]{subsection.2.5.1}{Statistical Estimation Problem and Transfer Functions}{section.2.5}% 11
+\BOOKMARK [2][-]{subsection.2.5.2}{Estimation filter implementation}{section.2.5}% 12
+\BOOKMARK [0][-]{chapter.3}{Hadamard ADC}{}% 13
+\BOOKMARK [1][-]{section.3.1}{Hardware implementation}{chapter.3}% 14

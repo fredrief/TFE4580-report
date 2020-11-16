@@ -1,0 +1,86 @@
+% !TEX root = ../../report.tex
+
+\begin{tikzpicture}
+    % --------------------- Nodes -------------------------------- %
+    \node[box,anchor=north west, minimum width=3cm, minimum height=8cm](H0) at (-1,0) {$\Hn{4}(Z)$};
+    \node[box,anchor=north west, minimum width=3cm, minimum height=8cm](H1) at (6,0) {$\Hn{4}(Z)$};
+    \foreach \x in {0,1,2,3}
+        \draw
+            (-0.8, -0.75 -2*\x) node[]{\tiny{$+$}}
+            (-0.8, -1.25 -2*\x) node[]{\tiny{$-$}}
+            (1.8, -0.75 -2*\x) node[]{\tiny{$+$}}
+            (1.8, -1.25 -2*\x) node[]{\tiny{$-$}}
+        ;
+    \foreach \x in {0,1,2,3}
+        \draw
+            (6.2, -0.75 -2*\x) node[]{\tiny{$+$}}
+            (6.2, -1.25 -2*\x) node[]{\tiny{$-$}}
+            (8.8, -0.75 -2*\x) node[]{\tiny{$+$}}
+            (8.8, -1.25 -2*\x) node[]{\tiny{$-$}}
+        ;
+
+    \node[box, minimum width=1cm, minimum height=1cm](int0) at (4,-1) {$\int$};
+    \node[box, minimum width=1cm, minimum height=1cm](int1) at (4,-3) {$\int$};
+    \node[box, minimum width=1cm, minimum height=1cm](int2) at (4,-5) {$\int$};
+    \node[box, minimum width=1cm, minimum height=1cm](int3) at (4,-7) {$\int$};
+
+    \node[box, minimum width=1cm, minimum height=1cm](buf0) at (11,-1) {$K$};
+    \node[box, minimum width=1cm, minimum height=1cm](buf1) at (11,-3) {$K$};
+    \node[box, minimum width=1cm, minimum height=1cm](buf2) at (11,-5) {$K$};
+    \node[box, minimum width=1cm, minimum height=1cm](buf3) at (11,-7) {$K$};
+
+    % --------------------- Paths -------------------------------- %
+    \foreach \x in {0,1,2,3}{
+        \draw
+        (-1.5, -2*\x - 0.75) to[short, o-] ++(0.5,0)
+        (-1.5, -2*\x - 1.25) to[short, o-] ++(0.5,0)
+        (2, -2*\x - 0.75) to[short, -] (3.5, -2*\x - 0.75)
+        (2, -2*\x - 1.25) to[short, -] (3.5, -2*\x - 1.25)
+        (4.5, -2*\x - 0.75) to[short, -] (6, -2*\x - 0.75)
+        (4.5, -2*\x - 1.25) to[short, -] (6, -2*\x - 1.25)
+        (9, -2*\x - 0.75) to[short, -] (10.5, -2*\x - 0.75)
+        (9, -2*\x - 1.25) to[short, -] (10.5, -2*\x - 1.25)
+        (11.5, -2*\x - 0.75) to[short, -o] (12.5, -2*\x - 0.75)
+        (11.5, -2*\x - 1.25) to[short, -o] (12.5, -2*\x - 1.25)
+
+        ;
+    }
+
+    % --------------------- Nodes -------------------------------- %
+    \draw
+        (-1.75, -0.65 - 2*0) node[]{\textcolor{OliveGreen}{\tiny{$+$}}}
+        (-1.75, -1 - 2*0) node[]{\textcolor{OliveGreen}{$u_0$}}
+        (-1.75, -1.35 - 2*0) node[]{\textcolor{OliveGreen}{\tiny{$-$}}}
+
+        (-1.75, -0.65 - 2*1) node[]{\textcolor{orange}{\tiny{$+$}}}
+        (-1.75, -1 - 2*1) node[]{\textcolor{orange}{$x'_0$}}
+        (-1.75, -1.35 - 2*1) node[]{\textcolor{orange}{\tiny{$-$}}}
+
+        (-1.75, -0.65 - 2*2) node[]{\textcolor{OliveGreen}{\tiny{$+$}}}
+        (-1.75, -1 - 2*2) node[]{\textcolor{OliveGreen}{$u_1$}}
+        (-1.75, -1.35 - 2*2) node[]{\textcolor{OliveGreen}{\tiny{$-$}}}
+
+        (-1.75, -0.65 - 2*3) node[]{\textcolor{orange}{\tiny{$+$}}}
+        (-1.75, -1 - 2*3) node[]{\textcolor{orange}{$x'_2$}}
+        (-1.75, -1.35 - 2*3) node[]{\textcolor{orange}{\tiny{$-$}}}
+    ;
+    \foreach \x in {0,1,2,3}
+        \draw
+            (2.75, -0.65 - 2*\x) node[]{\textcolor{red}{\tiny{$+$}}}
+            (2.75, -1 - 2*\x) node[]{\textcolor{red}{$s'_{\x}$}}
+            (2.75, -1.35 - 2*\x) node[]{\textcolor{red}{\tiny{$-$}}}
+        ;
+    \foreach \x in {0,1,2,3}
+        \draw
+            (5.25, -0.65 - 2*\x) node[]{\textcolor{orange}{\tiny{$+$}}}
+            (5.25, -1 - 2*\x) node[]{\textcolor{orange}{$x_{\x}$}}
+            (5.25, -1.35 - 2*\x) node[]{\textcolor{orange}{\tiny{$-$}}}
+        ;
+    \foreach \x in {0,1,2,3}
+        \draw
+            (12, -0.65 - 2*\x) node[]{\textcolor{orange}{\tiny{$+$}}}
+            (12, -1 - 2*\x) node[]{\textcolor{orange}{$x'_{\x}$}}
+            (12, -1.35 - 2*\x) node[]{\textcolor{orange}{\tiny{$-$}}}
+        ;
+
+\end{tikzpicture}

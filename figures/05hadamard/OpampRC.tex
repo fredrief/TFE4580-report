@@ -1,0 +1,22 @@
+% !TEX root = ../../report.tex
+\begin{circuitikz}
+
+% Opamp
+\node[fd op amp](opamp) at (2,0) {};
+
+\draw (opamp.+)  to[short, *-*] ++(-1,0) node[](inp){};
+\draw (opamp.-)  to[short, *-*] ++(-1,0) node[](inn){};
+
+\draw (inp) to[R, l=$R_{\beta}$] ++(-2, 0) to[short, -o] ++(-1,0) node[left]{$v^+_{i0}$};
+\draw (inn) to[R, l_=$R_{\beta}$] ++(-2, 0) to[short, -o] ++(-1,0) node[left]{$v^-_{i0}$};
+\draw (inp.center) -- ++(0,3) to[R, l_=$R_{\beta}$] ++(-2, 0) to[short, -o] ++(-1,0) node[below, yshift=-0.5cm]{$\vdots$} node[left]{$v^-_{iN}$};
+\draw (inn.center) -- ++(0,-3) to[R, l=$R_{\beta}$] ++(-2, 0) to[short, -o] ++(-1,0) node[above, yshift=0.5cm]{$\vdots$} node[left]{$v^+_{iN}$};
+
+\draw (opamp.out +) -- ++(0,1) to[C, l_=$C$] ++(-2,0) -| (opamp.-);
+\draw (opamp.out -) -- ++(0,-1) to[C, l=$C$] ++(-2,0) -| (opamp.+);
+
+\draw (opamp.out +) to[short, *-o] ++(2,0) node[right]{$v^+_o$};
+\draw (opamp.out -) to[short, *-o] ++(2,0) node[right]{$v^-_o$};
+
+
+\end{circuitikz}

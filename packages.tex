@@ -1,0 +1,41 @@
+% !TEX root = report.tex
+
+\usepackage[utf8]{inputenc}
+\usepackage{cite}
+\usepackage[hidelinks]{hyperref}
+
+% Math
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{nicefrac}
+\usepackage{bm}
+
+% For tables
+\usepackage[table, dvipsnames]{xcolor}
+\usepackage{tabularx, booktabs}
+\usepackage{multirow}
+
+% Figures
+\usepackage{rotating}
+
+% Units
+\usepackage{siunitx}
+\sisetup{
+    exponent-product = \cdot,
+    separate-uncertainty = true,
+    per-mode = symbol,
+    group-digits = false,
+    detect-weight=true,
+    detect-family=true,
+    detect-all
+}
+% Tikz
+\usepackage{tikz}
+\usepackage[siunitx]{circuitikz}
+\usetikzlibrary{shapes,arrows.meta, calc, automata, positioning, chains, decorations.markings, patterns, angles, quotes, math}
+
+% Tikzset
+\input{figures/tikzset.tex}
+\usepackage{pgfplots}
+\usepackage{graphicx} % Figures/graphics
+\usepackage{float} % Floats, H
+
