@@ -1,78 +1,91 @@
 % !TEX root = ../../report.tex
-% \begin{tikzpicture}[x=0.5cm, y=0.5cm,
-%     tiny circuit symbols]
-%     % --------------------- Nodes -------------------------------- %
+\begin{circuitikz}[scale=0.6, transform shape]
+    \ctikzset{resistor = european}
 
-%     \foreach \i in {0,1,2,3}
-%     {
-%       \node [] (ip \i) at (-2,-1 - 4*\i) {};
-%       \node [] (in \i) at (-2,-2 - 4*\i) {};
+    % BOX
+    \node[anchor=north west, draw, ultra thick, minimum width=20.5cm, minimum height=20cm] at (-2.5,2.5) {};
 
-%       \node [] (op \i) at (16,-1 - 4*\i) {};
-%       \node [] (on \i) at (16,-2 - 4*\i) {};
+    % LABELS
+    \foreach \y in {0,1,2,3}{
+        \node[above]() at (-3, -5*\y + 0.5) {\bm{$+$}};
+        \node[below]() at (-3, -5*\y - 0.5) {\bm{$-$}};
+        \node[above]() at (18.5, -5*\y + 0.5) {\bm{$+$}};
+        \node[below]() at (18.5, -5*\y - 0.5) {\bm{$-$}};
+    }
 
-%       \foreach \j in {0,1,2,3}{
-%         \node [resistor, info=\tiny{$Z$}] (res \i \j p) at (1 + \j*4, -1 - \i*4) {};
-%         \node [resistor, info=below:\tiny{$Z$}] (res \i \j n) at (1 + \j*4, -2 - \i*4) {};
-%         \node [left=0.3cm of res \i \j p.west](rin \i \j p){};
-%         \node [left=0.2cm of res \i \j n.west](rin \i \j n){};
+    % OUTPUTS
+    \foreach \y in {0,-5,-10,-15}{
+        \draw (2,\y + 0.5) -- ++(0,1) -- ++(15,0) to[short, -*] ++(0,-1) to[short, -o] ++(2,0);
+        \draw (2,\y - 0.5) -- ++(0,-1) -- ++(15,0) to[short, -*] ++(0,1) to[short, -o] ++(2,0);
+        \draw (7,\y + 0.5) to[short, -*] ++(0,1);
+        \draw (7,\y - 0.5) to[short, -*] ++(0,-1);
+        \draw (12,\y +  0.5) to[short, -*] ++(0,1);
+        \draw (12,\y - 0.5) to[short, -*] ++(0,-1);
+    }
 
-%       }
-%     }
-%     % --------------------- OUTPUT Paths -------------------------------- %
-%     \draw (res 00p.east) -- ++(1,0) -- ++(0,1) -- ++(13,0) -- ++(0,-1) to[short, -o] ++(1,0) node[above]{\tiny{$+$}};
-%     \draw (res 00n.east) -- ++(1,0) -- ++(0,-1) -- ++(13,0) -- ++(0,1) to[short, -o] ++(1,0) node[below]{\tiny{$-$}};
-%     \draw (res 01p.east) -- ++(1,0) -- ++(0,1) node[dot]{};
-%     \draw (res 01n.east) -- ++(1,0) -- ++(0,-1) node[dot]{};
-%     \draw (res 02p.east) -- ++(1,0) -- ++(0,1) node[dot]{};
-%     \draw (res 02n.east) -- ++(1,0) -- ++(0,-1) node[dot]{};
-%     \draw (res 03p.east) -- ++(2,0)  node[dot]{};
-%     \draw (res 03n.east) -- ++(2,0)  node[dot]{};
+    % INPUT 1
+    \draw (-3.5,0.5) to[short, o-*] (-1.5,0.5) -- ++(0.5,0);
+    \draw (-3.5,-0.5) to[short, o-*] (-1,-0.5);
+    \draw (-1.5,0.5) to[short, -*] (-1.5,0.5-5) -- ++(0.5, 0);
+    \draw (-1.5,0.5-5) to[short, -*] (-1.5,0.5-10) -- ++(0.5, 0);
+    \draw (-1.5,0.5-10) to[short, -] (-1.5,0.5-15) -- ++(0.5, 0);
+    \draw (-1,-0.5) to[short, -*] (-1,-0.5-5);
+    \draw (-1,-0.5-5) to[short, -*] (-1,-0.5-10);
+    \draw (-1,-0.5-10) to[short, -] (-1,-0.5-15);
+
+    % INPUT 2
+    \draw (-3.5,0.5-5) to[short, o-] (-2,0.5-5) -- ++(0,1.5) to[short, -*] ++(5.5, 0) coordinate[](22p);
+    \draw (-3.5,-0.5-5) to[short, o-] (-2,-0.5-5) -- ++(0,-1.5) to[short, -*] ++(6, 0) coordinate[](22n);
+    \draw (22p) to[short, -] ++(0,3.5) -- ++(0.5,0);
+    \draw (22p) to[short, -*] ++(0,-1.5) -- ++(0.5,0);
+    \draw (22p) ++(0,-1.5) to[short, -*] ++(0,-5) -- ++(0.5,0);
+    \draw (22p) ++(0,-6.5) to[short, -] ++(0,-5) -- ++(0.5,0);
+
+    \draw (22n) to[short, -*] ++(0,1.5) -- ++(0,5);
+    \draw (22n) to[short, -*] ++(0,-3.5) -- ++(0,-5);
+
+    % INPUT 3
+    \draw (-3.5,0.5-10) to[short, o-] (-2,0.5-10) -- ++(0,1.5) to[short, -*] ++(10.5, 0) coordinate[](33p);
+    \draw (-3.5,-0.5-10) to[short, o-] (-2,-0.5-10) -- ++(0,-1.5) to[short, -*] ++(11, 0) coordinate[](33n);
+    \draw (33p) to[short, -*] ++(0,3.5) -- ++(0.5,0);
+    \draw (33p) ++(0,3.5) to[short, -] ++(0,5) -- ++(0.5,0);
+    \draw (33p) to[short, -*] ++(0,-1.5) -- ++(0.5,0);
+    \draw (33p) ++(0,-1.5) to[short, -] ++(0,-5) -- ++(0.5,0);
+
+    \draw (33n) to[short, -*] ++(0,1.5) to[short, -*] ++(0,5) -- ++(0,5);
+    \draw (33n) to[short, -] ++(0,-3.5);
+
+    % INPUT 4
+    \draw (-3.5,0.5-15) to[short, o-] (-2,0.5-15) -- ++(0,1.5) to[short, -*] ++(15.5, 0) coordinate[](44p);
+    \draw (-3.5,-0.5-15) to[short, o-] (-2,-0.5-15) -- ++(0,-1.5) to[short, -] ++(16, 0) coordinate[](44n);
+    \draw (44p) to[short, -] ++(0,-1.5) -- ++(0.5,0);
+    \draw (44p) to[short, -*] ++(0,3.5) -- ++(0.5,0);
+    \draw (44p) ++(0,3.5) to[short, -*] ++(0,5) -- ++(0.5,0);
+    \draw (44p) ++(0,8.5) to[short, -] ++(0,5) -- ++(0.5,0);
+
+    \draw (44n) to[short, -*] ++(0,1.5) to[short, -*] ++(0,5) to[short, -*] ++(0,5) to[short, -] ++(0,5);
+
+    % MATRIX
+    \foreach \x/\y/\i in {0/0/0, 5/0/0, 10/0/0, 15/0/0}{
+        \draw (\x-1, \y+0.5) to[R, l=$Z$] (\x+1, \y+0.5) -- ++(0.5, -1*\i) -- ++(0.5, 0);
+        \draw (\x-1, \y-0.5) to[R, l_=$Z$] (\x+1, \y-0.5) -- ++(0.5, \i) -- ++(0.5, 0);
+    }
+
+    \foreach \x/\y/\i in {0/-5/0, 5/-5/1, 10/-5/0, 15/-5/1}{
+        \draw (\x-1, \y+0.5) to[R, l=$Z$] (\x+1, \y+0.5) -- ++(0.5, -1*\i) -- ++(0.5, 0);
+        \draw (\x-1, \y-0.5) to[R, l_=$Z$] (\x+1, \y-0.5) -- ++(0.5, \i) -- ++(0.5, 0);
+    }
+
+    \foreach \x/\y/\i in {0/-10/0, 5/-10/0, 10/-10/1, 15/-10/1}{
+        \draw (\x-1, \y+0.5) to[R, l=$Z$] (\x+1, \y+0.5) -- ++(0.5, -1*\i) -- ++(0.5, 0);
+        \draw (\x-1, \y-0.5) to[R, l_=$Z$] (\x+1, \y-0.5) -- ++(0.5, \i) -- ++(0.5, 0);
+    }
+
+    \foreach \x/\y/\i in {0/-15/0, 5/-15/1, 10/-15/1, 15/-15/0}{
+        \draw (\x-1, \y+0.5) to[R, l=$Z$] (\x+1, \y+0.5) -- ++(0.5, -1*\i) -- ++(0.5, 0);
+        \draw (\x-1, \y-0.5) to[R, l_=$Z$] (\x+1, \y-0.5) -- ++(0.5, \i) -- ++(0.5, 0);
+    }
 
 
-%     \draw (res 10p.east) -- ++(1,0) -- ++(0,1) -- ++(13,0) -- ++(0,-1) to[short, -o] ++(1,0) node[above]{\tiny{$+$}};
-%     \draw (res 10n.east) -- ++(1,0) -- ++(0,-1) -- ++(13,0) -- ++(0,1) to[short, -o] ++(1,0) node[below]{\tiny{$-$}};
-%     \draw (res 11p.east) -- ++(0.5,0) -- ++(1,-1) -- ++(0.5,0) -- ++(0,-1) node[dot]{};
-%     \draw (res 11n.east) -- ++(0.5,0) -- ++(1,1) -- ++(0.5,0) -- ++(0,1) node[dot]{};
-%     \draw (res 12p.east) -- ++(1,0) -- ++(0,1) node[dot]{};
-%     \draw (res 12n.east) -- ++(1,0) -- ++(0,-1) node[dot]{};
-%     \draw (res 13p.east) -- ++(0.5,0) -- ++(1,-1) -- ++(0.5,0) node[dot]{};
-%     \draw (res 13n.east) -- ++(0.5,0) -- ++(1,1) -- ++(0.5,0) node[dot]{};
 
-%     \draw (res 20p.east) -- ++(1,0) -- ++(0,1) -- ++(13,0) -- ++(0,-1) to[short, -o] ++(1,0) node[above]{\tiny{$+$}};
-%     \draw (res 20n.east) -- ++(1,0) -- ++(0,-1) -- ++(13,0) -- ++(0,1) to[short, -o] ++(1,0) node[below]{\tiny{$-$}};
-%     \draw (res 21p.east) -- ++(1,0) -- ++(0,1) node[dot]{};
-%     \draw (res 21n.east) -- ++(1,0) -- ++(0,-1) node[dot]{};
-%     \draw (res 22p.east) -- ++(0.5,0) -- ++(1,-1) -- ++(0.5,0) -- ++(0,-1) node[dot]{};
-%     \draw (res 22n.east) -- ++(0.5,0) -- ++(1,1) -- ++(0.5,0) -- ++(0,1) node[dot]{};
-%     \draw (res 23p.east) -- ++(0.5,0) -- ++(1,-1) -- ++(0.5,0) node[dot]{};
-%     \draw (res 23n.east) -- ++(0.5,0) -- ++(1,1) -- ++(0.5,0) node[dot]{};
-
-%     \draw (res 30p.east) -- ++(1,0) -- ++(0,1) -- ++(13,0) -- ++(0,-1) to[short, -o] ++(1,0) node[above]{\tiny{$+$}};
-%     \draw (res 30n.east) -- ++(1,0) -- ++(0,-1) -- ++(13,0) -- ++(0,1) to[short, -o] ++(1,0) node[below]{\tiny{$-$}};
-%     \draw (res 31p.east) -- ++(0.5,0) -- ++(1,-1) -- ++(0.5,0) -- ++(0,-1) node[dot]{};
-%     \draw (res 31n.east) -- ++(0.5,0) -- ++(1,1) -- ++(0.5,0) -- ++(0,1) node[dot]{};
-%     \draw (res 32p.east) -- ++(0.5,0) -- ++(1,-1) -- ++(0.5,0) -- ++(0,-1) node[dot]{};
-%     \draw (res 32n.east) -- ++(0.5,0) -- ++(1,1) -- ++(0.5,0) -- ++(0,1) node[dot]{};
-%     \draw (res 33p.east) -- ++(2,0)  node[dot]{};
-%     \draw (res 33n.east) -- ++(2,0)  node[dot]{};
-
-%     % --------------------- INPUT Paths -------------------------------- %
-%     \draw (ip 0) node[above]{\tiny{$+$}} to[short, o-] (rin 00p) node[dot]{} -- (res 00p.west);
-%     \draw (in 0) node[below]{\tiny{$-$}} to[short, o-] (rin 00n) node[dot]{} -- (res 00n.west);
-%     \draw (rin 00p.center) -- (rin 10p.center) node[dot]{} -- (res 10p.west);
-%     \draw (rin 10p.center) -- (rin 20p.center) node[dot]{} -- (res 20p.west);
-%     \draw (rin 20p.center) -- (rin 30p.center) -- (res 30p.west);
-%     \draw (rin 00n.center) -- (rin 10n.center) node[dot]{} -- (res 10n.west);
-%     \draw (rin 10n.center) -- (rin 20n.center) node[dot]{} -- (res 20n.west);
-%     \draw (rin 20n.center) -- (rin 30n.center) -- (res 30n.west);
-
-%     \draw (res 01p.west) -- (rin 01p.center) -- ++(0,-2.5) node[dot]{} -- (rin 31p.center) -- (res 31p.west);
-%     \draw (res 01n.west) -- (rin 01n.center) -- ++(0,-5.5) node[dot]{} -- (rin 31n.center) -- (res 31n.west);
-
-%     \draw (res 02p.west) -- (rin 02p.center) -- ++(0,-6.5) node[dot]{} -- (rin 32p.center) -- (res 32p.west);
-%     \draw (res 02n.west) -- (rin 02n.center) -- ++(0,-9.5) node[dot]{} -- (rin 32n.center) -- (res 32n.west);
-
-%     \draw (ip 1) node[above]{\tiny{$+$}} to[short, o-] ++(1,0);
-%     \draw (in 1) node[below]{\tiny{$-$}} to[short, o-] ++(1,0);
-% \end{tikzpicture}
+\end{circuitikz}

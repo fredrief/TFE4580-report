@@ -1,0 +1,332 @@
+\chapter{Transfer Function Analysis}
+\label{a:tf_analysis}
+This appendix contains the derivation of the transfer function of the AS described by equations \ref{eq:AH_def}, \ref{eq:BH_def} and \ref{eq:def_Cmat}. It will become apparent that for multiple inputs, i.e. $L>1$, the transfer function decouples into a set of identical expressions. For this analysis, we first consider the case of single input and then show how the obtained results generalizes for the multiple input case. For a single input, the transfer function is a scalar given by
+\begin{align}
+    G(\omega) & = \CmatT \left( j\omega \eyen{N} - \Amat \right)^{-1} \Bmat \\
+                   & = \CmatT \left( j\omega \eyen{N} - \Hn{N}' \Amat' \right)^{-1} \Hn{N}' \Bmat' \\
+                   & = \CmatT \bm{M}^{-1} \Hn{N}' \Bmat',
+\end{align}
+where we have defined $\bm{M} \triangleq \left( j\omega \eyen{N} - \Hn{N}' \Amat' \right) \in \R^{N \times N}$. To obtain an analytic expression for the transfer function, we first need a closed form expression for the inverse of this matrix. Referring to equations \ref{eq:defn_} and \ref{eq:def_AH_}, the matrix $\bm{M}$ can be expressed in block form as
+\begin{equation}
+    \bm{M} =
+    \begin{bmatrix}
+        \bm{M}_{11} & \bm{M}_{21} \\
+        \bm{M}_{12} & \bm{M}_{22}
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        j\omega \eyen{\nicefrac{N}{2}} & -\beta\Hn{\nicefrac{N}{2}}\bm{L}_{\nicefrac{N}{2}} \\
+        -\beta \Hn{\nicefrac{N}{2}}    & j\omega\eyen{\nicefrac{N}{2}}
+    \end{bmatrix}.
+\end{equation}
+The general inverse of a block matrix can be expressed using
+\begin{equation}
+    \label{eq:def_D1}
+        \bm{D}_1 = \bm{M}_{11} - \bm{M}_{12}\bm{M}_{22}^{-1}\bm{M}_{21}
+\end{equation}
+and
+\begin{equation}
+    \label{eq:def_D2}
+        \bm{D}_2 = \bm{M}_{22} - \bm{M}_{21}\bm{M}_{11}^{-1}\bm{M}_{12}
+\end{equation}
+as
+\begin{equation}
+    \bm{M}^{-1} =
+    \begin{bmatrix}
+        \bm{D}_1^{-1} & -\bm{M}_{11}^{-1}\bm{M}_{12}\bm{D}_{2}^{-1} \\
+        -\bm{D}_{2}^{-1}\bm{M}_{21}\bm{M}_{11}^{-1} & \bm{D}_{2}^{-1}
+    \end{bmatrix}.
+\end{equation}
+For this particular matrix, $\bm{D}_1$ and $\bm{D}_2$ coincide as
+\begin{equation}
+    \label{eq:def_D}
+        \bm{D} = j\omega \eyen{\nicefrac{N}{2}} - \frac{\beta^2}{j\omega}\frac{N}{2}\bm{L}_{\nicefrac{N}{2}}
+\end{equation}
+and the inverse of $\bm{M}$ can then be written as
+\begin{equation}
+    \label{eq:Minv}
+    \bm{M}^{-1} =
+    \begin{bmatrix}
+        \bm{D}^{-1} & \frac{\beta}{j\omega}\Hn{\nicefrac{N}{2}}\bm{L}_{\nicefrac{N}{2}}\bm{D}^{-1}  \\
+        \frac{\beta}{j\omega}\bm{D}^{-1}\Hn{\nicefrac{N}{2}} & \bm{D}^{-1}
+    \end{bmatrix}.
+\end{equation}
+
+It remains to find an expression for $\bm{D}^{-1}$. We first define the parameter $\psi \triangleq \frac{\beta^2}{(j\omega)^2}\frac{N}{2}$ and write
+\begin{equation}
+    \bm{D} = j\omega \left( \eyen{\nicefrac{N}{2}} - \psi \bm{L}_{\nicefrac{N}{2}} \right).
+\end{equation}
+By (\ref{eq:def_Lmat}), the matrix $\bm{L}_{\nicefrac{N}{2}}$ is strictly lower triangular which implies that $\bm{L}_{\nicefrac{N}{2}}^k = \bm{0}$ for some $k>0$.We can therefore express $\bm{D}^{-1}$ by the Neumann series (generalized geometric series) of $\bm{L}_{\nicefrac{N}{2}}$ as
+\begin{align}
+    \bm{D}^{-1} & = \frac{1}{j\omega} \left( \eyen{\nicefrac{N}{2}} - \psi \bm{L}_{\nicefrac{N}{2}} \right)^{-1} \\
+                & = \frac{1}{j\omega} \sum_{k=0}^{\infty}\psi^k \bm{L}_{\nicefrac{N}{2}}^k \label{eq:Dinv_Neumann} \\
+                & = \frac{1}{j\omega} \left( \eyen{\nicefrac{N}{2}} + \sum_{k=1}^{\frac{N}{2}-1}\psi^k \bm{L}_{\nicefrac{N}{2}}^k \right).
+\end{align}
+Because of the shape of $\bm{L}_{\nicefrac{N}{2}}$, the matrix $\left( \eyen{\nicefrac{N}{2}} + \sum_{k=1}^{\frac{N}{2}-1}\psi^k \bm{L}_{\nicefrac{N}{2}}^k \right)$ will have the form
+\begin{equation}
+    \left( \eyen{\nicefrac{N}{2}} + \sum_{k=1}^{\frac{N}{2}-1}\psi^k \bm{L}_{\nicefrac{N}{2}}^k \right) =
+    \begin{pmatrix}
+        1 & 0 &  & & &   \\
+        \psi & 1 & 0 &  & & \\
+        \psi^2 & \psi & 1 & 0 &  &  \\
+        \vdots & \ddots & \ddots  & \ddots &  0 \\
+        \psi^{\frac{N}{2}-1} & \cdots & \psi^2 & \psi & 1
+    \end{pmatrix}
+\end{equation}
+
+To obtain a compact expression, we introduce the vector
+\begin{equation}
+    \label{eq:def_psi_vec}
+    \bm{\psi}^M_i \triangleq
+    \begin{pmatrix}
+        \bm{0}_i \\
+        \psi^0 \\
+        \psi \\
+        \vdots \\
+        \psi^{M-1-i}
+    \end{pmatrix},
+\end{equation}
+where $\bm{0}_i \in \R^{i}$ is an all-zero column vector of length $i$. Using this vector, we write
+\begin{equation}
+    \left( \eyen{\nicefrac{N}{2}} + \sum_{k=1}^{\frac{N}{2}-1}\psi^k \bm{L}_{\nicefrac{N}{2}}^k \right) =\bm{\Psi}_{\nicefrac{N}{2}}
+\end{equation}
+where
+\begin{equation}
+    \bm{\Psi}_{\nicefrac{N}{2}} \triangleq
+    \begin{bmatrix}
+        \bm{\psi}^{\nicefrac{N}{2}}_0 & \cdots & \bm{\psi}^{\nicefrac{N}{2}}_{\nicefrac{N}{2}-1}
+    \end{bmatrix}.
+\end{equation}
+
+After the introduction of this helper matrix, we can write the expression for the transfer function as
+\begin{align}
+    G(\omega) & = \CmatT
+    \begin{bmatrix}
+        \bm{D}^{-1} & \frac{\beta}{j\omega}\Hn{\nicefrac{N}{2}}\bm{L}_{\nicefrac{N}{2}}\bm{D}^{-1}  \\
+        \frac{\beta}{j\omega}\bm{D}^{-1}\Hn{\nicefrac{N}{2}} & \bm{D}^{-1}
+    \end{bmatrix}
+    \Hn{N}' \Bmat \\
+    & = \CmatT
+    \begin{bmatrix}
+        \frac{1}{j\omega}\bm{\Psi}_{\nicefrac{N}{2}} & \frac{\beta}{(j\omega)^2}\Hn{\nicefrac{N}{2}}\bm{L}_{\nicefrac{N}{2}}\bm{\Psi}_{\nicefrac{N}{2}}  \\
+        \frac{\beta}{(j\omega)^2}\bm{\Psi}_{\nicefrac{N}{2}}\Hn{\nicefrac{N}{2}} & \frac{1}{j\omega}\bm{\Psi}_{\nicefrac{N}{2}}
+    \end{bmatrix}
+    \Hn{N}' \Bmat
+\end{align}
+
+Before proceeding, we recognize the following. As
+\begin{equation}
+    \Bmat' = \Tr{\left( \beta \quad 0 \quad \cdots \quad 0 \right)} \in \R^{N \times 1}
+\end{equation}
+we get
+\begin{equation}
+    \Hn{N}' \Bmat' = \beta
+    \begin{bmatrix}
+        \bm{1}_{\nicefrac{N}{2}} \\
+        \bm{0}_{\nicefrac{N}{2}}
+    \end{bmatrix}.
+\end{equation}
+Together with $\Tr{\bm{C}} = \left(0 \quad \cdots \quad 1 \right)$ we see that only $(\bm{M}^{-1})_{11} = \frac{\beta}{(j\omega)^2}\bm{\Psi}_{\nicefrac{N}{2}}\Hn{\nicefrac{N}{2}}$ will influence the transfer function, and we can write
+\begin{align}
+    G(\omega) & = \left( 0 \ \cdots \ 1 \right) \frac{\beta}{(j\omega)^2}\bm{\Psi}_{\nicefrac{N}{2}}\Hn{\nicefrac{N}{2}} \beta \bm{1}_{\nicefrac{N}{2}} \\
+              & = \frac{\beta^2}{(j\omega)^2} \left( 0 \ \cdots \ 1 \right) \bm{\Psi}_{\nicefrac{N}{2}}\Hn{\nicefrac{N}{2}} \bm{1}_{\nicefrac{N}{2}}
+\end{align}
+The matrix product $\bm{\Psi}_{\nicefrac{N}{2}}\Hn{\nicefrac{N}{2}} \bm{1}_{\nicefrac{N}{2}}$ can be analyzed recursively as
+\begin{align}
+    \bm{\Psi}_{\nicefrac{N}{2}}\Hn{\nicefrac{N}{2}} \bm{1}_{\nicefrac{N}{2}} & =
+    \begin{bmatrix}
+        \bm{\Psi}_{\nicefrac{N}{4}} & \bm{0}_{\nicefrac{N}{4} \times \nicefrac{N}{4}} \\
+        \bm{\hat{\Psi}}_{\nicefrac{N}{4}} & \bm{\Psi}_{\nicefrac{N}{4}}
+    \end{bmatrix}
+    \begin{bmatrix}
+        \Hn{\nicefrac{N}{4}} & \Hn{\nicefrac{N}{4}} \\
+        \Hn{\nicefrac{N}{4}} & -\Hn{\nicefrac{N}{4}}
+    \end{bmatrix}
+    \bm{1}_{\nicefrac{N}{2}} \\
+    & = 2
+    \begin{bmatrix}
+        \bm{\Psi}_{\nicefrac{N}{4}}\Hn{\nicefrac{N}{4}} \bm{1}_{\nicefrac{N}{4}} \\
+        \bm{\hat{\Psi}}_{\nicefrac{N}{4}}\Hn{\nicefrac{N}{4}} \bm{1}_{\nicefrac{N}{4}}
+    \end{bmatrix},
+\end{align}
+where
+\begin{equation}
+    \bm{\hat{\Psi}}_{\nicefrac{N}{4}} \triangleq \left[\psi^{\nicefrac{N}{4}} \bm{\psi}_0 \ \cdots \  \psi \bm{\psi}_0 \right].
+\end{equation}
+Furthermore,
+\begin{align}
+    \bm{\hat{\Psi}}_{\nicefrac{N}{4}}\Hn{\nicefrac{N}{4}} \bm{1}_{\nicefrac{N}{4}} & =
+    \begin{bmatrix}
+        \psi^{{\nicefrac{N}{8}}}\bm{\hat{\Psi}}_{\nicefrac{N}{8}} & \bm{\hat{\Psi}}_{\nicefrac{N}{8}} \\
+        \psi^{{\nicefrac{N}{4}}}\bm{\hat{\Psi}}_{\nicefrac{N}{8}} & \psi^{{\nicefrac{N}{8}}}\bm{\hat{\Psi}}_{\nicefrac{N}{8}}
+    \end{bmatrix}
+    \begin{bmatrix}
+        \Hn{\nicefrac{N}{8}} & \Hn{\nicefrac{N}{8}} \\
+        \Hn{\nicefrac{N}{8}} & -\Hn{\nicefrac{N}{8}}
+    \end{bmatrix}
+    \bm{1}_{\nicefrac{N}{2}} \\
+    & = 2
+    \begin{bmatrix}
+        \psi^{\nicefrac{N}{8}} \bm{\hat{\Psi}}_{\nicefrac{N}{8}}\Hn{\nicefrac{N}{8}}\bm{1}_{\nicefrac{N}{8}} \\
+        \psi^{\nicefrac{N}{4}} \bm{\hat{\Psi}}_{\nicefrac{N}{8}}\Hn{\nicefrac{N}{8}}\bm{1}_{\nicefrac{N}{8}}
+    \end{bmatrix}.
+\end{align}
+Starting at
+\begin{equation}
+    \bm{\hat{\Psi}}_{1}\Hn{1} \bm{1}_{1} = \psi,
+\end{equation}
+these recursive expressions may be combined to give
+\begin{equation}
+    \label{eq:PsiHnFinal}
+    \bm{\Psi}_{\nicefrac{N}{2}}\Hn{\nicefrac{N}{2}} \bm{1}_{\nicefrac{N}{2}} = \frac{N}{2}\bm{\psi}_0^{\nicefrac{N}{2}}.
+\end{equation}
+Finally, the transfer function is given by
+\begin{align}
+    G(\omega) & = \left( 0 \ \cdots \ 1 \right) \frac{\beta}{(j\omega)^2}\bm{\Psi}_{\nicefrac{N}{2}}\Hn{\nicefrac{N}{2}} \beta \bm{1}_{\nicefrac{N}{2}} \\
+    & = \frac{\beta^2}{(j\omega)^2}\frac{N}{2} \left( 0 \ \cdots \ 1 \right) \bm{\psi}_0^{\nicefrac{N}{2}} \\
+    & = \frac{\beta^2}{(j\omega)^2}\frac{N}{2} \psi^{\nicefrac{N}{2}-1} \\
+    & = \left(\frac{\beta^2}{(j\omega)^2}\frac{N}{2} \right)^{\nicefrac{N}{2}} \\
+    & = \left( \sqrt{\frac{N}{2}}\frac{\beta}{j\omega} \right)^N \label{eq:ATF_FINAL}
+\end{align}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsubsection*{Multiple inputs}
+The transfer function expression (\ref{eq:ATF_FINAL}) was derived assuming a single input only. We now show how this results generalizes for multiple inputs. We consider the case of $L=2$ inputs and the extension to arbitrary $L$ is straightforward.
+
+For $L>1$, we let $N \triangleq N_\ell L$, where $N_\ell$ is the system order for a single channel. For $L=2$ we have
+\begin{equation}
+    \Tr{\bm{C}} =
+    \begin{pmatrix}
+        \Tr{\bm{0}_{\nicefrac{N}{2}}} \ 0 \ \cdots \ 1 \ 0 \ \cdots \ 0 \\
+        \Tr{\bm{0}_{\nicefrac{N}{2}}} \ 0 \ \cdots \ 0 \ 0 \ \cdots \ 1
+    \end{pmatrix} \in \R^{2 \times N},
+\end{equation}
+\begin{equation}
+    \bm{B}' =
+    \Tr{\begin{pmatrix}
+        \beta \ \cdots \ 0 & 0 \ \cdots \ 0 & \Tr{\bm{0}_{\nicefrac{N}{2}}} \\
+        0 \ \cdots \ 0 & \beta \ \cdots \ 0 & \Tr{\bm{0}_{\nicefrac{N}{2}}}
+    \end{pmatrix}}  \in \R^{N \times 2},
+\end{equation}
+and
+\begin{equation}
+    \Hn{N}'\bm{B}' = \beta
+    \begin{bmatrix}
+        \bm{1}_{\nicefrac{N_\ell}{2}} & \bm{1}_{\nicefrac{N_\ell}{2}} \\
+        \bm{1}_{\nicefrac{N_\ell}{2}} & -\bm{1}_{\nicefrac{N_\ell}{2}} \\
+        \bm{0}_{\nicefrac{N}{2}} & \bm{0}_{\nicefrac{N}{2}}
+    \end{bmatrix}  \in \R^{N \times 2},
+\end{equation}
+$\Amat'$ is as given by (\ref{eq:def_AH_}), but with
+\begin{equation}
+    \bm{L}_{\nicefrac{N}{2}} \triangleq
+    \begin{bmatrix}
+        \bm{L}_{\nicefrac{N_\ell}{2}} & \bm{0}_{\nicefrac{N_\ell}{2} \times \nicefrac{N_\ell}{2}} \\
+        \bm{0}_{\nicefrac{N_\ell}{2} \times \nicefrac{N_\ell}{2}} & \bm{L}_{\nicefrac{N_\ell}{2}}
+    \end{bmatrix}.
+\end{equation}
+In (\ref{eq:Dinv_Neumann}) we used the power series of $\bm{L}_{\nicefrac{N}{2}}$. For $L=2$ we have
+\begin{align}
+    \bm{L}_{\nicefrac{N}{2}}^k & =
+    \begin{bmatrix}
+        \bm{L}_{\nicefrac{N_\ell}{2}} & \bm{0}_{\nicefrac{N_\ell}{2} \times \nicefrac{N_\ell}{2}} \\
+        \bm{0}_{\nicefrac{N_\ell}{2} \times \nicefrac{N_\ell}{2}} & \bm{L}_{\nicefrac{N_\ell}{2}}
+    \end{bmatrix}^k \\
+    & =
+    \begin{bmatrix}
+        \bm{L}_{\nicefrac{N_\ell}{2}}^k & \bm{0}_{\nicefrac{N_\ell}{2} \times \nicefrac{N_\ell}{2}} \\
+        \bm{0}_{\nicefrac{N_\ell}{2} \times \nicefrac{N_\ell}{2}} & \bm{L}_{\nicefrac{N_\ell}{2}}^k
+    \end{bmatrix},
+\end{align}
+and in consequence
+\begin{equation}
+    \bm{\Psi}_{\nicefrac{N}{2}} =
+    \begin{bmatrix}
+        \bm{\Psi}_{\nicefrac{N_\ell}{2}} & \bm{0}_{\nicefrac{N_\ell}{2} \times \nicefrac{N_\ell}{2}} \\
+        \bm{0}_{\nicefrac{N_\ell}{2} \times \nicefrac{N_\ell}{2}} & \bm{\Psi}_{\nicefrac{N_\ell}{2}}
+    \end{bmatrix}.
+\end{equation}
+Furthermore
+\begin{align}
+    \bm{\Psi}_{\nicefrac{N}{2}}\Hn{\nicefrac{N}{2}}
+    & =
+    \begin{bmatrix}
+        \bm{\Psi}_{\nicefrac{N_\ell}{2}} & \bm{0}_{\nicefrac{N_\ell}{2} \times \nicefrac{N_\ell}{2}} \\
+        \bm{0}_{\nicefrac{N_\ell}{2} \times \nicefrac{N_\ell}{2}} & \bm{\Psi}_{\nicefrac{N_\ell}{2}}
+    \end{bmatrix}
+    \begin{bmatrix}
+        \Hn{\nicefrac{N_\ell}{2}} & \Hn{\nicefrac{N_\ell}{2}} \\
+        \Hn{\nicefrac{N_\ell}{2}} & -\Hn{\nicefrac{N_\ell}{2}}
+    \end{bmatrix} \\
+    & =
+    \begin{bmatrix}
+        \bm{\Psi}_{\nicefrac{N_\ell}{2}} \Hn{\nicefrac{N_\ell}{2}} & \bm{\Psi}_{\nicefrac{N_\ell}{2}} \Hn{\nicefrac{N_\ell}{2}} \\
+        \bm{\Psi}_{\nicefrac{N_\ell}{2}} \Hn{\nicefrac{N_\ell}{2}} & -\bm{\Psi}_{\nicefrac{N_\ell}{2}}\Hn{\nicefrac{N_\ell}{2}}
+    \end{bmatrix},
+\end{align}
+and
+\begin{align}
+    \bm{\Psi}_{\nicefrac{N}{2}}\Hn{\nicefrac{N}{2}}
+    \begin{bmatrix}
+        \bm{1}_{\nicefrac{N_\ell}{2}} & \bm{1}_{\nicefrac{N_\ell}{2}} \\
+        \bm{1}_{\nicefrac{N_\ell}{2}} & -\bm{1}_{\nicefrac{N_\ell}{2}}
+    \end{bmatrix}
+    & =
+    \begin{bmatrix}
+        2\bm{\Psi}_{\nicefrac{N_\ell}{2}} \Hn{\nicefrac{N_\ell}{2}} & \bm{0}_{\nicefrac{N_\ell}{2}} \\
+        \bm{0}_{\nicefrac{N_\ell}{2}} & 2\bm{\Psi}_{\nicefrac{N_\ell}{2}} \Hn{\nicefrac{N_\ell}{2}}
+    \end{bmatrix},
+\end{align}
+The expression for the transfer function then becomes
+\begin{align}
+    \bm{G}(\omega) & = \frac{\beta^2}{(j\omega)^2}
+    \begin{pmatrix}
+        0 \ \cdots \ 1 \ 0 \ \cdots \ 0 \\
+        0 \ \cdots \ 0 \ 0 \ \cdots \ 1
+    \end{pmatrix}
+    \bm{\Psi}_{\nicefrac{N}{2}}\Hn{\nicefrac{N}{2}}
+    \begin{bmatrix}
+        \bm{1}_{\nicefrac{N_\ell}{2}} & \bm{1}_{\nicefrac{N_\ell}{2}} \\
+        \bm{1}_{\nicefrac{N_\ell}{2}} & -\bm{1}_{\nicefrac{N_\ell}{2}}
+    \end{bmatrix} \\
+    & = \frac{2\beta^2}{(j\omega)^2}
+    \begin{pmatrix}
+        0 \ \cdots \ 1 \ 0 \ \cdots \ 0 \\
+        0 \ \cdots \ 0 \ 0 \ \cdots \ 1
+    \end{pmatrix}
+    \begin{bmatrix}
+        \bm{\Psi}_{\nicefrac{N_\ell}{2}} \Hn{\nicefrac{N_\ell}{2}} & \bm{0}_{\nicefrac{N_\ell}{2}} \\
+        \bm{0}_{\nicefrac{N_\ell}{2}} & \bm{\Psi}_{\nicefrac{N_\ell}{2}} \Hn{\nicefrac{N_\ell}{2}}
+    \end{bmatrix} \\
+    & =
+    \begin{pmatrix}
+        \left( \sqrt{\frac{2N_\ell}{2}}\frac{\beta}{j\omega} \right)^{N_\ell} \\
+        \left( \sqrt{\frac{2N_\ell}{2}}\frac{\beta}{j\omega} \right)^{N_\ell}
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+        \left( \sqrt{\frac{N}{2}}\frac{\beta}{j\omega} \right)^{N_\ell} \\
+        \left( \sqrt{\frac{N}{2}}\frac{\beta}{j\omega} \right)^{N_\ell}
+    \end{pmatrix}.
+\end{align}
+
+From this derivation we see that for an ADC with an arbitrary number of input channels, the transfer function is
+\begin{equation}
+    \label{eq:ATF_MULTI_FINAL}
+    G(\omega) = \left( \sqrt{\frac{N}{2}}\frac{\beta}{j\omega} \right)^{N_\ell}
+\end{equation}
+for all channels.

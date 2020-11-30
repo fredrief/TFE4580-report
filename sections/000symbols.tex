@@ -1,0 +1,97 @@
+% !TEX root = ../report.tex
+\chapter*{List of Symbols}
+\section*{Matrices and Vectors}
+\begin{tabular}{ p{2cm} l }
+    a           & a scalar value \\
+
+    $\bm{a}$    & a column vector $\Tr{\left( a_1 \ \cdots \ a_N \right)} \in \R^{N}$ \\
+
+    $\bm{A}$    & a matrix
+    $\begin{pmatrix}
+        a_{11} & \cdots & a_{1N} \\
+        \vdots & \ddots & \vdots \\
+        a_{M1} & \cdots & a_{MN}
+    \end{pmatrix} \in R^{M \times N}
+    $ \\
+
+    $\bm{0}_N$  & an all-zero column vector of length $N$ \\
+    $\bm{0}_{M \times N}$    & an $M$-by-$N$ all-zero matrix \\
+    $\bm{1}_N$  & a column vector of length $N$ with all elements $1$ \\
+    $\bm{1}_{M \times N}$    & an $M$-by-$N$ matrix with all elements $1$ \\
+
+    $\eyen{N}$  & an $N$-by-$N$ matrix with ones on the main diagonal and all other elements zero \\
+
+    $\Hn{2}$    & second order Hadamard matrix
+    $
+    \begin{pmatrix}
+        1 & 1 \\
+        1 & -1
+    \end{pmatrix}
+    $ \\
+
+    $\Hn{N}$    & Hadamard matrix of order N defined by $\Hn{2} \otimes \Hn{\nicefrac{N}{2}}$ \\
+
+    $\Hn{N}'$   & modified Hadamard matrix
+    $
+    \begin{bmatrix}
+        \Hn{\nicefrac{N}{2}} & \bm{0}_{\nicefrac{N}{2} \times \nicefrac{N}{2}} \\
+        \bm{0}_{\nicefrac{N}{2} \times \nicefrac{N}{2}} & \Hn{\nicefrac{N}{2}}
+    \end{bmatrix}
+    $ \\
+
+    $\otimes$   & Kronecker product \\
+    $\Tr{()}$   & transpose
+
+
+\end{tabular}
+
+
+\section*{Sets}
+\begin{tabular}{ p{2cm} l }
+    $\R$    & the real numbers
+
+\end{tabular}
+
+\section*{Miscellaneous}
+\begin{tabular}{ p{2cm} l }
+    $\dot{\bm{x}}$    & elementwise time derivative $\frac{d}{dt}\bm{x}(t)$ \\
+
+\end{tabular}
+
+\section*{Control-Bounded Conversion}
+\begin{tabular}{ p{2cm} l }
+    $L$         &  input signal dimension \\
+    $N_\ell$    &  system order corresponding to each input channel \\
+    $N$         &  total system order $L N_\ell$ \\
+    $\beta$     &  integrator gain \\
+    $\Amat$     &  system matrix \\
+    $\Bmat$     &  input matrix \\
+    $\Cmat$     &  signal observation (output) matrix \\
+    $\Gmat$     &  control input matrix \\
+    $\Gmattilde$&  control observation matrix \\
+    $\utv$      &  input signal \\
+    $\bm{u}[k]$ &  input samples \\
+    $\utvhat$   &  estimated input signal \\
+    $\xtv$      &  state vector \\
+    $\skv$      &  control signal \\
+    $\stv$      &  control contribution \\
+    $\stvtilde$ &  control observation \\
+    $\ytv$      &  signal observation \\
+    $\ytvbreve$ &  fictional signal observation \\
+    $\Gw$       &  analog transfer function (ATF) matrix \\
+    $\Hw$       &  noise transfer function (NTF) matrix \\
+    $\Gw\Hw$    &  signal transfer function (STF) matrix \\
+
+
+\end{tabular}
+
+\section*{Acronyms}
+\begin{tabular}{ p{2cm} l }
+    AS         &  analog system \\
+    ATF        &  analog transfer function \\
+    DC         &  digital control \\
+    DE         &  digital estimator \\
+    NTF        &  noise transfer function \\
+    STF        &  signal transfer function \\
+
+\end{tabular}
