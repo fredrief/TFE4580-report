@@ -1,0 +1,25 @@
+\begin{thebibliography}{1}
+
+\bibitem{cbc_2011_loeliger}
+H.~{Loeliger}, L.~{Bolliger}, G.~{Wilckens}, and J.~{Biveroni},
+  ``Analog-to-digital conversion using unstable filters,'' in {\em 2011
+  Information Theory and Applications Workshop}, pp.~1--4, 2011.
+
+\bibitem{cbc_2015_loeliger}
+H.~{Loeliger} and G.~{Wilckens}, ``Control-based analog-to-digital conversion
+  without sampling and quantization,'' in {\em 2015 Information Theory and
+  Applications Workshop (ITA)}, pp.~119--122, 2015.
+
+\bibitem{cbc_2020_loeliger}
+H.-A. Loeliger, H.~Malmberg, and G.~Wilckens, ``Control-bounded
+  analog-to-digital conversion: Transfer function analysis, proof of concept,
+  and digital filter implementation,'' 2020.
+
+\bibitem{malmberg_thesis}
+H.~Malmberg, ``Control-bounded converters.'' 2020.
+
+\bibitem{optimal_filtering}
+B.~D.~O. {Anderson} and J.~B. {Moore}, {\em Optimal Filtering}.
+\newblock Prentice Hall, 1979.
+
+\end{thebibliography}
