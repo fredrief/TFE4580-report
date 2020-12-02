@@ -1,0 +1,18 @@
+% !TEX root = ../../report.tex
+\begin{tikzpicture}[]
+
+    % --------------------- Nodes --------------------------------
+    \node[circle, draw, inner sep=0.5mm] (add) at (1,0) {\Large+};
+    \node[box] (filter) at (2.5,0) {$G(\omega)$};
+    \node[circle, draw, inner sep=0.5mm] (add_q) at (4.5,0) {\Large+};
+
+    % --------------------- Paths --------------------------------
+    \draw[arrow] (0, 0) node[left]{$u(t)$} -- (add.west);
+    \draw[arrow] (add.east) -- (filter.west);
+    \draw[arrow] (filter.east) -- (add_q.west);
+    \draw[arrow] (add_q.east) -- ++(1,0) node[right]{$s[k]$};
+    \draw[*-, arrow] (add_q.east) ++(0.3, 0 ) to[short, *-] ++(0,1.5) -| (add.north) node[left, yshift=2mm]{\tiny $-$};
+
+    \draw[arrow] (4.5, 0.7) node[above]{$e[k]$} -- (add_q.north);
+
+\end{tikzpicture}

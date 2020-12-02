@@ -1,24 +1,21 @@
 % !TEX root = ../../report.tex
-\begin{tikzpicture}[circuit ee IEC]
+\begin{tikzpicture}[]
 
     % --------------------- Nodes --------------------------------
     \node[circle, draw, inner sep=0.5mm] (add) at (1,0) {\Large+};
     \node[box] (filter) at (2.5,0) {$G(\omega)$};
-    % Sampler
-    \draw (3.5,0) node[anchor=west](sampler-west){} to[short, -*] ++(0.5, 0) -- ++(0.5, 0.2);
-    \draw (4.5, 0) -- ++(0.5, 0) node[anchor=east](sampler-east){};
+    \node[box] (sampler) at (4.5,0) {S/H};
 
-    \node[box] (quantizer) at (6,0) {\quantizer};
-    \node[box] (decimation) at (8,0) {Dec};
+    \node[box] (quantizer) at (6.5,0) {\quantizer};
+    \node[box] (decimation) at (8.5,0) {Dec};
 
-    \node[box] (dac) at (4,1.5) {D/A};
+    \node[box] (dac) at (4.5,1.5) {D/A};
 
     % --------------------- Paths --------------------------------
     \draw[arrow] (0, 0) node[left]{$u(t)$} -- (add.west);
     \draw[arrow] (add.east) -- (filter.west);
-    \draw (filter.east) -- (sampler-west);
-    \draw[arrow] (sampler-east) -- (quantizer.west);
-    \draw[arrow] (quantizer.east) -- (decimation.west);
+    \draw[arrow] (filter.east) -- (sampler.west);
+    \draw[arrow] (sampler.east) -- (quantizer.west);
 
     \draw[*-, arrow] (quantizer.east) ++(0.3, 0 ) to[short, *-] ++(0,0.1) |- (dac.east);
     \draw[arrow] (dac.west) -| (add.north) node[left, yshift=2mm]{\tiny $-$};

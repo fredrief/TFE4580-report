@@ -1,0 +1,11 @@
+% !TEX root = ../../report.tex
+\begin{tikzpicture}[]
+
+    \node[box] (adc) at (0,0) {A/D};
+
+    \draw[arrow] (-1.5, 0) node[left]{$u(t)$} -- (adc.west);
+    \draw[ultra thick, arrow] (adc.east) -- ++(1,0) node[right]{$\hat{u}[k]$};
+    \draw[arrow] (-1.5, -1) node[left]{$V_{ref}$} -| (adc.south);
+
+
+\end{tikzpicture}

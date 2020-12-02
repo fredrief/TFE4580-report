@@ -1,0 +1,74 @@
+% !TEX root = ../../report.tex
+\begin{tikzpicture}[]
+
+    % --------------------- AS --------------------------------
+    \node[box, thick, minimum width=5.5cm, minimum height=5.2cm, anchor=north west] (AS) at (-3.5,3) {};
+    \node[yshift=-0.3cm] (ASlabel) at (AS.north) {AS};
+
+
+        % --------------------- Nodes -------------------------------- %
+        \node[box, scale=0.8, transform shape] (B_AS) at (-2.6,-0.5) {\Large$\Bmat$};
+        \node[circle, draw, inner sep=0.5mm, scale=0.8, transform shape] (add_AS) at (-1.5,-0.5) {\Large\textbf{+}};
+        \node[box, scale=0.8, transform shape] (ci_AS) at (-0.5,-0.5) {\Large $\bm{\int}$};
+        \node[box, scale=0.8, transform shape] (gamma_tilde_AS) at (1.2,-0.5) {\Large$\GmattildeT$};
+        \node[box, dashed, scale=0.8, transform shape] (C_AS) at (1.2,2) {\Large$\CmatT$};
+        \node[box, scale=0.8, transform shape] (A_AS) at (-0.5,2) {\Large$\Amat$};
+        \node[box, scale=0.8, transform shape] (gamma_AS) at (-1.5,-1.5) {\Large$\Gmat$};
+
+        % --------------------- Paths -------------------------------- %
+        \draw[arrow] (B_AS.east) -- (add_AS.west);
+        \draw[arrow] (gamma_AS.north) -- (add_AS.south);
+        \draw[arrow] (A_AS.west) -| (add_AS.north);
+        \draw[arrow] (add_AS.east) -- (ci_AS.west);
+        \draw[arrow] (ci_AS.east) -- (gamma_tilde_AS.west);
+        \draw (ci_AS.east)  ++(0.4, 0) node[below]{$\xtv$} to[short, *-] ++(0,2.5) coordinate[](x_AS){};
+        \draw[arrow] (x_AS) to[short, *-] (A_AS.east);
+        \draw[arrow, dashed] (x_AS) -- (C_AS.west);
+
+
+    % --------------------- DC --------------------------------
+    \node[box, thick, anchor=north west, minimum width=2.8cm, minimum height=4cm] (DC) at (2.8,0.3) {};
+    \node[yshift=0.3cm] (DClabel) at (DC.south) {DC};
+        \node[box, scale=0.8, transform shape] (sampler) at (3.6,-0.5) {\Large \textbf{S/H}};
+        \node[box, scale=0.8, transform shape] (quantizer) at (4.7,-0.5) {\onebitqthick};
+        \node[box, scale=0.8, transform shape] (DAC) at (4.1,-2.5) {\Large \textbf{D/A}};
+
+    % --------------------- DE --------------------------------
+    \node[box, thick, minimum width=9cm, minimum height=5.2cm, anchor=north west] (DE) at (6.5,3) {};
+    \node[yshift=-0.3cm] (DElabel) at (DE.north) {DE};
+    \draw coordinate[](ctrl_in) at (6.5, -0.5);
+
+        \node[box, dashed, scale=0.8, transform shape] (dac_DE) at (7.2,-0.5) {\Large \textbf{D/A}};
+        \node[box, dashed, scale=0.8, transform shape] (gamma_DE) at (8.5,-0.5) {\Large$\Gmat$};
+        \node[circle, draw, dashed, inner sep=0.5mm, scale=0.8, transform shape] (add_DE) at (9.6,-0.5) {\Large\textbf{+}};
+        \node[box, dashed, scale=0.8, transform shape] (ci_DE) at (10.7,-0.5) {\Large $\bm{\int}$};
+        \node[box, dashed, scale=0.8, transform shape] (A_DE) at (9.6,-1.5) {\Large$\Amat$};
+        \node[box, dashed, scale=0.8, transform shape] (C_DE) at (12.2,-0.5) {\Large$\CmatT$};
+
+        \draw[arrow, dashed] (gamma_DE.east) -- (add_DE.west);
+        \draw[arrow, dashed] (add_DE.east) -- (ci_DE.west);
+        \draw[arrow, dashed] (ci_DE.east) -- ++(0.25, 0) coordinate[](x_DE) -- (C_DE.west);
+        \draw[arrow, dashed] (x_DE) to[short, *-] ++(0, -0.5) |- (A_DE.east);
+        \draw[arrow, dashed] (A_DE.north) -- (add_DE);
+
+        \node[box, dashed, scale=0.8, transform shape] (Hw) at (14.3, -0.5) {\Large$\Hw$};
+
+
+    % --------------------- Paths --------------------------------
+    \draw[arrow] (-4, -0.5) node[left]{$\utv$} -- (B_AS.west);
+    \draw[arrow] (gamma_tilde_AS.east) node[right, yshift=-3mm, xshift=4mm]{$\stvtilde$} -- (sampler.west);
+    \draw[arrow] (sampler.east) -- (quantizer.west);
+    \draw[] (quantizer.east) -- ++(0.3,0) coordinate[](a) -- (ctrl_in) node[above, xshift=-0.5cm]{$\skv$};
+    \draw[arrow] (a) to[short, *-] ++(0,-0.5) |- (DAC.east);
+    \draw[arrow] (DAC.west) -| (gamma_AS.south) node[below, midway, xshift=3.9cm]{$\stv$};
+
+    \draw[arrow, dashed] (ctrl_in) -- (dac_DE.west);
+    \draw[arrow, dashed] (dac_DE.east) -- (gamma_DE.west) node[below, yshift=-4mm, xshift=-2mm]{$\stv$};
+    \draw[arrow, dashed] (C_AS) -- ++(2,0) node[left, yshift=3mm]{$\ytv$};
+
+    \draw (5.5, 2) node[draw, fill=black, minimum width=2mm, minimum height=2mm, inner sep=0mm](y0){} node[left, xshift=-1mm]{$\bm{0}$} node[right, xshift=1mm, yshift=3mm]{$\tilde{\bm{y}}(t)$};
+    \draw[dashed] (y0.east) -- ++(0.9, 0);
+    \draw[arrow, dashed] (C_DE.east) node[right, yshift=-3mm]{$\bm{q}(t)$} -- (Hw.west);
+    \draw[arrow, dashed] (Hw.east) -- ++(1,0) node[right] {$\utvhat$};
+
+\end{tikzpicture}

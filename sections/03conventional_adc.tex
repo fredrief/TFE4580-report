@@ -1,49 +1,91 @@
 % !TEX root = ../report.tex
 
-\chapter{Conventional A/D conversion}
+\chapter{Conventional A/D Conversion}
 \label{sec:conventional_adc}
-In order to highlight how a control-bounded converter distinguishes from conventional A/D converters, some fundamentals of conventional A/D conversion is included in this chapter. Conventional A/D converters can generally be divided into two main categories; Nyquist rate- and oversampling converters. In the classical approach, the conversion problem is divided into sampling and quantization, and the main difference between the Nyquist rate and the oversampling converters is the frequency of the sampling. The two types of converters will be described briefly in the following sections.
+In order to highlight how a control-bounded converter distinguishes from conventional A/D converters, some fundamentals of conventional A/D conversion is given in this chapter. A black box illustration of a general ADC is given in figure \ref{fig:black_box_adc}.
+\begin{figure}[htbp]
+    \centering
+    \input{figures/03theory/black_box_adc.tex}
+    \caption{A black box representation of a general A/D converter.}
+    \label{fig:black_box_adc}
+\end{figure}
+$u(t)$ represents the analog input and $\ukhat$ is the digital output signal. For each $k$, $\hat{u}[k]$ is an N-bit digital word given by
+\begin{equation}
+    \ukhat = b_1 2^{-1} + b_2 2^{-2} + \cdots + b_N{-N}
+\end{equation}
+where each bit $b_i \in \{0, 1\}$. Assuming that the ADC produces digital outputs with a period of $T$, for any time instance $t_0$, we let $\hat{u}[k_0]$ be the digital estimate of the continuous time input $u(k_0 T)$.
 
-\section{Nyquist Converters}
+In figure \ref{fig:black_box_adc}, $V_{ref}$ is the reference voltage used for quantization of the input. The relation between the quantities is given by
+\begin{equation}
+    V_{ref}\left( b_1 2^{-1} + b_2 2^{-2} + \cdots + b_N 2^{-N}\right) = u(t) \pm V_x
+\end{equation}
+where
+\begin{equation}
+    \label{eq:Vx}
+    -\frac{1}{2}V_{LSB} \leq V_x < \frac{1}{2}V_{LSB}
+\end{equation}
+and
+\begin{equation}
+    V_{LSB} = \frac{V_{ref}}{2^N}.
+\end{equation}
+$V_X$ is referred to as the quantization error, which for an ideal N-bit ADC is bounded as in (\ref{eq:Vx}). This quantization error is giving rise to the quantization noise observed in the digital output.
 
+Conventional A/D converters can generally be divided into two main categories; Nyquist rate- and oversampling converters. These two types of A/D converters will be described briefly in the following sections.
 
+\section{Nyquist Rate A/D converters}
+As the name indicates, a Nyquist rate converter is related to the Nyquist sampling frequency. However, because sampling at the Nyquist rate would require a very precise anti-aliasing filter, practical converters are in general operating at a somewhat higher frequency. Following \cite{johns_martin}, a Nyquist rate A/D converter can be defined as a converter where each output value has a one-to-one correspondence with a single input value. A typical block diagram of a Nyquist rate ADC is shown in figure \ref{fig:nyquist_rate_adc}.
 \label{subsec:nyquist_adc}
 \begin{figure}[htbp]
-    \input{figures/03theory/sample_centric_adc.tex}
+    \input{figures/03theory/nyquist_adc.tex}
     \centering
-    \caption{The sample-centric view on A/D conversion.}
-    \label{fig:sample_centric_adc}
+    \caption{A typical Nyquist rate ADC.}
+    \label{fig:nyquist_rate_adc}
 \end{figure}
+
+In figure \ref{fig:nyquist_rate_adc}, the analog input $u(t)$ is first passed through an anti-aliasing filter to suppress the higher frequency components. The signal is then sampled and held by the box labeled S/H. The sampled signal is then quantized with N-bit resolution to produce the digital output $\ukhat$.
 
 \section{Oversampling converters}
 \label{subsec:oversampling_adc}
-Robustness by introducing redundancy in the form of oversampling. Oversampling ration refers to the nyquist rate and defined by
+In contrast to the Nyquist rate converter, an oversampling ADC samples the input signal at a frequency much higher than the Nyquist frequency. For an analog input signal that is bandlimited to $f_0$, we define the oversampling ratio as
 \begin{equation}
-    \text{OSR} = \frac{f_s}{2f_0}
+    \text{OSR} \triangleq \frac{f_s}{2f_0}
 \end{equation}
+where $f_s$ is the sampling frequency of the ADC. Sampling at a higher frequency generates redundant information about the input signal, and a single estimate of the input signal at a certain time instance is obtained by averaging several consecutive samples. The redundancy is this way utilized to give a higher resolution, or equivalently reduced requirements on the involved circuit components.
 
-Straight-forward oversampling itself gives an advantage 3dB per doubling of OSR.
-
-By introducing a feedback path with a loop filter, less error and better resolution can be obtained in a certain frequency band. Effect known as noise shaping. Such a system is known as a \sdmod. A discrete time \sdmod is shown in figure \ref{fig:dtsdmod}.
-
+Straight forward noise shaping will itself give an improved signal-to-noise ratio (SNR) of 3dB per doubling of OSR \cite{johns_martin}. The performance of the oversampling converter is further improved by noise shaping of the quantization noise, through a feedback loop with a loop filter. Such a system is known as a $\sd$ ADC and the part of the system that performs the noise shaping is called a $\sd$ modulator. Such a system is illustrated in figure \ref{fig:dtsdmod}.
 \begin{figure}[htbp]
     \input{figures/03theory/dtsdm.tex}
     \centering
-    \caption{The sample-centric view on A/D conversion.}
+    \caption{A discrete-time $\sd$ ADC.}
     \label{fig:dtsdmod}
 \end{figure}
 
-A continuous time \sdmod is achieved by including the sampling in the feedback loop. In this case, the anti-aliasing filter is part of loop filter $G(e^{j\Omega})$. A continuous time \sdmod is shown in figure \ref{fig:ctsdmod}.
+The system shown in figure \ref{fig:dtsdmod} is called a discrete-time $\sd$ ADC because the $\sd$ modulator has a discrete-time input. A continuous time $\sd$ converter is achieved by including the sampling in the feedback loop, as shown in figure \ref{fig:ctsdmod}. In this case, the anti-aliasing filter is part of loop filter $G(\omega)$.
 
 \begin{figure}[htbp]
     \input{figures/03theory/ctsdm.tex}
     \centering
-    \caption{The sample-centric view on A/D conversion.}
+    \caption{A continuous-time $\sd$ ADC.}
     \label{fig:ctsdmod}
 \end{figure}
 
-\sdmod analysis
+\subsection{Transfer Function Analysis}
+\label{sec:ctsd_tf_analysis}
+The transfer function analysis of the continuous-time $\sd$ modulator involves a mixture of continuous- and discrete time signals, as the transition between these domains happens inside the modulator. The analysis is straight forward, but the resulting expression is somewhat dirty. To give a clear and intuitive understanding of the transfer functions, we avoid the distinction between continuous and discrete time in this analysis. The resulting simplified system is shown in figure \ref{fig:ctsdmod_lin}. The quantizer is replaced by its linear model, which approximates the quantization error as an independent signal that enters the system in an additive way.
+\begin{figure}[htbp]
+    \input{figures/03theory/ctsdm_lin.tex}
+    \centering
+    \caption{A simplified, linear model of the continuous-time $\sd$ ADC.}
+    \label{fig:ctsdmod_lin}
+\end{figure}
 
-
-Transfer functions
-
+Let $U, E$ and $S$ be the signals $u(t), e[k]$ and $s[k]$ in frequency domain, where the distinction between periodic and continuous frequency domain is implicit. The output of the modulator can be expressed as
+\begin{equation}
+    S = E + G[U - S]
+\end{equation}
+and hence
+\begin{equation}
+    \label{eq:ctsd_tf}
+    S = \underbrace{\frac{1}{1+G}}_\text{NTF}E + \underbrace{\frac{G}{1 + G}}_\text{STF}U.
+\end{equation}
+From (\ref{eq:ctsd_tf}) we recognize the noise transfer function as $\NTF = \frac{1}{1+G}$ and the signal transfer function as $\STF = \frac{G}{1 + G}$. Because the input signal and the quantization noise experience different transfer functions, it is possible to shape the noise such that most of the quantization noise appears outside the frequency band of interest, while simultaneously leaving the actual signal unchanged. This is the effect known as noise shaping.

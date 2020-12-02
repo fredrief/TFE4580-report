@@ -1,0 +1,14 @@
+% !TEX root = ../../report.tex
+\begin{tikzpicture}[]
+
+\node[box] (lpf) at (0,0) {\lpf};
+\node[box] (sh) at (2,0) {S/H};
+\node[box] (quantizer) at (4,0) {\quantizer};
+
+\draw[arrow] (-1.5, 0) node[left]{$u(t)$} -- (lpf.west);
+\draw[arrow] (lpf.east)  node[right, yshift=-0.4cm]{$\tilde{u}(t)$} -- (sh.west);
+\draw[arrow] (sh.east) node[right, yshift=-0.4cm]{$\tilde{u}[k]$} -- (quantizer.west);
+\draw[arrow] (quantizer.east) -- ++(1, 0)  node[right]{$\hat{u}[k]$};
+
+
+\end{tikzpicture}

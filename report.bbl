@@ -1,5 +1,10 @@
 \begin{thebibliography}{1}
 
+\bibitem{johns_martin}
+T.~C. Carusone, D.~Johns, and K.~Martin, {\em Analog Integrated Circuit Design,
+  second edition}.
+\newblock John Wiley and Sons Inc., 2013.
+
 \bibitem{cbc_2011_loeliger}
 H.~{Loeliger}, L.~{Bolliger}, G.~{Wilckens}, and J.~{Biveroni},
   ``Analog-to-digital conversion using unstable filters,'' in {\em 2011

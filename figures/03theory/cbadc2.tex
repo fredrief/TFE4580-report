@@ -1,0 +1,26 @@
+% !TEX root = ../../report.tex
+\begin{tikzpicture}[]
+
+    % --------------------- Nodes --------------------------------
+    \node[box] (AS) at (1,0) {AS};
+    % Sampler
+    \node[box] (sampler) at (3.5,0) {S/H};
+    \node[box] (quantizer) at (5.5,0) {\onebitq};
+    \node[box] (DAC) at (4.5,-1.5) {D/A};
+    \node[box] (DE) at (8.5,0) {DE};
+
+    \node[box, dashed, anchor=north west, minimum width=4.5cm, minimum height=3.8cm] (DC) at (2.5,1) {};
+    \node[yshift=0.3cm] (DClabel) at (DC.south) {DC};
+
+    % --------------------- Paths --------------------------------
+    \draw[arrow] (0, 0) node[left]{$\utv$} -- (AS.west);
+    \draw[arrow] (AS.east) node[right, yshift=4mm]{$\stvtilde$} -- (sampler.west);
+    \draw[arrow] (sampler.east) -- (quantizer.west);
+    \draw[arrow] (quantizer.east) -- ++(0.5,0) coordinate[](a) -- (DE.west) node[above, xshift=-0.6cm]{$\skv$};
+    \draw[arrow] (DE.east) -- ++(0.5,0) node[right] {$\ukvhat$};
+
+    \draw[arrow] (a) to[short, *-] ++(0,-0.5) |- (DAC.east);
+    \draw[arrow] (DAC.west) -| (AS.south) node[above, midway, xshift=1cm]{$\stv$};
+
+
+\end{tikzpicture}

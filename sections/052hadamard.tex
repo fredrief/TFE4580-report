@@ -1,11 +1,13 @@
 % !TEX root = ../report.tex
 
 \chapter{Hadamard ADC}
+\label{sec:HadamardADC}
+
 The main advantage of control-bounded ADCs is flexibility. The only requirement set on the system by the estimation filter is that the it obeys the differential equations (\ref{eq:state_space_equations}). This flexibility allows the designer to taylor the system against the application to a larger degree than what is possible in conventional ADC.
 
 The application of this work is modern high-end ultrasound probes. Such probes has up to 10,000 transducers stacked in a 2D array, and the large number of transducers is used for beamforming. With todays technology, having 10,000 ADCs inside the probe is not possible due to restrictions on area and current consumption. Todays solutions therefore employ combinations of analog and digital beamforming, dividing the transducer array into sub arrays sharing one ADC. The transducers of each sub array are combined with analog delay-and-add techniques. Having full control of each transducer would of course be favorable.
 
-In this work, we want to take advantage of this number of channels. Instead of converting each channel individually we view the problem of converting 10,000 analog signals as one big task, resulting in one huge ADC instead of 10,000 smaller ones. The goal is that the resulting ADC will have a current consumption less than 10,000 times a single state-of-the-art ADC.
+In this work, we want to take advantage of this large number of input channels. Instead of converting each channel individually we view the problem of converting 10,000 analog signals as one big task, resulting in one huge ADC instead of 10,000 smaller ones. The goal is that the resulting ADC will have a current consumption less than 10,000 times a single state-of-the-art ADC.
 
 The Hadamard ADC is based on the chain-of-integrator ADC and apply the Hadamard matrix, $\Hn{N}$, to rotate the state vector of the analog system. For N being powers of two, the Hadamard matrix is defined recursively as
 \begin{equation}

@@ -6,7 +6,7 @@
     \node[above=1mm of as_model]{Analog System (AS)};
     \node[box] (B) at (0,0) {$\Bmat$};
     \node[circle, draw, inner sep=0.5mm] (add) at (1.5,0) {\Large+};
-    \node[box, minimum height=2cm] (ci) at (3,0) {\ci};
+    \node[box] (ci) at (3,0) {$\bm{\int}$};
     \node[box] (gamma_tilde) at (6,0) {$\GmattildeT$};
     \node[box, dashed] (C) at (6,2) {$\CmatT$};
     \node[box] (A) at (3,2) {$\Amat$};
@@ -19,7 +19,7 @@
     \draw[arrow] (A.west) -| (add.north);
     \draw[arrow] (add.east) -- (ci.west);
     \draw[arrow] (ci.east) -- (gamma_tilde.west);
-    \draw (ci.east)  ++(1, 0) to[short, *-] ++(0,2) coordinate[](x){};
+    \draw (ci.east)  ++(1, 0) node[below]{$\xtv$} to[short, *-] ++(0,2) coordinate[](x){};
     \draw[arrow] (x) to[short, *-] (A.east);
     \draw[arrow, dashed] (x) -- (C.west);
     \draw[arrow, dashed] (C.east) -- ++(1.5, 0) node[right]{$\ytv$};
