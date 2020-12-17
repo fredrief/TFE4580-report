@@ -11,16 +11,16 @@
 \node[circle, draw, inner sep=0.5mm] (add3) at (10,0) {\Large+};
 
 \node[box, anchor=north west, scale=0.8, transform shape] (SH1) at (1,-1.5) {S/H};
-\node[box, anchor=north west, scale=0.8, transform shape] (Q1) at (0,-1.5) {\onebitqrev};
-\node[box, anchor=north west, scale=0.8, transform shape] (DAC1) at (-1.5,-1.5) {D/A};
+\node[box, anchor=north west, scale=0.8, transform shape] (Q1) at (-0.2,-1.5) {\onebitqrev};
+\node[box, anchor=north west, scale=0.8, transform shape] (DAC1) at (-1.5-0.3,-1.5) {D/A};
 
 \node[box, anchor=north west, scale=0.8, transform shape] (SH2) at (6,-1.5) {S/H};
-\node[box, anchor=north west, scale=0.8, transform shape] (Q2) at (5,-1.5) {\onebitqrev};
-\node[box, anchor=north west, scale=0.8, transform shape] (DAC2) at (-1.5+5,-1.5) {D/A};
+\node[box, anchor=north west, scale=0.8, transform shape] (Q2) at (4.8,-1.5) {\onebitqrev};
+\node[box, anchor=north west, scale=0.8, transform shape] (DAC2) at (-1.5+5-0.3,-1.5) {D/A};
 
 \node[box, anchor=north west, scale=0.8, transform shape] (SHN) at (6+7,-1.5) {S/H};
-\node[box, anchor=north west, scale=0.8, transform shape] (QN) at (5+7,-1.5) {\onebitqrev};
-\node[box, anchor=north west, scale=0.8, transform shape] (DACN) at (-1.5+5+7,-1.5) {D/A};
+\node[box, anchor=north west, scale=0.8, transform shape] (QN) at (4.8+7,-1.5) {\onebitqrev};
+\node[box, anchor=north west, scale=0.8, transform shape] (DACN) at (-1.5+5+7-0.3,-1.5) {D/A};
 
 \node[box, minimum width=14.5cm, anchor=north west] (DE) at (-1.5,-4){Digital Estimator};
 
@@ -41,21 +41,21 @@
 \draw[arrow] (IN.east) -| (SHN.north)  node[above, xshift=6mm]{$\tilde{s}_N(t)$};
 \node[above, xshift=1cm] at (IN.east) {$x_N(t)$};
 
-\draw[] (SHN.west) -- (QN.east);
-\draw[] (QN.west) -- (DACN.east)node[midway](sN){};
+\draw[arrow] (SHN.west) -- (QN.east);
+\draw[arrow] (QN.west) -- (DACN.east)node[midway](sN){};
 \draw[arrow] (DACN.west) node[below, xshift=-5mm]{$s_N(t)$} -| (add3.south);
 \draw[arrow] (sN.center) to[short, *-] ++(0,-2.1) node[right, yshift=7mm]{$s_N[k]$};
 
 \draw[arrow] (SH2.north) ++(0,1.5) node[above]{$x_1(t)$} to[short, *-] (SH2.north) node[above, xshift=6mm]{$\tilde{s}_1(t)$};
-\draw[] (SH2.west) -- (Q2.east);
-\draw[] (Q2.west) -- (DAC2.east)node[midway](s2){};
+\draw[arrow] (SH2.west) -- (Q2.east);
+\draw[arrow] (Q2.west) -- (DAC2.east)node[midway](s2){};
 \draw[arrow] (DAC2.west) node[below, xshift=-5mm]{$s_1(t)$} -| (add2.south);
 \draw[arrow] (s2.center) to[short, *-] ++(0,-2.1) node[right, yshift=7mm]{$s_1[k]$};
 
 
 \draw[arrow] (SH1.north) ++(0,1.5) node[above]{$x_0(t)$} to[short, *-] (SH1.north) node[above, xshift=6mm]{$\tilde{s}_0(t)$};
-\draw[] (SH1.west) -- (Q1.east);
-\draw[] (Q1.west) -- (DAC1.east) node[midway](s1){};
+\draw[arrow] (SH1.west) -- (Q1.east);
+\draw[arrow] (Q1.west) -- (DAC1.east) node[midway](s1){};
 \draw[arrow] (DAC1.west) node[below, xshift=-5mm]{$s_0(t)$} -| (add1.south);
 \draw[arrow] (s1.center) to[short, *-] ++(0,-2.1) node[right, yshift=7mm]{$s_0[k]$};
 

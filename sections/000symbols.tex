@@ -1,17 +1,25 @@
 % !TEX root = ../report.tex
 \chapter*{List of Symbols}
+\addcontentsline{toc}{chapter}{List of Symbols}
 \section*{Matrices and Vectors}
 \begin{tabular}{ p{2cm} l }
     a           & a scalar value \\
 
-    $\bm{a}$    & a column vector $\Tr{\left( a_1 \ \cdots \ a_N \right)} \in \R^{N}$ \\
+    $\bm{a}$    & a column vector $\Tr{\left( a_0 \ \cdots \ a_{N-1} \right)} \in \R^{N}$ \\
 
     $\bm{A}$    & a matrix
     $\begin{pmatrix}
-        a_{11} & \cdots & a_{1N} \\
+        a_{00} & \cdots & a_{0(N-1)} \\
         \vdots & \ddots & \vdots \\
-        a_{M1} & \cdots & a_{MN}
+        a_{(M-1)0} & \cdots & a_{(M-1)(N-1)}
     \end{pmatrix} \in R^{M \times N}
+    $ \\
+    $\bm{A}_{i,j}$ & a sub-matrix, that is part of a block matrix, e.g.
+    $\bm{A} =
+    \begin{bmatrix}
+        \bm{A}_{0,0} & \bm{A}_{0,1} \\
+        \bm{A}_{1,0} & \bm{A}_{1,1}
+    \end{bmatrix}
     $ \\
 
     $\bm{0}_N$  & an all-zero column vector of length $N$ \\
@@ -19,7 +27,7 @@
     $\bm{1}_N$  & a column vector of length $N$ with all elements $1$ \\
     $\bm{1}_{M \times N}$    & an $M$-by-$N$ matrix with all elements $1$ \\
 
-    $\eyen{N}$  & an $N$-by-$N$ matrix with ones on the main diagonal and all other elements zero \\
+    $\eyen{N}$  & an $N$-by-$N$ identity matrix \\
 
     $\Hn{2}$    & second order Hadamard matrix
     $
@@ -31,7 +39,7 @@
 
     $\Hn{N}$    & Hadamard matrix of order N defined by $\Hn{2} \otimes \Hn{\nicefrac{N}{2}}$ \\
 
-    $\Hn{N}'$   & modified Hadamard matrix
+    $\Hn{N}'$   & reduced Hadamard matrix
     $
     \begin{bmatrix}
         \Hn{\nicefrac{N}{2}} & \bm{0}_{\nicefrac{N}{2} \times \nicefrac{N}{2}} \\
@@ -41,9 +49,10 @@
 
     $\otimes$   & Kronecker product \\
     $\Tr{()}$   & transpose \\
+    $\HTr{()}$  & Hermetian transpose \\
     $|a|$       & absolute value \\
     $||\bm{b}||_p$      & p-norm $\left( \Sigma_i |b_i|^p \right)^{\nicefrac{1}{p}}$ \\
-    $||\bm{c}||_{\infty}$        & max norm, equivalent to $\max(|c_1|,|c_2|, \cdots |c_N|)$ \\
+    $||\bm{c}||_{\infty}$        & max norm, equivalent to $\max(|c_0|,|c_1|, \cdots |c_{N-1}|)$ \\
 
 \end{tabular}
 
@@ -63,7 +72,7 @@
 \section*{Control-Bounded Conversion}
 \begin{tabular}{ p{2cm} l }
     $L$         &  input signal dimension \\
-    $N_\ell$    &  system order corresponding to each input channel \\
+    $N_\ell$    &  system order corresponding to each channel \\
     $N$         &  total system order $L N_\ell$ \\
     $\kappa$    &  control gain \\
     $\beta$     &  integrator gain \\
@@ -73,13 +82,15 @@
     $\Gmat$     &  control input matrix \\
     $\Gmattilde$&  control observation matrix \\
     $\utv$      &  input signal \\
-    $\utvhat$   &  estimated input signal \\
+    $\utvhat$   &  estimated/reconstructed input signal \\
+    $\tilde{\bm{u}}(t)$   &  Hadamard transformed input signal  \\
     $\xtv$      &  state vector \\
     $\skv$      &  control signal \\
     $\stv$      &  control contribution \\
     $\stvtilde$ &  control observation \\
     $\ytv$      &  signal observation \\
     $\ytvbreve$ &  fictional signal observation \\
+    $\qtv$      &  the control signal, seen at the output of the analog system \\
     $\Gw$       &  analog transfer function (ATF) matrix \\
     $\Hw$       &  noise transfer function (NTF) matrix \\
     $\Gw\Hw$    &  signal transfer function (STF) matrix \\
@@ -95,7 +106,11 @@
     DAC        &  digital to analog converter \\
     DC         &  digital control \\
     DE         &  digital estimator \\
+    MIMO       &  multiple input, multiple output \\
     NTF        &  noise transfer function \\
+    NRZ        &  non-return to zero \\
+    PSD        &  power spectral density \\
+    SAP        &  sub-aperture \\
     STF        &  signal transfer function \\
 
 \end{tabular}

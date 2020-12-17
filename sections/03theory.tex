@@ -1,15 +1,14 @@
 % !TEX root = ../report.tex
 
-\chapter{Background Theory}
+\chapter{Oversampling A/D Converters}
 \label{sec:theory}
-\section{Oversampling A/D Converters}
 It will become apparent that the control-bounded ADC shares some similarities with conventional oversampling converters, and in particular the continuous-time $\sd$ converter. In order to show where the control-bounded converter distinguishes from these architectures, a brief introduction to conventional oversampling ADCs is included in this section. The presented material is assumed well known to the reader, and is only included to establish a basis of comparison. For a proper introduction to the topic, the reader is referred to \cite{johns_martin}.
 
 An oversampling ADC is based on sampling the input signal at a frequency much higher than the Nyquist rate. For an analog input signal that is bandlimited to $f_0$, we define the oversampling ratio as
 \begin{equation}
     \text{OSR} \triangleq \frac{f_s}{2f_0}
 \end{equation}
-where $f_s$ is the sampling frequency of the ADC. Sampling at a higher frequency generates redundant information about the input signal, and a single estimate of the input signal is typically obtained by averaging several consecutive samples. The redundancy is this way utilized to give a higher resolution, or equivalently reduced requirements on the involved circuit components.
+where $f_s$ is the sampling frequency of the ADC. Sampling at a higher frequency generates redundant signal information, and a single estimate of the input signal is \textcolor{red}{typically obtained by averaging several consecutive samples(?)}. The redundancy is this way utilized to give a higher resolution, or equivalently reduced requirements on the involved circuit components.
 
 Straight forward oversampling will itself give an improved signal-to-noise ratio (SNR) of 3dB per doubling of OSR \cite{johns_martin}. The performance of the oversampling converter is further improved by noise shaping of the quantization noise, through a feedback loop with a loop filter. Such a system is known as a $\sd$ ADC and the part of the system that performs the noise shaping is called a $\sd$ modulator. Such a system is illustrated in figure \ref{fig:dtsdmod}.
 \begin{figure}[htbp]
@@ -18,9 +17,9 @@ Straight forward oversampling will itself give an improved signal-to-noise ratio
     \caption{A discrete-time $\sd$ ADC.}
     \label{fig:dtsdmod}
 \end{figure}
-In figure \ref{fig:dtsdmod}, the box labeled \enquote{S/H} performs the sample-and-hold operation, and passes this discrete-time signal to the $\sd$ modulator. The $\sd$ modulator performs a quantization of the signal, together with a noise shaping of the quantization noise. It is common to include an anti-aliasing filter in front of the S/H-operation.
+In figure \ref{fig:dtsdmod}, the box labeled \enquote{S/H} performs the sample-and-hold operation, and passes a discrete-time signal to the $\sd$ modulator. The $\sd$ modulator performs a quantization of the signal, together with a noise shaping of the quantization noise. It is common to include an anti-aliasing filter in front of the S/H-operation. The output of the $\sd$ modulator is passed on to a digital decimation filter.\textcolor{red}{ This filter usually performs a combination low-pass filtering and down-sampling.}
 
-The system shown in figure \ref{fig:dtsdmod} is called a discrete-time $\sd$ ADC because the $\sd$ modulator has a discrete-time input. A continuous-time $\sd$ converter is achieved by including the sampling in the feedback loop, as shown in figure \ref{fig:ctsdmod}. In this case, an eventual anti-aliasing filter is part of loop filter $G(\omega)$.
+The system shown in figure \ref{fig:dtsdmod} is called a discrete-time $\sd$ ADC because the $\sd$ modulator has a discrete-time input. A continuous-time $\sd$ converter is achieved by including the sampling in the feedback loop, as shown in figure \ref{fig:ctsdmod}. In this case, an eventual anti-aliasing filter is part of the loop filter $G(\omega)$.
 \begin{figure}[htbp]
     \input{figures/03theory/ctsdm.tex}
     \centering
@@ -28,7 +27,7 @@ The system shown in figure \ref{fig:dtsdmod} is called a discrete-time $\sd$ ADC
     \label{fig:ctsdmod}
 \end{figure}
 
-\subsection{Transfer Function Analysis}
+\subsubsection*{Transfer Function Analysis}
 \label{sec:sd_tf_analysis}
 A transfer function analysis of the discrete-time $\sd$ modulator is obtained by evaluating the linearized model shown in figure \ref{fig:dtsdmod_lin}. The analysis of the continuous-time modulator is similar.
 \begin{figure}[htbp]
@@ -39,13 +38,13 @@ A transfer function analysis of the discrete-time $\sd$ modulator is obtained by
 \end{figure}
 This model approximates the quantization error as a signal being independent of the input. This can of course not be strictly true, but is a useful approximation for the analysis.
 
-Let $U(z), E(z)$ and $S(z)$ be the signals $u[k], e[k]$ and $s[k]$ after applying the z-transform. The modulator output is given by
+Let $U(z), E(z)$ and $S(z)$ be the signals Z-transformed version of $u[k], e[k]$ and $s[k]$. The modulator output is then given by
 \begin{equation}
     S(z) = E(z) + G(z)[U(z) - S(z)],
 \end{equation}
-and the signal- and noise transfer function can then be recognized by evaluating
+and the signal- and noise transfer function can be recognized by evaluating
 \begin{equation}
     \label{eq:ctsd_tf}
-    S = \underbrace{\frac{1}{1+G}}_\text{NTF}E + \underbrace{\frac{G}{1 + G}}_\text{STF}U.
+    S(z) = \underbrace{\frac{1}{1+G(z)}}_\text{NTF}E + \underbrace{\frac{G(z)}{1 + G(z)}}_\text{STF}U(z).
 \end{equation}
-as $\NTF = \frac{1}{1+G}$ and $\STF = \frac{G}{1 + G}$. Because the input signal and the quantization noise experience different transfer functions, it is possible to shape the noise such that most of the quantization noise appears outside the frequency band of interest, while simultaneously leaving the actual signal unchanged. This is the effect known as noise shaping. Note here that the necessary condition for noise shaping is that the signal and the quantization error enters the system at different points in the signal flow.
+as $\NTF = \frac{1}{1+G(z)}$ and $\STF = \frac{G(z)}{1 + G(z)}$. Because the input signal and the quantization noise experience different transfer functions, it is possible to shape the noise such that most of the quantization noise appears outside the frequency band of interest, while simultaneously leaving the actual signal unchanged. This is the effect known as noise shaping. Note here that the necessary condition for noise shaping is that the signal and the quantization error enters the system at different points in the signal flow.

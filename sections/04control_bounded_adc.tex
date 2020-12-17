@@ -3,11 +3,11 @@
 \chapter{Control-Bounded A/D Conversion}
 \label{sec:cbadc}
 \section{History and Background}
-Control-bounded A/D conversion is a conceptually new approach to the problem of creating a digital representation of an analog signal. The conversion technique has developed quite recently over the last years, and the progress is mainly pushed forward by prof. Hans-Andrea Loeliger et al., from the Signal and Information Processing Laboratory (ISI), ETH Zürich. The concept was first introduced at the IEEE Information Theory \& Applications Workshop (ITA), february 2011 \cite{cbc_2011_loeliger}. In this paper, the main building blocks of a control-bounded ADC was presented, but no explicit example of such an ADC was given, and no behavioural analysis presented. The approach was further developed in \cite{cbc_2015_loeliger}, which was published for the same conference in 2015. In this paper, the conversion algorithm is improved and a limited transfer function analysis is presented. The latest publication on control-bounded conversion is from 2020 \cite{cbc_2020_loeliger}. This is a longer paper with the goal of providing the sufficient information for analog designers to experiment with control-bounded ADCs. The paper provides a more details on the implementation and operation of the building blocks, together with a full transfer function analysis. Measurements on a proof-of-concept hardware prototype is also presented.
+Control-bounded A/D conversion is a conceptually new approach to the problem of creating a digital representation of an analog signal. The conversion technique has developed over the last years, and the progress is mainly pushed forward by prof. Hans-Andrea Loeliger et al., from the Signal and Information Processing Laboratory (ISI), ETH Zürich. The concept was first introduced at the IEEE Information Theory \& Applications Workshop (ITA), february 2011 \cite{cbc_2011_loeliger}. In this paper, the main building blocks of a control-bounded ADC was presented, but no explicit example of such an ADC was given, and no behavioural analysis presented. The approach was further developed in \cite{cbc_2015_loeliger}, which was published for the same conference in 2015. In this paper, the conversion algorithm is improved and a limited transfer function analysis is presented. The latest publication on control-bounded conversion is from 2020 \cite{cbc_2020_loeliger}. This is a longer paper with the goal of providing the sufficient information for analog designers to experiment with control-bounded ADCs. The paper provides a more details on the operation of the building blocks, together with a full transfer function analysis. Measurements on a proof-of-concept hardware prototype is also presented.
 
-In addition to the mentioned papers, Hampus Malmberg, co-author of the latest paper \cite{cbc_2020_loeliger}, has recently defended his Ph.D. on Control-Bounded Converters. The author of this paper has been given early access to a draft of the thesis that is not yet published \cite{malmberg_thesis}, and this draft serves as the main source of information on this topic. Malmberg also held a presentation at the 2020 IEEE International Symposium on Circuits and Systems (ISCAS)\cite{malmberg_talk}, where he presented the basic concept of control-bounded ADC together with the idea of the Hadamard ADC which is a basis for this work.
+In addition to the mentioned papers, Hampus Malmberg, co-author of the latest paper \cite{cbc_2020_loeliger}, has recently defended his Ph.D. on control-bounded converters. The thesis\cite{malmberg_thesis} is not yet published, but the author has been given access to a draft which serves as the main source of information on this topic. Malmberg also held a presentation at the 2020 IEEE International Symposium on Circuits and Systems (ISCAS)\cite{malmberg_talk}, where he presented the basic concept of control-bounded ADC, together with the Hadamard ADC which is a basis for the architecture proposed in a later chapter.
 
-In this section, the operating principle of a control-bounded converter is described in detail, and we follow the notation established in \cite{cbc_2020_loeliger}. The theoretical presentation given in this section will be very close to that of \cite{malmberg_thesis}, but less general and limited to what is necessary for understanding the presented results.
+In this section, the operating principle of a control-bounded converter is described in detail, and we follow the notation established in \cite{cbc_2020_loeliger}. The theoretical presentation given in this section will be very close to that of \cite{malmberg_thesis}, but less general and limited to what is necessary for understanding the the rest of the thesis.
 
 
 
@@ -35,7 +35,7 @@ In this section, the operating principle of a control-bounded converter is descr
 
 
 \section{Overview}
-The control-bounded ADC approaches the A/D conversion problem differently compared to conventional A/D converters. The conceptual difference lies in the view on sampling. In a control-bounded converter, the analog input signal is never sampled in the traditional way. The circuit that constitutes a control-bounded ADC still contains quantizers, but the quantized signals are never treated as a sampled version of the input. Instead, they are intermediate digital signals that only indirectly relates to the input, and they are used by a digital estimation filter to perform the digital estimate of the input signal. This way, rather than the process of performing accurate measurements of an analog signal using imperfect circuit components, sampling becomes the process of converting a redundant digital representation into an efficient one \cite{malmberg_thesis}.
+The control-bounded ADC approaches the A/D conversion problem differently compared to conventional A/D converters. The conceptual difference lies in the view on sampling. In a control-bounded converter, the analog input signal is never sampled in the traditional way. The circuit that constitutes a control-bounded ADC still contains quantizers, but the quantized signals are never treated as a sampled version of the input. Instead, they are intermediate digital signals that only indirectly relates to the input, and they are used by a digital estimation filter to perform the digital estimate of the input signal. This way, rather than the process of performing \textcolor{red}{(in)accurate} measurements of an analog signal using imperfect circuit components, sampling becomes the process of converting a redundant digital representation into an efficient one \cite{malmberg_thesis}. \textcolor{red}{Litt for tung setning?}
 
 To clarify this, consider the general block diagram shown in figure \ref{fig:cbadc1}.
 \begin{figure}[htbp]
@@ -56,18 +56,9 @@ Note that the output of the digital estimator is denoted as a continuous-time es
     \label{fig:cbadc2}
 \end{figure}
 
-Before going into detail on each of these building blocks, consider figure \ref{fig:cbadc2}, which shows the same block diagram, but with the DC box opened. From this figure it is evident that the structure of the control-bounded ADC is very similar to that of the continuous-time $\sd$ modulator in figure \ref{fig:ctsdmod}. The control-bounded converter may in fact be viewed as a generalization of the continuous-time $\sd$ ADC. As mentioned, the main difference between these architectures arises from the different interpretation of the control signal $\skv$. In the $\sd$ ADC, this signal is viewed as a filtered, sampled and quantized version of the input signal and the digital output is obtained by averaging this signal through a decimation filter. In the control-bounded perspective the direct relation between $\skv$ and $\utv$ is ignored completely. Instead, we focus solely on the fact that $\stv$ is the contribution needed to stabilize the internal states of the analog system. This view leeds to a different estimation filter for the reconstruction of $\utvhat$.
+Before going into detail on each of these building blocks, consider figure \ref{fig:cbadc2}, which shows the same block diagram, but with the DC box opened. From this figure it is evident that the structure of the control-bounded ADC is very similar to that of the continuous-time $\sd$ modulator in figure \ref{fig:ctsdmod}. The control-bounded converter may in fact be viewed as a generalization of the continuous-time $\sd$ ADC. As mentioned, the main difference between these architectures arises from the different interpretation of the control signal $\skv$. In the $\sd$ ADC, this signal is viewed as a filtered, sampled and quantized version of the input signal and the digital output is obtained by averaging this signal through a decimation filter. In the control-bounded perspective, the direct relation between $\skv$ and $\utv$ is ignored completely. Instead, we focus solely on the fact that $\stv$ is the contribution needed to stabilize the internal states of the analog system. This view leeds to a different estimation filter for the reconstruction of $\utvhat$.
 
-It should be noted that the contribution of the control-bounded ADC is not to provide an alternative decimation filter to already existing $\sd$ ADCs. As shown in section \ref{sec:sd_tf_analysis}, the noise shaping of the $\sd$ modulator relies on the fact that the signal and the quantization noise enters the system at different points in the signal flow. This condition is a major restriction to the design space of $\sd$ modulators. The estimation filter of the control-bounded converter on the other hand, imposes no restrictions to the analog system. Hence, the ADC can be designed with combinations of analog system and digital control that have previously been unimaginable. The advantage of this will become more apparent when considering the Hadamard ADC in chapter \ref{sec:HadamardADC}.
-
-
-
-
-
-
-
-
-
+It should be noted that the contribution of the control-bounded ADC is not to provide an alternative decimation filter to already existing $\sd$ ADCs. Stepping away from the sampling oriented view of $\skv$, relaxes the requirements on the parts of the circuit that produces this signal. More importantly, the indirect relation between $\skv$ and $\utv$ enables a more general interaction between the analog and the digital parts of the system. There are for instance no need to require a one-to-one relation between the elements of these two signals, and they need not be of the same dimension. Each element of $\skv$ might contain information from all elements of $\utv$. These features are particularly interesting for multi-cannel systems which is of special interest in this thesis.
 
 
 
@@ -117,7 +108,7 @@ and
     \label{eq:def_control_contribution}
     \stv \triangleq \left( s_1(t),..., s_M(t) \right)^\mathsf{T} \in \R^M.
 \end{equation}
-This system is said to have $L$ inputs, $M$ controls and $N$ states. We will refer to $\Amat \in \R^{N \times N}$, $\Bmat \in \R^{N \times L}$ and $\Gmat \in \R^{N \times M}$ as the \textit{system matrix}, the \textit{input matrix} and \textit{the control input matrix} respectively.
+This system is said to have $L$ input channels, $M$ controls and $N$ states. We will refer to $\Amat \in \R^{N \times N}$, $\Bmat \in \R^{N \times L}$ and $\Gmat \in \R^{N \times M}$ as the \textit{system matrix}, the \textit{input matrix} and \textit{the control input matrix} respectively. We will also refer to $N$ as the \textit{system order}.
 
 The only physical output of the analog system is the control observation
 \begin{equation}
@@ -130,11 +121,11 @@ The second output of the analog system is the purely conceptual signal
     \label{eq:def_as_output}
     \ytv \triangleq \CmatT \xtv \in \R^{\tilde{N}},
 \end{equation}
- which is used by the digital estimator to produce the estimate $\utvhat$. This signal has no physical meaning, and the \textit{signal observation matrix} $\CmatT \in \R^{\tilde{N} \times N}$ is basically telling the digital estimation algorithm which of the internal states that could be treated as bounded. Thus $\ytv$ and $\CmatT$ does only exist conceptually inside the digital estimator.
+ which is used by the digital estimator to produce the estimate $\utvhat$. This signal has no physical meaning, and the \textit{signal observation matrix} $\CmatT \in \R^{\tilde{N} \times N}$ is basically telling the digital estimation algorithm which of the internal analog states that could be treated as bounded. Thus $\ytv$ and $\CmatT$ does only exist conceptually inside the digital estimator.
 
 \subsection{Transfer Function and Impulse Response Matrix}
 \label{sec:as_tf}
-The transfer function of the analog system gives the frequency domain relation between the input $\bm{U}(\omega)$ and the output $\bm{Y}(\omega)$. Hence for the general case of $L$ inputs and $\tilde{N}$ outputs, the analog transfer function (ATF) is a $\tilde{N}$-by-$L$ matrix, defined by $\bm{Y}(\omega) = \Gw \bm{U}(\omega)$. Each element $G_{i,j}(\omega)$ of $\Gw$ is the transfer function from $U_j(\omega)$ to $Y_i(\omega)$. From (\ref{eq:state_space_equations}) the ATF is obtained as
+The transfer function of the analog system gives the frequency domain relation between the input $\bm{U}(\omega)$ and the output $\bm{Y}(\omega)$. Hence for the general case of $L$ input channels and $\tilde{N}$ outputs, the analog transfer function (ATF) is a $\tilde{N}$-by-$L$ matrix, defined by $\bm{Y}(\omega) = \Gw \bm{U}(\omega)$. Each element $G_{i,j}(\omega)$ of $\Gw$ is the transfer function from $U_j(\omega)$ to $Y_i(\omega)$. From (\ref{eq:state_space_equations}) the ATF is obtained as
 \begin{equation}
     \label{eq:ATF_def}
     \Gw = \CmatT\left(\jw \eyen{N} - \Amat \right)^{-1}\Bmat,
@@ -176,20 +167,20 @@ where $\exp$ denotes the matrix exponential.
 
 \section{Digital Control}
 \label{sec:04digcontrol}
-The digital control is a discrete time system which serves the purpose of stabilizing the analog system. It includes a sample-and-hold circuit, a one-bit quantizer and a D/A converter, as shown in figure \ref{fig:cbadc2}. The control observation $\stvtilde$ is sampled and quantized with a period $T$, resulting in the digital control signal $\skv$ which is passed on to the digital estimator. The D/A converter is a non-return to zero (NRZ) DAC generating the control contribution $\stv$.
+The digital control is a discrete time system which serves the purpose of stabilizing the analog system. It includes a sample-and-hold circuit, a one-bit quantizer and a D/A converter, as shown in figure \ref{fig:cbadc2}.\textcolor{red}{ The control observation $\stvtilde$ is sampled and quantized with a period $T$, resulting in the digital control signal $\skv$ which is passed on to the digital estimator. The D/A converter is in this thesis assumed to be a non-return to zero (NRZ) DAC generating the control contribution $\stv$.}
 
-The digital control is called effective if it manages to keep the state vector bounded, given a bounded input vector. The input vector $\utv$ is bounded if it satisfies
+The digital control is called effective if it manages to keep the state vector bounded, given a bounded input. The input vector $\utv$ is bounded if it satisfies
 \begin{equation}
-    ||\utv||_{\infty} \leq b_{\bm{u}} \quad \forall t.
+    ||\utv||_{\infty} \leq b_{\bm{u}} \ \forall t.
 \end{equation}
 Equivalently, the state vector $\xtv$ is bounded if it satisfies
 \begin{equation}
     \label{eq:bx}
-    ||\xtv||_{\infty} \leq b_{\bm{x}} \quad \forall t.
+    ||\xtv||_{\infty} \leq b_{\bm{x}} \ \forall t.
 \end{equation}
-In this paper, the input signal will always be assumed bounded, and the boundary $b_{\bm{u}}$ is assumed to be determined by an external circuit. The boundary for the state vector, $b_{\bm{x}}$, is a free variable and determines the magnitude of the state vector of the analog system.
+\textcolor{red}{In this thesis, the input signal will always be assumed bounded, and the boundary $b_{\bm{u}}$ is assumed to be determined by the application.} The boundary for the state vector, $b_{\bm{x}}$, is a free variable and determines the magnitude of the state vector of the analog system.
 
-A thorough analysis of the criteria for an effective control is found in \cite{malmberg_thesis}. The analysis is useful for the theoretical understanding of the system, but not necessary for the design process and is therefore beyond the scope of this paper. Intuitively, there are three quantities affecting the stability of the analog system. The sampling period $T$ of the digital control, the unity gain frequency of the analog system and the boundary $b_{\bm{x}}$. Increasing the speed of the analog system would require a shorter sampling period to counteract the faster growth of the system states. Reducing the boundary  $b_{\bm{x}}$ would require either reducing the speed of the analog system or increasing the sampling frequency, in order to maintain a tighter bound.
+A thorough analysis of the criteria for an effective control is found in \cite{malmberg_thesis}. The analysis is useful for the theoretical understanding of the system, but not necessary for the design process and is therefore beyond the scope of this paper. Intuitively however, there are three quantities affecting the stability of the analog system. The sampling period $T$ of the digital control, the unity gain frequency of the analog system and the boundary $b_{\bm{x}}$. Increasing the speed of the analog system would require a shorter sampling period to counteract the faster growth of the system states. Reducing the boundary $b_{\bm{x}}$ would require either reducing the speed of the analog system or increasing the sampling frequency, in order to maintain a tighter bound.
 
 It will become apparent in the next section that the performance of the overall ADC is related to the digital controls ability to bound the state vector. Designing the ADC for a stability guarantee means that it is theoretically impossible for the state vector to grow beyond $b_{\bm{x}}$ at any point in time, given any valid input signal. This will of course result in a large stability margin most of the time, which means that there is potential for increased performance not being utilized. The preferred way of tuning the stability of the system is therefore through simulations, and then to include the possibility of a full system reset if it happens to become unstable.
 
@@ -213,14 +204,14 @@ It will become apparent in the next section that the performance of the overall 
 
 
 \section{Digital Estimator}
-The digital estimator (DE) forms an estimate $\utvhat$ of $\utv$ based on the control signals $\skv$ and the knowledge of the AS system parameters. The purpose of this section is to describe the digital estimation problem, and to derive the optimum linear estimation filter.
+The digital estimator (DE) forms an estimate $\utvhat$ of $\utv$ based on the control signals $\skv$ and the knowledge of the analog systems parameters. The purpose of this section is to describe the digital estimation problem, and to present the optimum linear estimation filter.
 
 \subsection{Statistical Estimation Problem and Transfer Functions}
-In the following analysis, the system described by (\ref{eq:state_space_equations}) is assumed to be invariant and stable. This assumption only applies in the analysis of this section, where the goal is to describe the estimation problem and derive the analytic transfer function expressions. The actual estimation filter will not be limited by these assumptions.
+In the following analysis, the system described by (\ref{eq:state_space_equations}) is assumed to be invariant and stable. This assumption is only needed to derive an analytic transfer function expression, and will not limit the actual estimation filter.
 
-The objective of the digital estimator is to construct a digital estimate $\utvhat$ of $\utv$, based on the control signals $\skv$. As highlighted previously in this chapter, the direct relation between $\skv$ and $\utv$ is ignored completely by the digital estimator. Instead, $\skv$ is only treated as the signal needed to stabilize the analog system, when triggered by an input signal $\utv$.
+The objective of the digital estimator is to construct a digital estimate $\utvhat$ of $\utv$, based on the control signals $\skv$. As highlighted previously in this chapter, the direct relation between $\skv$ and $\utv$ is ignored completely. Instead, $\skv$ is only treated as the signal needed to stabilize the analog system, when triggered by an input signal $\utv$.
 
-To formalize this approach, let $\ytvbreve \triangleq (\bm{g} * \bm{u})(t) \in \R^{\tilde{N}}$ be the signal that would have occurred at the output of the analog system in the absence of any digital control. Futhermore, let $\qtv$ be the control contribution signal seen at the output of the analog system. Because the control contribution enters the analog system in an additive way, we can express the relation as
+To formalize this approach, let $\ytvbreve \triangleq (\bm{g} * \bm{u})(t) \in \R^{\tilde{N}}$ be the signal that would have occurred at the output of the analog system in the absence of any digital control. Futhermore, let $\qtv$ be the control contribution signal seen at the output of the analog system. Because the control contribution enters the analog system in an additive way, their relation may be expressed as
 \begin{equation}
     \label{eq:actual_observation}
     \ytv = \ytvbreve -\qtv.
@@ -246,7 +237,7 @@ Because the objective of the analog system is to greatly amplify the sought freq
             &= (\bm{h} * \bm{g} * \bm{u})(t) \label{eq:uhat_q_err2}
 \end{align}
 
-It is evident that $\utvhat$ could have been computed with arbitrary accuracy, if the output $\ytv$ was known to the digital estimator. This if statement is obvious, but it illustrates an important point. Instead of relying on an inevitably inaccurate measurement of $\ytv$, we choose to approximate this signal as constantly being zero. The accuracy of the estimate then relies on the validity of the approximation $\ytv \approx \bm{0}$, rather than the precision of a direct measurement of $\ytv$. This approximation is illustrated in figure \ref{fig:de_problem}, where it is indicated that the actual analog system output is disregarded and substituted with the fictional observation $\ytvtilde = \bm{0}$.
+It is evident that $\utvhat$ could have been computed with arbitrary accuracy, if the output $\ytv$ was completely known to the digital estimator. This if statement is obvious, but it illustrates an important point. Instead of relying on an inevitably inaccurate measurement of $\ytv$, we choose to approximate this signal as constantly being zero. The accuracy of the estimate then relies on the validity of the approximation $\ytv \approx \bm{0}$, rather than the precision of a direct measurement of $\ytv$. This approximation is illustrated in figure \ref{fig:de_problem}, where it is indicated that the actual analog system output is disregarded and substituted with the fictional observation $\ytvtilde = \bm{0}$.
 
 Any deviation of $\ytv$ from $\bm{0}$ will result in a conversion error, meaning that $\ytv$ is the conversion error signal seen at the output of the analog system. This conversion error does not enter the estimate directly, but is filtered by $\htv$. From the Fourier transform of (\ref{eq:uhat_q_err2}),
 \begin{equation}
@@ -263,7 +254,7 @@ The error introduces by the approximation in (\ref{eq:uhat_approx}) is treated b
     \htv    & = \argmin_{\bar{\bm{h}}} \E[(\utvhat - \utv)^2] \\
             & = \argmin_{\bar{\bm{h}}} \E[((\bar{\bm{h}}*\bm{q})(t) - \utv)^2].
 \end{align}
-This minimization problem is exactly the objective of the Wiener-filter \cite{optimal_filtering} and the impulse response matrix is given by the solution to the well known Wiener-Hopf equations:
+\textcolor{red}{This minimization problem is exactly the objective of the Wiener-filter \cite{optimal_filtering} and the impulse response matrix is given by the solution to the well-known Wiener-Hopf equations: - Går det litt fort her?}
 \begin{equation}
     \label{eq:wiener_hopf}
     (\bm{h}* \RqqT)(\tau) = \RuqT(-\tau)
