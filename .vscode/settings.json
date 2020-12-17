@@ -1,7 +1,15 @@
 {
     "cSpell.words": [
         "bandlimited",
+        "beamformer",
+        "dacn",
+        "iscas",
+        "lnas",
         "newcommands",
+        "parametrizations",
         "riccati"
+    ],
+    "cSpell.ignoreWords": [
+        "linearizing"
     ]
 }

@@ -1,0 +1,56 @@
+% !TEX root = ../report.tex
+\chapter{Description of the Estimation Filter Algorithm}
+\label{a:de_filter_description}
+This appendix provides a short and concise description of the estimation filter algorithm.
+
+The algorithm consist of a forward recursion
+\begin{equation}
+    \label{eq:mf}
+    \mf_{k+1} \triangleq \Af \mf_k +  \Bf\skvin{k},
+\end{equation}
+
+a backward recursion
+\begin{equation}
+    \label{eq:mb}
+    \mb_{k-1} \triangleq \Ab \mb_{k} +  \Bb\skvin{k-1},
+\end{equation}
+and finally the estimate
+\begin{equation}
+    \label{eq:uhat_filter_estimate}
+    \utvhatin{t_k} \triangleq \W{T}(\mb_k - \mf_k).
+\end{equation}
+
+The matrices $\Af, \Ab, \Bf, \Bb$ and $\W{}$ is computed offline, and is given by the following equations.
+\begin{equation}
+    \label{eq:def_Af}
+    \Af \triangleq \exp \left( \left( \bm{A} - \frac{1}{\eta^2} \Vf \right) T \right)
+\end{equation}
+\begin{equation}
+    \label{eq:def_Ab}
+    \Ab \triangleq \exp \left( - \left( \bm{A} + \frac{1}{\eta^2} \Vb \right) T \right)
+\end{equation}
+\begin{equation}
+    \label{eq:def_Bf}
+    \Bf \triangleq \int_0^T \exp \left( \left( \bm{A} - \frac{1}{\eta^2} \Vf \right) (T-\tau) \right)\Gmat d\tau
+\end{equation}
+\begin{equation}
+    \label{eq:def_Bb}
+    \Bb \triangleq -\int_0^T \exp \left( - \left( \bm{A} + \frac{1}{\eta^2} \Vb \right) (T-\tau) \right)\Gmat d\tau
+\end{equation}
+In equations (\ref{eq:def_Af} - \ref{eq:def_Bb}), $\exp(.)$ denotes the matrix exponential, which is not to be confused with the element-wise exponential operation.
+
+The matrices $\Vf$ and $\Vb$ used in (\ref{eq:def_Af} - \ref{eq:def_Bb}) is obtained by solving the continuous-time algebraic Riccati (CARE) equations
+\begin{equation}
+    \label{eq:Vf_care}
+    \Amat\Vf + \left( \Amat\Vf \right)^\mathsf{T} + \Bmat \Bmat^\mathsf{T} - \frac{1}{\eta^2}\Vf\CmatT\Cmat\Vf = \bm{0}_{N \times N}
+\end{equation}
+and
+\begin{equation}
+    \label{eq:Vb_care}
+    \Amat\Vb + \left( \Amat\Vb \right)^\mathsf{T} - \Bmat \Bmat^\mathsf{T} + \frac{1}{\eta^2}\Vb\CmatT\Cmat\Vb = \bm{0}_{N \times N}.
+\end{equation}
+The matrix $\W{}$ is finally obtained by solving the linear equation system
+\begin{equation}
+    \label{eq:W_sys}
+    \left( \Vf + \Vb \right)\W{} = \Bmat.
+\end{equation}

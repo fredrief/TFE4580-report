@@ -3,7 +3,6 @@
 
     % --------------------- Nodes --------------------------------
     % LPF
-    \node[box] (lpf) at (-0.5,0) {\lpf};
     \node[box] (sampler) at (1.5,0) {S/H};
     \node[circle, draw, inner sep=0.5mm] (add) at (3,0) {\Large+};
     \node[box] (filter) at (4.5,0) {$G(z)$};
@@ -13,8 +12,7 @@
     \node[above=5mm of sigma-delta.north, anchor=north]{$\Sigma\Delta$ modulator};
 
     % --------------------- Paths --------------------------------
-    \draw[arrow] (-1.5, 0) node[left]{$u(t)$} -- (lpf.west);
-    \draw (lpf.east)  node[right, yshift=-0.4cm]{$\tilde{u}(t)$} -- (sampler.west);
+    \draw[arrow] (0, 0) node[left]{$u(t)$} -- (sampler.west);
     \draw[arrow] (sampler.east) -- (add.west);
     \draw[arrow] (add.east) -- (filter.west);
     \draw[arrow] (filter.east) -- (quantizer.west);

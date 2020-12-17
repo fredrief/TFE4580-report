@@ -1,10 +1,12 @@
-\chapter{Transfer Function Analysis}
+% !TEX root = ../report.tex
+
+\chapter{Transfer Function Analysis of Proposed Architecture}
 \label{a:tf_analysis}
-This appendix contains the derivation of the transfer function of the AS described by equations \ref{eq:AH_def}, \ref{eq:BH_def} and \ref{eq:def_Cmat}. It will become apparent that for multiple inputs, i.e. $L>1$, the transfer function decouples into a set of identical expressions. For this analysis, we first consider the case of single input and then show how the obtained results generalizes for the multiple input case. For a single input, the transfer function is a scalar given by
+This appendix contains the derivation of the transfer function of the AS described by equations \ref{eq:AH_def}, \ref{eq:BH_def} and \ref{eq:CHs_def}. It will become apparent that for multiple inputs, i.e. $L>1$, the transfer function decouples into a set of identical expressions. For this analysis, we first consider the case of single input and then show how the obtained results generalizes for the multiple input case. For a single input, the transfer function is a scalar given by
 \begin{align}
-    G(\omega) & = \CmatT \left( j\omega \eyen{N} - \Amat \right)^{-1} \Bmat \\
-                   & = \CmatT \left( j\omega \eyen{N} - \Hn{N}' \Amat' \right)^{-1} \Hn{N}' \Bmat' \\
-                   & = \CmatT \bm{M}^{-1} \Hn{N}' \Bmat',
+    G(\omega) & = \CmatT_{H} \left( j\omega \eyen{N} - \Amat_H \right)^{-1} \Bmat_H \\
+                   & = \CmatT_{CI_s} \left( j\omega \eyen{N} - \Hn{N}' \Amat' \right)^{-1} \Hn{N}' \Bmat_{CI} \\
+                   & = \CmatT_{CI_s} \bm{M}^{-1} \Hn{N}' \Bmat_{CI},
 \end{align}
 where we have defined $\bm{M} \triangleq \left( j\omega \eyen{N} - \Hn{N}' \Amat' \right) \in \R^{N \times N}$. To obtain an analytic expression for the transfer function, we first need a closed form expression for the inverse of this matrix. Referring to equations \ref{eq:defn_} and \ref{eq:def_AH_}, the matrix $\bm{M}$ can be expressed in block form as
 \begin{equation}
@@ -56,7 +58,7 @@ It remains to find an expression for $\bm{D}^{-1}$. We first define the paramete
 \begin{equation}
     \bm{D} = j\omega \left( \eyen{\nicefrac{N}{2}} - \psi \bm{L}_{\nicefrac{N}{2}} \right).
 \end{equation}
-By (\ref{eq:def_Lmat}), the matrix $\bm{L}_{\nicefrac{N}{2}}$ is strictly lower triangular which implies that $\bm{L}_{\nicefrac{N}{2}}^k = \bm{0}$ for some $k>0$.We can therefore express $\bm{D}^{-1}$ by the Neumann series (generalized geometric series) of $\bm{L}_{\nicefrac{N}{2}}$ as
+By (\ref{eq:def_Lmat}), the matrix $\bm{L}_{\nicefrac{N}{2}}$ is strictly lower triangular which implies that $\bm{L}_{\nicefrac{N}{2}}^k = \bm{0}$ for $k \geq \frac{N}{2}$. We can therefore express $\bm{D}^{-1}$ by the Neumann series (generalized geometric series) of $\bm{L}_{\nicefrac{N}{2}}$ as
 \begin{align}
     \bm{D}^{-1} & = \frac{1}{j\omega} \left( \eyen{\nicefrac{N}{2}} - \psi \bm{L}_{\nicefrac{N}{2}} \right)^{-1} \\
                 & = \frac{1}{j\omega} \sum_{k=0}^{\infty}\psi^k \bm{L}_{\nicefrac{N}{2}}^k \label{eq:Dinv_Neumann} \\
@@ -69,8 +71,8 @@ Because of the shape of $\bm{L}_{\nicefrac{N}{2}}$, the matrix $\left( \eyen{\ni
         1 & 0 &  & & &   \\
         \psi & 1 & 0 &  & & \\
         \psi^2 & \psi & 1 & 0 &  &  \\
-        \vdots & \ddots & \ddots  & \ddots &  0 \\
-        \psi^{\frac{N}{2}-1} & \cdots & \psi^2 & \psi & 1
+        \vdots &  & \ddots  & \ddots &  0 \\
+        \psi^{\frac{N}{2}-1} & \cdots &  & \psi & 1
     \end{pmatrix}
 \end{equation}
 
@@ -100,27 +102,27 @@ where
 
 After the introduction of this helper matrix, we can write the expression for the transfer function as
 \begin{align}
-    G(\omega) & = \CmatT
+    G(\omega) & = \CmatT_{CI_s}
     \begin{bmatrix}
         \bm{D}^{-1} & \frac{\beta}{j\omega}\Hn{\nicefrac{N}{2}}\bm{L}_{\nicefrac{N}{2}}\bm{D}^{-1}  \\
         \frac{\beta}{j\omega}\bm{D}^{-1}\Hn{\nicefrac{N}{2}} & \bm{D}^{-1}
     \end{bmatrix}
-    \Hn{N}' \Bmat \\
-    & = \CmatT
+    \Hn{N}' \Bmat_H \\
+    & = \CmatT_{CI_s}
     \begin{bmatrix}
         \frac{1}{j\omega}\bm{\Psi}_{\nicefrac{N}{2}} & \frac{\beta}{(j\omega)^2}\Hn{\nicefrac{N}{2}}\bm{L}_{\nicefrac{N}{2}}\bm{\Psi}_{\nicefrac{N}{2}}  \\
         \frac{\beta}{(j\omega)^2}\bm{\Psi}_{\nicefrac{N}{2}}\Hn{\nicefrac{N}{2}} & \frac{1}{j\omega}\bm{\Psi}_{\nicefrac{N}{2}}
     \end{bmatrix}
-    \Hn{N}' \Bmat
+    \Hn{N}' \Bmat_H
 \end{align}
 
 Before proceeding, we recognize the following. As
 \begin{equation}
-    \Bmat' = \Tr{\left( \beta \quad 0 \quad \cdots \quad 0 \right)} \in \R^{N \times 1}
+    \Bmat_{CI} = \Tr{\left( \beta \quad 0 \quad \cdots \quad 0 \right)} \in \R^{N \times 1}
 \end{equation}
 we get
 \begin{equation}
-    \Hn{N}' \Bmat' = \beta
+    \Hn{N}' \Bmat_{CI} = \beta
     \begin{bmatrix}
         \bm{1}_{\nicefrac{N}{2}} \\
         \bm{0}_{\nicefrac{N}{2}}
@@ -209,14 +211,14 @@ The transfer function expression (\ref{eq:ATF_FINAL}) was derived assuming a sin
 
 For $L>1$, we let $N \triangleq N_\ell L$, where $N_\ell$ is the system order for a single channel. For $L=2$ we have
 \begin{equation}
-    \Tr{\bm{C}} =
+    \CmatT_{CI_s} =
     \begin{pmatrix}
         \Tr{\bm{0}_{\nicefrac{N}{2}}} \ 0 \ \cdots \ 1 \ 0 \ \cdots \ 0 \\
         \Tr{\bm{0}_{\nicefrac{N}{2}}} \ 0 \ \cdots \ 0 \ 0 \ \cdots \ 1
     \end{pmatrix} \in \R^{2 \times N},
 \end{equation}
 \begin{equation}
-    \bm{B}' =
+    \Bmat_H =
     \Tr{\begin{pmatrix}
         \beta \ \cdots \ 0 & 0 \ \cdots \ 0 & \Tr{\bm{0}_{\nicefrac{N}{2}}} \\
         0 \ \cdots \ 0 & \beta \ \cdots \ 0 & \Tr{\bm{0}_{\nicefrac{N}{2}}}
@@ -224,7 +226,7 @@ For $L>1$, we let $N \triangleq N_\ell L$, where $N_\ell$ is the system order fo
 \end{equation}
 and
 \begin{equation}
-    \Hn{N}'\bm{B}' = \beta
+    \Hn{N}'\Bmat_H = \beta
     \begin{bmatrix}
         \bm{1}_{\nicefrac{N_\ell}{2}} & \bm{1}_{\nicefrac{N_\ell}{2}} \\
         \bm{1}_{\nicefrac{N_\ell}{2}} & -\bm{1}_{\nicefrac{N_\ell}{2}} \\

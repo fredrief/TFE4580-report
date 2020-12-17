@@ -1,0 +1,19 @@
+% !TEX root = ../../report.tex
+
+\begin{table}[htbp]
+  \centering
+  \caption{Simulation parameters, Chain-of-Integrators}
+    \begin{tabular}{lcc}
+    \rowcolor[rgb]{ 0,  0,  0} \textcolor[rgb]{ 1,  1,  1}{\textbf{Parameter}}	 & \textcolor[rgb]{ 1,  1,  1}{\textbf{Symbol}}
+                             & \textcolor[rgb]{ 1,  1,  1}{\textbf{Value}}              \\
+    Critical frequency       & $f_c$            & $\SI{10}{\mega\hertz}$                  \\
+    Unity gain frequency     & $f_u$            & $\SI{50}{\mega\hertz}$               \\
+    Integrator gain          & $\beta$          & $\SI{315}{\mega\hertz}$               \\
+    Sampling frequency       & $f_s$            & $\SI{650}{\mega\hertz}$                 \\
+    Oversampling ratio       & $\text{OSR} \left( \frac{f_s}{2f_c} \right)$ & $32.5$     \\
+    Control gain             & $\kappa$          & $1$
+    \end{tabular}
+  \label{tab:CI_params}
+\end{table}
+
+

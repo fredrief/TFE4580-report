@@ -1,0 +1,18 @@
+% !TEX root = ../report.tex
+
+\chapter{General Transfer Function of the Analog System}
+\label{a:ATF}
+In this appendix presents the derivation of the general transfer function of the analog system. From (\ref{eq:state_space_equations}) the frequency domain relation between the input and the state vector is obtained as
+\begin{align}
+    \jw \bm{X}(\omega) &= \Amat \bm{X}(\omega) + \Bmat\bm{U}(\omega) \\
+    \left(\jw \eyen{N} - \Amat \right)  \bm{X}(\omega) &=  \Bmat\bm{U}(\omega) \\
+    \bm{X}(\omega) &= \left(\jw \eyen{N} - \Amat \right)^{-1}\Bmat\bm{U}(\omega).
+\end{align}
+The output vector is obtained by multiplying the state vector with the signal signal observation matrix, $\CmatT$. Hence
+\begin{equation}
+    \bm{Y}(\jw) = \CmatT\left(\jw \eyen{N} - \Amat \right)^{-1}\Bmat\bm{U}(\jw)
+\end{equation}
+and we recognize the ATF as
+\begin{equation}
+    \Gw = \CmatT\left(\jw \eyen{N} - \Amat \right)^{-1}\Bmat.
+\end{equation}

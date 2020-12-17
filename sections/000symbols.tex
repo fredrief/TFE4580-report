@@ -50,8 +50,8 @@
 
 \section*{Sets}
 \begin{tabular}{ p{2cm} l }
-    $\R$    & the real numbers
-
+    $\R$    & the real numbers \\
+    $\C$    & the complex numbers
 \end{tabular}
 
 \section*{Miscellaneous}
@@ -65,6 +65,7 @@
     $L$         &  input signal dimension \\
     $N_\ell$    &  system order corresponding to each input channel \\
     $N$         &  total system order $L N_\ell$ \\
+    $\kappa$    &  control gain \\
     $\beta$     &  integrator gain \\
     $\Amat$     &  system matrix \\
     $\Bmat$     &  input matrix \\
@@ -72,8 +73,7 @@
     $\Gmat$     &  control input matrix \\
     $\Gmattilde$&  control observation matrix \\
     $\utv$      &  input signal \\
-    $\bm{u}[k]$ &  input samples \\
-    $\ukvhat$   &  estimated input samples \\
+    $\utvhat$   &  estimated input signal \\
     $\xtv$      &  state vector \\
     $\skv$      &  control signal \\
     $\stv$      &  control contribution \\
@@ -89,8 +89,10 @@
 
 \section*{Acronyms}
 \begin{tabular}{ p{2cm} l }
+    ADC        &  analog to digital converter \\
     AS         &  analog system \\
     ATF        &  analog transfer function \\
+    DAC        &  digital to analog converter \\
     DC         &  digital control \\
     DE         &  digital estimator \\
     NTF        &  noise transfer function \\

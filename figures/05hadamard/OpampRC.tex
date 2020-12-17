@@ -9,8 +9,8 @@
 
 \draw (inp) to[R, l=$R_{\beta}$] ++(-2, 0) to[short, -o] ++(-1,0) node[left]{$v^+_{i0}$};
 \draw (inn) to[R, l_=$R_{\beta}$] ++(-2, 0) to[short, -o] ++(-1,0) node[left]{$v^-_{i0}$};
-\draw (inp.center) -- ++(0,3) to[R, l_=$R_{\beta}$] ++(-2, 0) to[short, -o] ++(-1,0) node[below, yshift=-0.5cm]{$\vdots$} node[left]{$v^-_{iN}$};
-\draw (inn.center) -- ++(0,-3) to[R, l=$R_{\beta}$] ++(-2, 0) to[short, -o] ++(-1,0) node[above, yshift=0.5cm]{$\vdots$} node[left]{$v^+_{iN}$};
+\draw (inp.center) -- ++(0,-2.5) to[R, l_=$R{\beta}$] ++(-2, 0) to[short, -o] ++(-1,0) node[above, yshift=0.5cm]{$\vdots$} node[left]{$v^-_{i(\nicefrac{N}{2}-1)}$};
+\draw (inn.center) -- ++(0,2.5) to[R, l=$R_{\beta}$] ++(-2, 0) to[short, -o] ++(-1,0) node[below, yshift=-0.5cm]{$\vdots$} node[left]{$v^+_{i(\nicefrac{N}{2}-1)}$};
 
 \draw (opamp.out +) -- ++(0,1) to[C, l_=$C$] ++(-2,0) -| (opamp.-);
 \draw (opamp.out -) -- ++(0,-1) to[C, l=$C$] ++(-2,0) -| (opamp.+);

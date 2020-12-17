@@ -14,11 +14,11 @@
 
 \draw (inn) to[C, l=$C_{\beta}$] ++(-1, 0) to[short, -o] ++(-1,0) node[left]{$v^-_{i0}$};
 \draw (inp) to[C, l_=$C_{\beta}$] ++(-1, 0) to[short, -o] ++(-1,0) node[left]{$v^+_{i0}$};
-\draw (inp.center) -- ++(0,2) to[C, l_=$C_{\beta}$] ++(-1, 0) to[short, -o] ++(-1,0) node[below, yshift=-0.5cm]{$\vdots$} node[left]{$v^+_{iN}$};
-\draw (inn.center) -- ++(0,-2) to[C, l=$C_{\beta}$] ++(-1, 0) to[short, -o] ++(-1,0) node[above, yshift=0.5cm]{$\vdots$} node[left]{$v^-_{iN}$};
+\draw (inp.center) -- ++(0,2) to[C, l_=$C_{\beta}$] ++(-1, 0) to[short, -o] ++(-1,0) node[below, yshift=-0.5cm]{$\vdots$} node[left]{$v^+_{i(\nicefrac{N}{2}-1)}$};
+\draw (inn.center) -- ++(0,-2) to[C, l=$C_{\beta}$] ++(-1, 0) to[short, -o] ++(-1,0) node[above, yshift=0.5cm]{$\vdots$} node[left]{$v^-_{i(\nicefrac{N}{2}-1)}$};
 
-\draw (ota op.center) -- ++(2,0) to[C, l=$C$] ++(0,2) node[tground]{};
-\draw (ota on.center) -- ++(2,0) to[C, l=$C$] ++(0,-2) node[tground]{};
+\draw (ota op.center) -- ++(2,0) to[C, l=$2C$] ++(0,2) node[tground]{};
+\draw (ota on.center) -- ++(2,0) to[C, l_=$2C$] ++(0,-2) node[tground]{};
 
 \draw (ota op.center) ++(2,0) to[short, *-o] ++(1,0) node[right]{$v^+_{o}$};
 \draw (ota on.center) ++(2,0) to[short, *-o] ++(1,0) node[right]{$v^-_{o}$};

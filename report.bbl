@@ -1,4 +1,18 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
+
+\bibitem{haugen_3D_imaging_SAP_pilot}
+P.~{Santos}, G.~{Haugen}, L.~{Løvstakken}, E.~{Samset}, and J.~{D'hooge},
+  ``High frame rate 3d tissue velocity imaging using sub-aperture beamforming:
+  A pilot study in vivo,'' in {\em 2016 IEEE International Ultrasonics
+  Symposium (IUS)}, pp.~1--4, 2016.
+
+\bibitem{cbc_2020_loeliger}
+H.-A. Loeliger, H.~Malmberg, and G.~Wilckens, ``Control-bounded
+  analog-to-digital conversion: Transfer function analysis, proof of concept,
+  and digital filter implementation,'' 2020.
+
+\bibitem{malmberg_thesis}
+H.~Malmberg, ``Control-bounded converters.'' 2020.
 
 \bibitem{johns_martin}
 T.~C. Carusone, D.~Johns, and K.~Martin, {\em Analog Integrated Circuit Design,
@@ -15,16 +29,21 @@ H.~{Loeliger} and G.~{Wilckens}, ``Control-based analog-to-digital conversion
   without sampling and quantization,'' in {\em 2015 Information Theory and
   Applications Workshop (ITA)}, pp.~119--122, 2015.
 
-\bibitem{cbc_2020_loeliger}
-H.-A. Loeliger, H.~Malmberg, and G.~Wilckens, ``Control-bounded
-  analog-to-digital conversion: Transfer function analysis, proof of concept,
-  and digital filter implementation,'' 2020.
-
-\bibitem{malmberg_thesis}
-H.~Malmberg, ``Control-bounded converters.'' 2020.
+\bibitem{malmberg_talk}
+H.~{Malmberg} and H.~A. {Loeliger}, ``Analog-to-digital conversion using
+  self-averaging analog hadamard networks,'' in {\em 2020 IEEE International
+  Symposium on Circuits and Systems (ISCAS)}, pp.~1--1, 2020.
 
 \bibitem{optimal_filtering}
 B.~D.~O. {Anderson} and J.~B. {Moore}, {\em Optimal Filtering}.
 \newblock Prentice Hall, 1979.
+
+\bibitem{spectre}
+I.~Cadence Design~Systems, ``Spectre simulation platform.''
+  \url{https://www.cadence.com/ko_KR/home/tools/custom-ic-analog-rf-design/circuit-simulation/spectre-simulation-platform.html},
+  2020.
+
+\bibitem{cbadcsim2}
+F.~Feyling, ``cbadcsim2.'' \url{https://github.com/fredrief/cbadcsim2}, 2020.
 
 \end{thebibliography}

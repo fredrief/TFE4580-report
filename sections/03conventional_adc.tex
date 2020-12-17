@@ -2,38 +2,10 @@
 
 \chapter{Conventional A/D Conversion}
 \label{sec:conventional_adc}
-In order to highlight how a control-bounded converter distinguishes from conventional A/D converters, some fundamentals of conventional A/D conversion is given in this chapter. A black box illustration of a general ADC is given in figure \ref{fig:black_box_adc}.
-\begin{figure}[htbp]
-    \centering
-    \input{figures/03theory/black_box_adc.tex}
-    \caption{A black box representation of a general A/D converter.}
-    \label{fig:black_box_adc}
-\end{figure}
-$u(t)$ represents the analog input and $\ukhat$ is the digital output signal. For each $k$, $\hat{u}[k]$ is an N-bit digital word given by
-\begin{equation}
-    \ukhat = b_1 2^{-1} + b_2 2^{-2} + \cdots + b_N{-N}
-\end{equation}
-where each bit $b_i \in \{0, 1\}$. Assuming that the ADC produces digital outputs with a period of $T$, for any time instance $t_0$, we let $\hat{u}[k_0]$ be the digital estimate of the continuous time input $u(k_0 T)$.
-
-In figure \ref{fig:black_box_adc}, $V_{ref}$ is the reference voltage used for quantization of the input. The relation between the quantities is given by
-\begin{equation}
-    V_{ref}\left( b_1 2^{-1} + b_2 2^{-2} + \cdots + b_N 2^{-N}\right) = u(t) \pm V_x
-\end{equation}
-where
-\begin{equation}
-    \label{eq:Vx}
-    -\frac{1}{2}V_{LSB} \leq V_x < \frac{1}{2}V_{LSB}
-\end{equation}
-and
-\begin{equation}
-    V_{LSB} = \frac{V_{ref}}{2^N}.
-\end{equation}
-$V_X$ is referred to as the quantization error, which for an ideal N-bit ADC is bounded as in (\ref{eq:Vx}). This quantization error is giving rise to the quantization noise observed in the digital output.
-
-Conventional A/D converters can generally be divided into two main categories; Nyquist rate- and oversampling converters. These two types of A/D converters will be described briefly in the following sections.
+This chapter contains a very brief introduction to conventional A/D conversion. The presented material is assumed to be well-known to the reader and is included here to highlight how a control-bounded ADC differs from conventional ADC architectures. For a general introduction to A/D conversion, the reader is referred to \cite{johns_martin}. Conventional A/D converters can generally be divided into two main categories; Nyquist rate- and oversampling converters. These will be described briefly in the following sections.
 
 \section{Nyquist Rate A/D converters}
-As the name indicates, a Nyquist rate converter is related to the Nyquist sampling frequency. However, because sampling at the Nyquist rate would require a very precise anti-aliasing filter, practical converters are in general operating at a somewhat higher frequency. Following \cite{johns_martin}, a Nyquist rate A/D converter can be defined as a converter where each output value has a one-to-one correspondence with a single input value. A typical block diagram of a Nyquist rate ADC is shown in figure \ref{fig:nyquist_rate_adc}.
+Following \cite{johns_martin}, a Nyquist rate A/D converter can be defined as a converter where each output value has a one-to-one correspondence with a single input value. The conversion process is often logically divided into sampling and quantization and a block diagram of this structure is shown in figure \ref{fig:nyquist_rate_adc}.
 \label{subsec:nyquist_adc}
 \begin{figure}[htbp]
     \input{figures/03theory/nyquist_adc.tex}
@@ -42,12 +14,15 @@ As the name indicates, a Nyquist rate converter is related to the Nyquist sampli
     \label{fig:nyquist_rate_adc}
 \end{figure}
 
+In figure \ref{fig:nyquist_rate_adc}, the box labeled S/H performs a sample-and-hold operation, turning the
+
 In figure \ref{fig:nyquist_rate_adc}, the analog input $u(t)$ is first passed through an anti-aliasing filter to suppress the higher frequency components. The signal is then sampled and held by the box labeled S/H. The sampled signal is then quantized with N-bit resolution to produce the digital output $\ukhat$.
 
 \section{Oversampling converters}
 \label{subsec:oversampling_adc}
 In contrast to the Nyquist rate converter, an oversampling ADC samples the input signal at a frequency much higher than the Nyquist frequency. For an analog input signal that is bandlimited to $f_0$, we define the oversampling ratio as
 \begin{equation}
+    \label{eq:osr_def}
     \text{OSR} \triangleq \frac{f_s}{2f_0}
 \end{equation}
 where $f_s$ is the sampling frequency of the ADC. Sampling at a higher frequency generates redundant information about the input signal, and a single estimate of the input signal at a certain time instance is obtained by averaging several consecutive samples. The redundancy is this way utilized to give a higher resolution, or equivalently reduced requirements on the involved circuit components.

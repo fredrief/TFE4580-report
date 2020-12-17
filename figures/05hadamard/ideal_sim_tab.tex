@@ -1,0 +1,22 @@
+% !TEX root = ../../report.tex
+
+\begin{table}[htbp]
+    \centering
+    \caption{Simulation parameters, proposed Hadamard ADC}
+      \begin{tabular}{lccr}
+      \rowcolor[rgb]{ 0,  0,  0} \textcolor[rgb]{ 1,  1,  1}{\textbf{Parameter}}	 & \textcolor[rgb]{ 1,  1,  1}{\textbf{Symbol}}
+                               & \textcolor[rgb]{ 1,  1,  1}{\textbf{Value}} & \textcolor[rgb]{ 1,  1,  1}{\textbf{Comment}}          \\
+      Critical frequency       & $f_c$            & $\SI{10}{\mega\hertz}$          &                                                  \\
+      Unity gain frequency     & $f_u$            & $\SI{20}{\mega\hertz}$          &                                                  \\
+      Sampling frequency       & $f_s$            & $\SI{650}{\mega\hertz}$         &                                                  \\
+      Oversampling ratio       & $\text{OSR} \left( \frac{f_s}{2f_c} \right)$       & $32.5$                                            \\
+      System order             & $N$              & $4$                             &                                                   \\
+      Integrator gain          & $\beta$          & $\SI{126}{\mega\hertz}$         & $\beta = 2\pi f_u$                                \\
+      Control gain             & $\kappa$         & $1$                             &                                                    \\
+      State boundary (input boundary)  & $b_{\bm{x}}$ ($b_{\bm{u}}$)    & $1$ ($1$) &                                                    \\
+      Input signal frequency   & $f_{in}$         & $\SI{650}{\kilo\hertz}$         &                                                       \\
+      Input signal amplitude   & $a_{in}$         & $0.9$                           & FS = $b_{\bm{u}}$
+
+      \end{tabular}
+    \label{tab:HCI_params}
+  \end{table}

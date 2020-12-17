@@ -1,2 +1,46 @@
 % !TEX root = ../report.tex
 \chapter{Introduction}
+Modern medical ultrasound systems for 3D imaging are complicated electronic devices. 3D imaging requires an extensive use of beamforming in order to place the focal point at different depths of body. This beamforming is achieved through a matrix of transducers and a single 3D ultrasound probe may contain several thousands such transducer elements.
+
+Most medical ultrasound systems do the main part of the signal processing in a back-end console outside the probe. In order to limit the number of wires needed to transport the digital signals, the beamforming is commonly divided into two stages, using a sub-aperture beamforming (SAP) technique. This way the beamforming is partially done in the probe using analog delay-and-add techniques, and partially in the back-end console with digital signal processing. The SAP technique enables the use of 2D transducer matrices, as thousands of cables out of the probe would be both costly and impractical in a clinical setting, but the technique also shows some limitations \cite{haugen_3D_imaging_SAP_pilot}.
+
+As the ongoing technology development tend to make digital processors smaller, faster and more energy efficient, at some point it might be possible to do all the required signal processing inside the probe, and transmit an image stream wirelessly to a displaying device. Having the main processor inside the probe, removes the need for wired transmission of digital signals out of the probe, and opens the possibility for an all-digital beamforming instead of the traditional SAP aided solution.
+
+Todays conventional digital receiver chain consist of a low noise amplifier (LNA) and an analog to digital converter (ADC). Having a digital access to each individual transducer would require several thousands of these receiver chains, and consequently very limited power available for each of them. This situation motivates a rethinking of the whole receiver system architecture. A system consisting of thousands of general purpose receiver chains, operating independently of each other, might not the best solution for converting this huge number of analog inputs into the digital domain. In addition, the traditional division between LNA and ADC might also be inefficient, and architectures treating the whole receiver chain as a single unit might increase the overall efficiency.
+
+\section{Control-Bounded Conversion}
+Over the last years few years, a group at the university ETH Zürich has developed a conceptually new approach to A/D conversion called \textit{control-bounded conversion} \cite{cbc_2020_loeliger}. The main advantage of this approach is that it opens a new and wider design space, enabling ADC architectures that have previously been unimaginable. The latest contribution to control-bounded conversion is the doctoral thesis of Hampus Malmberg \cite{malmberg_thesis}. This thesis explores the design space space associated with these converters, and proposes several different architectures suited for various applications.
+
+One particularly interesting architecture is the so called Hadamard ADC, which enables a new and interesting way of combining multiple input channels. There is also no need for an external LNA as the amplification is incorporated in the analog part of the ADC. Combining multiple input channels in one ADC enables the utilization of the statistical properties of the input channels, yielding a potentially increased performance. The ultimate goal should be to take advantage of all prior knowledge available for the specific application.
+
+This new ADC approach addresses several important issues and opportunities of the mentioned medical ultrasound situation, with thousands of analog input channels. The proposed control-bounded ADC architectures is however only evaluated on a theoretical level, and no optimized circuit implementation is reported so far.
+
+\section{The Scope of the Thesis}
+This thesis is the beginning of an attempt to realize the first circuit implementation of a control-bounded ADC that is optimized for a specific application. The application in mind is the mentioned medical ultrasound system. The bandwidth is $\SI{5}{\mega\hertz}$ centered around a carrier frequency of $\SI{5}{\mega\hertz}$. The required signal-to-noise ratio per channel is $> 62$ dB or equivalently more than 10 effective bits. The final ADC is to be taped out using a $\SI{22}{\nano\metre}$ FDSOI CMOS technology. Under these requirements, the power consumption of the overall system should be minimized. The specifications are summarized in table \ref{tab:adc_specs}.
+
+\input{figures/01intro/specs.tex}
+
+The goal of this thesis is to establish a starting point for transistor level implementation of this control-bounded ADC. The main contribution of the thesis the development of a novel ADC architecture, based on the Hadamard ADC proposed in \cite{malmberg_thesis}.
+
+The proposed architecture is developed with the mentioned specifications in mind. However, the proposed architecture is still to be seen as a \enquote{minimum viable product} of a control-bounded ADC. There are numbers of possibilities for further improvement that should be incorporated in a future version, in order to fully utilize the potential of this ADC. The goal of the proposed architecture is to demonstrate some of the potential, while still keeping the analog circuit simple enough to make it realizable within a reasonable amount of time. The main goal of the project is to find out if the proposed ADC architecture is suited for this application and deserves further development. By evaluating the final current consumption, and the design challenges discovered along the way, the final circuit implementation will hopefully give an answer to this question.
+
+\section{Main Contributions}
+The main contribution of this thesis is the proposed ADC architecture that serves as a starting point for transistor level implementation of the involved circuit components. An analytic transfer function analysis is presented together with theoretical simulations, and possible topologies for the hardware implementation is discussed. The goal of the discussion is not to conclude on the best solution, but rather to establish a theoretical background for future work. Noise is not considered in this thesis and the most critical design challenges will probably be discovered during transistor implementations.
+
+In addition to the proposed ADC architecture, an important contribution of this thesis is the understanding of the control-bounded ADCs operating principle, together with the development of necessary simulation framework. As this is a new and different approach to A/D conversion, the available literature on the topic is limited. Extensive use of simulations, together with calculations and hypothesis testing has been necessary properly understand the control-bounded ADC. Together with the associated simulation framework, this constitutes an important basis for further work.
+
+\section{Thesis Outline}
+The thesis is structured as follows.
+
+\textbf{Chapter \ref{sec:theory}} - not completely decided yet.
+
+\textbf{Chapter \ref{sec:cbadc} }gives a general, theoretical introduction to the control-bounded conversion principle. The goal of the chapter is to provide an understanding of the operating principle and the fundamental building blocks of the ADC. When describing the control-bounded ADC we follow the language and conventions established by previous publications, and the content of this chapter is very close to that of \cite{malmberg_thesis}, chapter 4. It is however less general and limited to whats relevant for the remaining part of the thesis.
+
+\textbf{Chapter \ref{sec:ciadc}} presents the chain-of-integrator ADC, which is the simplest and most straight-forward control-bounded ADC architecture. This architecture is also covered in both \cite{cbc_2020_loeliger} and \cite{malmberg_thesis}. This simple structure is the basis for the proposed ADC, and its analysis reveals useful results that is also applicable to other architectures.
+
+\textbf{Chapter \ref{sec:HadamardADC}} covers the proposed ADC architecture. A discussion of possible hardware implementations and theoretical simulation results is presented. An analytic transfer function analysis is also provided.
+
+\textbf{Discussion }in a separate chapter?
+
+\textbf{Conclusion.}
+

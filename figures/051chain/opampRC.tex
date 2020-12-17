@@ -1,0 +1,14 @@
+% !TEX root = ../../report.tex
+\begin{circuitikz}
+
+% Opamp
+\node[op amp](opamp) at (2,0) {};
+
+\draw (opamp.-) -- ++(-0.5, 0) node[](a){} -- ++(-0.5, 0) node[](b){} to[R, -o, l_=$R_{\beta}$] ++(-3,0) node[left]{$x_{k-1}(t)$};
+\draw (b.center) to[short, *-] ++(0,2) to[R, -o, l_=$R_{\kappa\beta}$] ++(-3,0) node[left]{$s_{k}(t)$};
+
+\draw (opamp.+) -- ++(0,-0.5) node[ground]{};
+\draw (a.center) to[short, *-] ++(0,1.5) to[C, l=$C$] ++(2.5,0) -| (opamp.out) to[short, -*] ++(0,0);
+\draw (opamp.out) to[short, -o] ++(1,0) node[right]{$x_k(t)$};
+
+\end{circuitikz}

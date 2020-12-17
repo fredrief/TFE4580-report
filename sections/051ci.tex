@@ -2,3 +2,255 @@
 
 \chapter{The Chain-of-Integrators ADC}
 \label{sec:ciadc}
+The simplest control-bounded ADC is the Chain-of-integrators ADC, as presented in \cite{cbc_2020_loeliger}. This configuration consists of an integrator chain, where each integrator is stabilized by a local, independent digital control loop. The structure of this analog system resembles the MASH $\sd$ modulator, and it is shown in \cite{malmberg_thesis} that the performance is also very similar. A block diagram of the full chain-of-integrators ADC is shown in figure \ref{fig:CI}.
+
+As highlighted in the previous section, the main contribution of the control-bounded ADC is the design flexibility guaranteed by the digital estimator. Thus, this straight forward approach does not utilize this flexibility and does indeed show some shortcomings compared to more advanced structures, like the Hadamard ADC presented in the next chapter.
+
+However, the chain-of-integrators serves as an important starting point and a thorough understand of its operating principle is important for understanding the structure presented next. The theoretical analysis is also rather straight forward and several important results from the analysis of the chain-of-integrators are directly applicable to other architectures. In addition, the simulations on the chain-of-integrators demonstrates the developed simulation framework which is an essential tool for further work on the topic.
+
+This chapter is organized as follows. The first section presents a description of the analog system together with a transfer function analysis, based on the results from section \ref{sec:as_tf}. The digital control is then briefly described and the conditions for an effective control is discussed. Finally we present and discuss the simulation results.
+
+
+\begin{figure}[hbp]
+    \centering
+    \input{figures/051chain/ci_system.tex}
+    \caption{A block diagram of an $N$th order chain-of-integrators ADC}
+    \label{fig:CI}
+\end{figure}
+
+
+
+
+
+\section{Analog System}
+The analog system of the chain-of-integrators ADC is shown in figure \ref{fig:CI}. The (ideal) integrators has a transfer function $\nicefrac{\beta}{s}$, and the parameter $\beta$ is referred to as the \textit{integrator gain}. The input signal $u(t)$ is passed through $N$ such integrators, each being controlled by a local, independent control loop. Note that the input signal and output estimates of this ADC are both scalars, as a multi-input chain-of-integrators would be nothing more than $L$ equal systems in parallel.
+
+The system dynamics is described by the equation
+\begin{equation}
+    \label{eq:CI_state_space_eq}
+    \dot{\bm{x}}(t) = \Amat_{CI}\xtv + \Bmat_{CI}u(t) + \Gmat_{CI}\stv.
+\end{equation}
+where the system matrix and the input matrix are given by
+\begin{equation}
+    \label{eq:ci_amat}
+    \Amat_{CI} =
+    \begin{pmatrix}
+    0  \\
+    \beta & 0 \\
+    & \ddots & \ddots & \\
+    & &  \beta & 0
+    \end{pmatrix}
+    \in \R^{N \times N}
+\end{equation}
+and
+\begin{equation}
+    \label{eq:ci_bmat}
+    \Bmat_{CI} = \Tr{
+    \begin{pmatrix}
+        \beta & 0 & \cdots & 0
+    \end{pmatrix}
+    }
+    \in \R^{N \times 1}
+\end{equation}
+respectively.
+
+The $N$ dimensional state-vector $\xtv$ is observed directly by the local digital control, and the control observation matrix is given by
+\begin{equation}
+    \label{eq:ci_GmattildeT}
+    \GmattildeT_{CI} = \eyen{N}.
+\end{equation}
+The output of the 1 bit D/A converter is given by
+\begin{equation}
+    s_i(t) =
+    \begin{cases}
+        \kappa, & \text{if } s_i[k]=1 \\
+        -\kappa,& \text{if } s_i[k]=0,
+    \end{cases}
+\end{equation}
+and $\kappa$ is referred to as the \textit{control gain}. The control matrix is given by
+\begin{equation}
+    \label{eq:ci_Gmat}
+    \Gmat_{CI} =
+    \begin{pmatrix}
+        \kappa \beta \\
+        & \ddots \\
+        & & \kappa \beta
+    \end{pmatrix}.
+\end{equation}
+
+As mentioned in chapter \ref{sec:cbadc}, the signal observation matrix $\CmatT$ maps the state vector $\xtv$ to the output vector $\ytv$. The functionality of this matrix is basically to tell the estimation algorithm which states that could be treated as bounded. As this matrix is purely conceptual, it has no part in the physical implementation and may be chosen independent of the analog system. Typically one would choose to map either all or only the last state to the output, by choosing either
+\begin{equation}
+    \label{eq:ci_cmats}
+    \CmatT_{CI_s} =
+        \begin{pmatrix}
+            0 & \cdots & 0 & 1
+        \end{pmatrix}
+        \in \R^{1 \times N}
+\end{equation}
+or
+\begin{equation}
+    \label{eq:ci_cmatm}
+    \CmatT_{CI_m} = \eyen{N}.
+\end{equation}
+These different choices of $\CmatT$ is referred to as single and multiple output respectively. Intuitively one would think that considering all internal states of the analog system in the estimation filter would give increased performance, and this is indeed the case. The computational complexity of the filter is also indifferent to the choice of $\CmatT$, so $\CmatT_{CI_m}$ is the natural choice for this matrix. The single output matrix is still considered in this paper for the sake of a tractable analysis.
+
+
+\subsection{Transfer Function Analysis}
+For this single input ADC, the analog transfer function of \ref{eq:ATF_def} reduces to a column vector. Each element of the transfer function vector is given by
+\begin{equation}
+    G_k(\omega) = \prod_{\ell = 0}^{N-1} \frac{\beta}{j \omega}.
+\end{equation}
+Hence for the single output case,
+\begin{equation}
+    G_s(\omega) = \left( \frac{\beta}{\jw} \right)^N
+\end{equation}
+and
+\begin{equation}
+    \label{eq:atf_ci_single}
+    \norm{G_s(\omega)}{2}^2 = |G_{N-1}(\omega)|^2 = \left(\frac{\beta}{\omega}\right)^{2N}.
+\end{equation}
+For multiple output,
+\begin{equation}
+    \norm{G_m(\omega)}{2}^2 = \frac{1- \left( \frac{\omega}{\beta} \right)^{2N}}{ \left( \frac{\omega}{\beta} \right)^{2N} \left( 1 - \frac{\omega^2}{\beta^2} \right) }.
+\end{equation}
+
+A comparison of the analog transfer function obtained from single and multiple output is shown in figure \ref{fig:atf_ci_m_vs_s}, for $\beta = 2\pi \cdot \SI{20}{\mega\hertz}$ and $N=5$. As the figure shows, the difference is mainly visible for frequencies above the unity gain of the integrators.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/051chain/ATF_m_vs_s.png}
+    \caption{Comparison of analog transfer function obtained from single and multiple output, for $\beta = 2\pi \cdot \SI{20}{\mega\hertz}$ and $N=5$.}
+    \label{fig:atf_ci_m_vs_s}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Effective digital control}
+In the chain-of-integrators ADC, each integrator is under local digital control. This simple control structure is easy to implement and allows for an analytic derivation of the effective control criteria. This derivation is carried out in detail in \cite{malmberg_thesis} and the main results is presented here.
+
+In the analysis, the input is assumed to be bounded, i.e. $|u(t)| \leq b_u \forall t$, and the conditions for effective control ensure $\norm{\xtv}{\infty} \leq b_{\bm{x}} \forall t$, see section \ref{sec:04digcontrol}. For the chain-of-integrators this is guaranteed If
+\begin{equation}
+    \label{eq:effctrl_kappa}
+    |\kappa| \geq b_{\bm{x}}
+\end{equation}
+and
+\begin{equation}
+    \label{eq:effctrl_Tbeta}
+    T|\beta|(|\kappa| + b_{\bm{x}}) \leq b_{\bm{x}}.
+\end{equation}
+
+\subsection{Implications on the Sampling Rate}
+A natural choice of $\kappa$ and $b_{\bm{x}}$ is to let both equal the positive supply voltage. With $\kappa = \bx$, (\ref{eq:effctrl_Tbeta}) reduces to
+\begin{equation}
+    \label{eq:effctrl_simp}
+    T|\beta| \leq \frac{1}{2}.
+\end{equation}
+
+To see how this condition influences the sampling rate, let $f_s = \frac{1}{T}$ be the sampling frequency of the digital control and let $f_u = \frac{\beta}{2 \pi}$ be the unity gain frequency of the integrators. Equation (\ref{eq:effctrl_simp}) may then be written as
+\begin{equation}
+    \label{eq:fs4fu}
+    f_s \geq 4 \pi f_u,
+\end{equation}
+i.e. given $\kappa = \bx$, the sampling rate must be approximately $12.6$ times the unity gain frequency of the integrators in order to guarantee an effective control.
+
+To place this requirement in the context of oversampling, the unity gain frequency must be related to the frequency band of interest. For simplicity, only the single output transfer function is now considered. Assume that the frequency content of the input signal is upper bounded by a frequency $f_0$ and the critical frequency of the estimation filter is set as $f_c \geq f_0$. Then from (\ref{eq:def_BW}) and (\ref{eq:atf_ci_single}), the parameter $\eta$ may be expressed as
+\begin{equation}
+    \label{eq:fu_vs_fc}
+    \eta = \left(\frac{\beta}{\omega_c}\right)^{N} = \left( \frac{f_u}{f_c} \right)^N.
+\end{equation}
+From (\ref{eq:stf_eta_start})-(\ref{eq:stf_eta_end}), $\eta$ is also the relation between the magnitude of the signal and noise transfer function at the critical frequency. From (\ref{eq:fu_vs_fc}) it is seen that $\eta$ grows with system order as long as $\frac{f_u}{f_c} \geq 1$. We therefore define a practical limit
+\begin{equation}
+    f_u \geq 2f_c
+\end{equation}
+for this relation, in order to take advantage of the higher system order.
+
+Based on this discussion the relation between the signal bandwidth $f_0$ and the sampling rate may ultimately be expressed as
+\begin{equation}
+    f_s \geq 8 \pi f_0,
+\end{equation}
+or equivalently
+\begin{equation}
+    \text{OSR} \geq 4\pi.
+\end{equation}
+Thus, for a chain-of-integrators ADC with guaranteed stability and $\kappa=\bx$, the minimum oversampling rate is approximately 12.6.
+
+As mentioned in section \ref{sec:04digcontrol}, designing for stability guarantee is not attractive from a performance point of view. In section \ref{sec:practical_remarks} it was shown that $T, \beta$ and $\bx$ are the only parameters affecting the SNR of a control-bounded ADC and it is therefore an inevitable trade-off between stability and performance. The preferred way of determining this trade-off is by simulations, and the results obtained in this section serves as a useful starting point.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Simulations}
+The process of simulating a control-bounded ADC is divided into two separate steps. First, the interaction between the analog system and the digital control is simulated in time domain to generate the control signal $\skv$. In the following, this part of the simulation process is referred to as the \textit{system simulation}. These control signals are then applied as input to the digital estimation filter, which generates the output estimate $\utvhat$. For the chain-of-integrators ADC, the system simulations are done using the Spectre simulation platform \cite{spectre} and the estimation filter is implemented in python.
+
+\subsection{System Simulation}
+The circuit used for the system simulation is a 5th order system, derived from the diagram of figure \ref{fig:CI}. The integrators are implemented using a first order opamp-RC filter as shown in figure \ref{fig:opampRCint}, and the opamp is modelled by an ideal voltage controlled voltage source.
+\begin{figure}[htbp]
+    \centering
+    \input{figures/051chain/opampRC.tex}
+    \caption{An Opamp-RC integrator used for the chain-of-integrators simulation.}
+    \label{fig:opampRCint}
+\end{figure}
+The Sample-and-hold, 1 bit quantizer and 1 bit dac, are all incorporated in an ideal, clocked comparator written in VerilogA. The digital control signal $\skv$ does therefore not exist in the system simulation and is extracted from the control contribution, $\stv$, in a post-processing step.
+
+\subsection{Estimation Filter Implementation}
+The digital estimation filter is implemented in python and the source code is available at GitHub \cite{cbadcsim2}. The filter is first initialized by computing the offline matrices, defined by equations (\ref{eq:def_Af})-(\ref{eq:W_sys}). The actual estimate is than carried out recursively as described by (\ref{eq:mf})-(\ref{eq:uhat_filter_estimate}). As the recursive estimate takes place after the system simulation is complete, both the forward and the backward recursion uses all available control signals. In a production environment, this is obviously not possible and only a limited amount of \enquote{future} samples are available. The filter algorithm is quite sensitive to the boundary conditions, but usually a few hundred samples is enough for the filter to settle properly.
+
+\subsection{Simulation Results}
+The parameters used for the simulation is summarized in table \ref{tab:CI_params}. The integrator gain is achieved by choosing $R_{\beta} = \SI{320}{\kilo\ohm}$ and $C = \SI{10}{\femto\farad}$. The comparator output is $\pm \SI{1}{\volt}$, and the control gain is set to $\kappa=1$ by having $R_{\kappa\beta} = R_\beta$.
+\input{figures/051chain/CI_SIM_TAB.tex}
+
+A plot of the estimated power spectral density is provided in figure \ref{fig:CI_sim_N5}, for both the single and multiple output case. Note that the difference is mainly notable for frequencies above the critical frequency of the estimation filter.
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figures/051chain/CI_sim_N5.png}
+    \caption{Estimated PSD for a 5th order chain-of-integrator ADC.}
+    \label{fig:CI_sim_N5}
+\end{figure}
+
+A snapshot of the time-domain simulation is shown in figure \ref{fig:snapshot_x1x5}, which compares the state signals $x_1(t)$ and $x_5(t)$ for a full scale sinusoidal input. Note that the input signal is clearly present in $x_1(t)$, while it is almost invisible in $x_5(t)$.
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/051chain/CI_time_x1x5.png}
+    \caption{Time-domain snapshot of $x_1(t)$ and $x_5(t)$, for a full scale sinusoidal input.}
+    \label{fig:snapshot_x1x5}
+\end{figure}
+
+% \begin{figure}[!ht]
+%     \begin{subfigure}[b]{.5\linewidth}
+%       \centering
+%       \includegraphics[width=\linewidth]{figures/051chain/CI_time_x1s1.png}
+%       \caption{A subfigure}
+%       \label{fig:1a}
+%     \end{subfigure}%
+%     \begin{subfigure}[b]{.5\linewidth}
+%       \centering
+%       \includegraphics[width=\linewidth]{figures/051chain/CI_time_x5s5.png}
+%       \subcaption{Another subfigure}
+%       \label{fig:1b}
+%     \end{subfigure}
+%     \caption{A figure with two subfigures}
+%     \label{fig:1}
+%   \end{figure}
