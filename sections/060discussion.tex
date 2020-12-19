@@ -54,8 +54,18 @@ In the presented work, the control gain $\kappa$ is not given much attention. In
 
 
 \subsection{Comparator Offset Voltage}
-Another advantage of control-bounded ADCs that should be mentioned, is the sensitivity to offset voltage in the comparators. As highlighted several times, the only information about the control signals that is used by the digital estimator is that this was the signal needed to stabilize the internal states of the analog system. The digital estimator do not care about how these control signals relate to the input or the states of the analog system. Note that $\Gmattilde$ is not used by the DE in figure \ref{fig:de_problem}. This means that the output estimate is completely invariant to the offset voltage of the comparators, as long as the offset voltage is not disabling the digital control from bounding the state vector.
-\textcolor{red}{Is this interesting?}
+Another advantage of control-bounded ADCs that should be mentioned, is the sensitivity to offset voltage in the comparators. As highlighted several times, the only information about the control signals that is used by the digital estimator is that this was the signal needed to stabilize the internal states of the analog system. The digital estimator do not care about how these control signals relate to the input or the states of the analog system. Note that $\Gmattilde$ is not used by the digital estimator in figure \ref{fig:de_problem}. This means that the output estimate is completely invariant to the offset voltage of the comparators, as long as the offset voltage is not disabling the digital control from bounding the state vector.
+
+Figure \ref{fig:offset_sim} verifies this statement. The figure shows the PSD of the estimated input signal, $\utvhat$, from a chain-of-integrator simulation where the input referred offset voltage of the comparators is varied. The parameters used for the simulation is identical to that of table \ref{tab:CI_params}. In particular, the supply voltage used is $\SI{1}{\volt}$. The input referred offset voltage is modelled by adjusting the reference voltage of the ideal comparators. The reference voltage is varied from 0 to $\SI{700}{\milli\volt}$.
+
+The key point of the figure is to show that an offset voltage of $\SI{300}{\milli\volt}$ has essentially no effect on the output estimate. When the offset voltage is increased to $\SI{500}{\milli\volt}$ and $\SI{700}{\milli\volt}$, the digital control is no longer able to properly bound the state vector and the quality of the estimate is reduced.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{figures/060discussion/offset_sim.png}
+    \caption{PSD of $\utvhat$ from a chain-of-integrator simulation, where the input offset voltage of the comparators is varied. The simulated circuit has a supply voltage of $\SI{1}{\volt}$ and the input offset voltage of the comparators are varied between 0 and $\SI{700}{\milli\volt}$ as indicated.}
+    \label{fig:offset_sim}
+\end{figure}
 
 
 

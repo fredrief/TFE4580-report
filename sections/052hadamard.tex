@@ -189,13 +189,13 @@ The proposed hardware architecture for this system is shown in figure \ref{fig:H
     \end{pmatrix}.
 \end{align}
 
-In figure \ref{fig:HCI_AS_01} color coding is used to distinguish between the input channels (green), the \textit{physical} states (orange) and the control contributions (red). The boxes labeled $\bm{H}_4(Z)$ contains the analog implementation of a 4-by-4 Hadamard matrix. The differential implementation enables an efficient realization of the $\pm 1$ operation of the Hadamard matrix, by crossing/not crossing the wires. The implementation of the $H_4(Z)$ matrix is taken from \cite{malmberg_thesis}, and shown in figure \ref{fig:H4Z}. The impedance $Z$ will be resistive or capacitive depending on the choice of integrator topology.\footnote{Note here that the elements of the impedance matrix will be part of the integrator gain $\beta$. It is not the case that $\bm{H}_4(Z)$ implements $\Hn{4}$ directly, while $\Amat'$ is implemented by the integrators alone. $\Amat_H = \bm{H}'_{N}\Amat'$ is implemented through a combination of the integrators and impedance matrices.}
+In figure \ref{fig:HCI_AS_01} color coding is used to distinguish between the input channels (green), the physical states (orange) and the control contributions (red). The boxes labeled $\bm{H}_4(Z)$ contains the analog implementation of a 4-by-4 Hadamard matrix. The differential implementation enables an efficient realization of the $\pm 1$ operation of the Hadamard matrix, by crossing/not crossing the wires. The implementation of the $H_4(Z)$ matrix is taken from \cite{malmberg_thesis}, and shown in figure \ref{fig:H4Z}. The impedance $Z$ will be resistive or capacitive depending on the choice of integrator topology.\footnote{Note here that the elements of the impedance matrix will be part of the integrator gain $\beta$. It is not the case that $\bm{H}_4(Z)$ implements $\Hn{4}$ directly, while $\Amat'$ is implemented by the integrators alone. $\Amat_H = \bm{H}'_{N}\Amat'$ is implemented through a combination of the integrators and impedance matrices.}
 
 The two input channels $u_0$ and $u_1$ is connected to the first Hadamard matrix together with the states $x_4$ and $x_6$. The input to the first column of integrators will therefore be an orthogonal mixture of each of these signals. The outputs of these integrators are denoted $x_0$-$x_3$. Because of the state-space rotation achieved by $\bm{H}_4(Z)$, these physical states are separated from the logical ones. The control contributions $s_0$-$s_3$ is applied at the input of these integrators to bound their outputs.
 
-These four states are then applied as an input to the second Hadamard matrix. As the Hadamard matrix is its own inverse up to a constant, cf. (\ref{eq:Hmat_symmetry}) and (\ref{eq:Hmat_inverse}), this second Hadamard matrix rotates the state-space back to the origin. In consequence, the states $x_4$-$x_7$ lies in the \enquote{normal} state-space, and the logical states coincides with the physical ones at this point. This means that e.g. $x_4$ is the result of $u_0$ passing through two integrators, each being controlled by a digital feedback loop. To increase the system order, $x_4$ is fed back to the first Hadamard matrix, and the relation between $x_5$ and $x_4$ is the same as the relation between $x_4$ and $u_0$. The same holds for $u_1$, $x_6$ and $x_7$.
+These four states are then applied as an input to the second Hadamard matrix. As the Hadamard matrix is its own inverse up to a constant, cf. (\ref{eq:Hmat_symmetry}) and (\ref{eq:Hmat_inverse}), this second Hadamard matrix rotates the state-space back to the origin. In consequence, the states $x_4$-$x_7$ lies in the \enquote{normal} state-space, and the logical states coincides with the physical ones at this point. This means that e.g. $x_4$ is the result of $u_0$ passing through two integrators, each being under digital control. To increase the system order, $x_4$ is fed back to the first Hadamard matrix, and the relation between $x_5$ and $x_4$ is the same as the relation between $x_4$ and $u_0$. The same holds for $u_1$, $x_6$ and $x_7$.
 
-The system may therefore be understood as 4th order, multi-channel chain-of-integrators, where the signal from all input channels are distributed over the first column of integrators. As the Hadamard matrix is only defined for $N$ being powers of two, both the number of channels, $L$, and the system order per channel, $N_{\ell}$, is also restricted to being powers of two. Increasing $N_\ell$ from $4$ to $6$ would require a $\bm{H}_6$ matrix which is undefined. Increasing the number of channels to e.g. $L=3$ could however be achieved by leaving the 4th input to the Hadamard matrix shortened.
+The system may therefore be understood as 4th order, multi-channel chain of integrators, where the signal from all input channels are distributed over the first column of integrators. As the Hadamard matrix is only defined for $N$ being powers of two, both the number of channels, $L$, and the system order per channel, $N_{\ell}$, is also restricted to being powers of two. Increasing $N_\ell$ from $4$ to $6$ would require a $\bm{H}_6$ matrix which is undefined. Increasing the number of channels to e.g. $L=3$ could however be achieved by leaving the 4th input to the Hadamard matrix shortened.
 
 \begin{sidewaysfigure}[htbp]
     \centering
@@ -316,13 +316,12 @@ In summary, from a system architecture point of view, the Gm-C realization seems
 
 
 
-
 \section{Digital Control}
 The previous section was concerned with the matrices $\Amat, \Bmat$ and $\CmatT$, but $\Gmat$ and $\GmattildeT$ still need to be determined. It is highlighted here that even though the control matrices determines the performance of the digital control, they are part of the \textit{analog} system, cf. figure \ref{fig:as_state_space_model}. In particular, $\GmattildeT$ determines how the digital control \textit{observes} the internal states of the analog system, and could in general be any linear mapping. The same applies for $\Gmat$, which determines how the control contribution $\stv$ \textit{enters} the analog system.
 
 It was pointed out in section \ref{sec:cbc_overview} that the indirect relation between $\skv$ and $\utv$ enables more general interactions between the analog system and the digital control, compared to that of a $\sd$ modulator. The structure of the Hadamard ADC gives an example such an interaction that would not be possible in a $\sd$ ADC.
 
-For the chain-of-integrator ADC in figure \ref{fig:CI}, each integrator has its own dedicated control loop. Hence, for this architecture, the relation between $\skv$ and $\utv$ is not very different from that of a $\sd$ modulator. This local digital control is described by $\GmattildeT_{CI} = \eyen{N}$ and $\Gmat_{CI} = \kappa \beta \GmattildeT_{CI}$, cf. equations (\ref{eq:ci_GmattildeT}) and (\ref{eq:ci_Gmat}). In general, the control matrices require an analog implementation, in the same way as $\Hn{4}(Z)$ implements the Hadamard matrix in the analog system of figure \ref{fig:HCI_AS_01}.
+For the chain-of-integrator ADC in figure \ref{fig:CI}, each integrator has its own dedicated control loop. Hence, for this architecture, the relation between $\skv$ and $\utv$ is not very different from that of a $\sd$ modulator. This local digital control is described by $\GmattildeT_{CI} = \eyen{N}$ and $\Gmat_{CI} = \kappa \beta \eyen{N}$, cf. equations (\ref{eq:ci_GmattildeT}) and (\ref{eq:ci_Gmat}). In general, the control matrices require an analog implementation, in the same way as $\Hn{4}(Z)$ implements the Hadamard matrix in the analog system of figure \ref{fig:HCI_AS_01}.
 
 
 
@@ -338,35 +337,50 @@ In addition, the digital control need not be a static, time-independent system d
 
 These ideas illustrates some of the possibilities within the design space of a control-bounded converter. Although there are most likely numerous implementation challenges to be discovered, these advanced features are all enabled by the control-bounded framework. These ideas are mentioned here to indicate possibilities for future development.
 
-\subsection{Proposed Control Implementation}
-In this work, three different choices of control matrices are considered. In all cases $\Gmat_{H} = \kappa \beta \GmattildeT_{H}$ and the number of controls equals the number of states, i.e. $M=N$. The different parametrizations differs in how the control dimensions align with the signal dimensions.
 
+
+
+
+
+
+\subsection{Proposed Control Parametrization}
+In this work, three different choices of control matrices are considered. In all cases $\Gmat_{H} = \kappa \beta \GmattildeT_{H}$ and the number of controls equals the number of states, i.e. $M=N$. The different parametrizations differs in how the control dimensions align with the signal dimensions. We will refer to the different control parametrizations as \textit{local control, aligned control} and \textit{misaligned control}.
+
+\subsubsection*{Local Control}
 The simplest solution from an implementation point of view is to use local control for each integrator, i.e.
 \begin{equation}
-    \Gmat_{H}^l = \eyen{N}.
+    \Gmat_{H}^l = \kappa\beta \eyen{N}.
 \end{equation}
-In this case, the digital control observes the physical signal states and controls each of them independently. In the example of figure \ref{fig:HCI_AS_01}, this would mean that the control dimensions align with the signal dimension for $x_4$-$x_7$, while $x_0$-$x_3$ are observed in a rotated space, as these does not align with the physical dimensions.
+In this case, the digital control observes the physical signal states and controls each of them independently. The analog implementation of this solution would be to have a separate digital feedback loop around each integrator.
 
-In addition to local control, complete alignment and complete misalignment between control and signal dimensions are also considered. The former is achieved by Hadamard transforming the rotate states $x_0$-$x_3$, while leaving the remaining states unchanged. This operation is described by
+In the example of figure \ref{fig:HCI_AS_01}, this would mean that the control dimensions align with the signal dimension for $x_4$-$x_7$, while $x_0$-$x_3$ are observed in a rotated space, as these does not align with the physical dimensions.
+
+\subsubsection*{Aligned Control}
+Aligned control is achieved by applying a Hadamard transform to the rotated states $x_0$-$x_3$, while observing $x_4$-$x_7$ directly. In this case, the control dimensions and signal dimensions align completely. In other words, there is a one-to-one relationship between the elements of the control observation $\stvtilde$ and the logical states of the analog system. This operation is described by
 \begin{equation}
     \Gmat_{H}^a =
-    \begin{bmatrix}
+    \kappa\beta  \begin{bmatrix}
         \sqrt{\frac{2}{N}}\Hn{\nicefrac{N}{2}}    & \bm{0}_{\nicefrac{N}{2} \times \nicefrac{N}{2}} \\
         \bm{0}_{\nicefrac{N}{2} \times \nicefrac{N}{2}}  & \eyen{\nicefrac{N}{2}}
-    \end{bmatrix}.
+    \end{bmatrix},
 \end{equation}
-The scaling of $\sqrt{\frac{2}{N}}$ is included to normalize the $\Hn{\nicefrac{N}{2}}$ matrix.
+where the scaling of $\sqrt{\frac{2}{N}}$ is included to normalize the $\Hn{\nicefrac{N}{2}}$ matrix.
 
-The latter is achieved by transforming the unrotated states $x_4$-$x_7$, thereby observing all states in a misaligned dimension. In this case,
+
+Referring to figure \ref{fig:HCI_AS_01}, the analog implementation of this structure would be to assign local digital control to the states $x_4$-$x_7$ as the logical and physical states coincide at these nodes. The states $x_0$-$x_3$ would first go through an analog Hadamard matrix before entering the comparators of the digital control. This will rotate the physical states to the same orientation as the logical ones, before the control decisions are being made. The output of the DAC will subsequently be passes through another analog Hadamard matrix before entering the nodes labeled $s_0$-$s_3$ in figure \ref{fig:HCI_AS_01}.
+
+
+\subsubsection*{Misaligned Control}
+Misaligned control is the complementary solution of the aligned control, and has a complete misalignment between the control and the signal dimensions. This is achieved by rotating the states $x_4$-$x_7$ while observing $x_0$-$x_3$ directly. The $\Gmat$-matrix describing this operation is given by
 \begin{equation}
     \Gmat_{H}^m =
-    \begin{bmatrix}
+    \kappa\beta \begin{bmatrix}
         \eyen{\nicefrac{N}{2}}    & \bm{0}_{\nicefrac{N}{2} \times \nicefrac{N}{2}} \\
         \bm{0}_{\nicefrac{N}{2} \times \nicefrac{N}{2}}    & \sqrt{\frac{2}{N}}\Hn{\nicefrac{N}{2}}
     \end{bmatrix}.
 \end{equation}
 
-
+In this situation, each element of the control observation $\stvtilde$ contains information about all the logical states. The analog implementation would be similar to that of the aligned control, except that the Hadamard transform is applied to $x_4$-$x_7$ instead of $x_0$-$x_3$.
 
 
 
@@ -390,12 +404,13 @@ A simulation of the proposed architecture with the three different choices of co
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\linewidth]{figures/05hadamard/ideal_sim.png}
-    \caption{Simulation results of the proposed ADC architecture for $N=4$. The three considered choices of control matrix are compared together with the chain-of-integrators (CI) system of the same order. The input is a single sinusoidal signal with a $90\%$ full scale amplitude. }
+    \caption{Simulation results of the proposed ADC architecture for $N=4$ and $L=1$. The three considered choices of control matrix are compared together with the chain-of-integrators (CI) system of the same order. The input is a single sinusoidal signal with a $90\%$ full scale amplitude. }
     \label{fig:HCI_SIM1}
 \end{figure}
 The simulation shows that the proposed ADC performs very similar to the chain-of-integrators from chapter \ref{sec:ciadc}. Especially the aligned control configuration is almost indistinguishable from the chain-of-integrators. As the proposed Hadamard ADC is essentially a chain-of-integrators with an intermediate state rotation, completely aligning the control and signal dimensions makes this configuration essentially equal to the chain-of-integrators in the ideal case. For the two other configurations, the performance is slightly different.
 
 As the transfer function of the all four systems are identical, the only performance difference is (in this ideal case) caused by the digital controls ability to bound the state vector. We observe from this simulation that the misaligned control seem to perform slightly better than the other configurations.
+
 
 As mentioned in the introduction to this chapter, one of the main motivations for the Hadamard ADC was to distribute the mismatch sensitivity of the involved components. A mismatch simulation is performed to see how the proposed ADC performs under component mismatch, compared to the chain-of-integrator. The simulation is done by using the same parameters as in the previous, ideal simulation. Before running the system simulation, i.e. solving ($\ref{eq:hci_state_space_equations}$), all elements of the matrices $\Amat, \Bmat$ and $\Gmat$ are offset from their ideal value. The deviation is drawn randomly from a normal distribution with a standard deviation of 1\%. The reconstruction of $\utvhat$ is ultimately done using the nominal values. The presented results is obtained by averaging the output estimate of 10 simulation runs. Although this simple simulation does not completely resemble a realistic mismatch situation, it gives an indication of how the system is affected by non-ideal component values.
 
