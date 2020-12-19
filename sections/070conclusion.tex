@@ -1,3 +1,34 @@
 % !TEX root = ../report.tex
 
-\chapter{Conclusion and future work}
+\chapter{Conclusion and future progress}
+\label{sec:conclusion}
+This thesis have explored how control-bounded A/D converters could be used advantageously for receiver systems with multiple input channels. A thorough introduction to the control-bounded conversion concept was given, which provided the necessary background for understanding the considered architectures. The simple chain-of-integrator ADC was presented as a soft introduction to what a control-bounded ADC could be. In addition, several useful results obtained from its analysis also applies to other architectures.
+
+The main focus of the thesis has been the proposed Hadamard architecture, which was based on the architecture presented in \cite{malmberg_thesis}. The proposed architecture is very similar to the existing one, but allows for a more power efficient implementation due to the absence of buffers in the analog system. Some design challenges associated with two different integrator topologies are also considered.
+
+In contrast to the chain-of-integrator, The Hadamard ADC utilizes some of the flexibility within the control-bounded conversion framework. Important features of this architecture include the tolerance to component mismatch and the potential SNR gain by \enquote{averaging} the input channels through a Hadamard matrix. In addition, the ability to share the control resources between the different states has a great potential for future development.
+
+These benefits does however not come without limitations. First of all, realizing an analog implementation of the Hadamard network takes area and has a negative impact on the design of integrators. When considering mismatch sensitivity, harmonics in the spectrum are turned into an increased noise floor. Whether or not this is beneficial will depend on the application. The averaging effect obtained from the Hadamard transform has a huge potential for SNR increasement for systems with large number of input channels. This requires however, that the signal energy has a sufficiently uneven distribution among the input channels. The potential SNR gain will therefore depend on the application at hand.
+
+The shared control could be implemented with any analog system, and might provide a significant performance increasement for applications where the Hadamard analog system is not suited. The potential for implementing an adaptive control system that learns statistical properties of the input signal during operation, is highlighted as a particularly interesting feature.
+
+In summary, we have seen that the control-bounded conversion framework enables interesting ways of tailoring the ADC design for a specific application. In a multi-channel receiver system, placing several independent, general purpose ADCs side-by-side, is not likely the best way of capturing the incoming information content. With the control-bounded converter, the tools for utilizing prior knowledge of the input signal does now exist. We therefore argue, that when designing a receiver system architecture, stepping away from the conventional view on A/D conversion should at least be considered.
+
+
+\subsection*{Future progress}
+As mentioned in the introduction, the next step of this project is to realize a circuit implementation of a control-bounded ADC, optimized for medical ultrasound imaging. Some key specifications for this application was listed in table \ref{tab:adc_specs}. Based on the discussions in this thesis, we therefore have to choose which architecture to go for in the next stage.
+
+As seen in table \ref{tab:adc_specs}, the only distortion requirement listed for this application is the magnitude of the second harmonic, and the other harmonics are considered less significant. This points towards that trading reduced harmonics for increased noise floor in the Hadamard ADC, might not be beneficial for this application.
+
+The medical ultrasound probes used for 3D imaging has several thousand receivers. In the best case scenario of figure \ref{fig:signal_dimension}, the averaging effect of the Hadamard transform would give a direct SNR improvement of about 30dB. However the statistical properties of the input channels are not well understood by the author. A simple analysis of experimental raw data has been performed, but as the 3D ultrasound systems uses the mentioned SAP beamforming, the true raw data from the individual receivers are somewhat hidden from the output of the ADCs. The required knowledge to decide on this topic is therefore not present at the moment.
+
+Also considering the increased design challenges associated with the Hadamard system, the current plan is to implement a chain-based structure in the next step. This will be combined with some kind of shared control system, but exactly what features to include in this first realization is not yet decided. One potentially low-hanging fruit, is to pick only a subset of the available control dimensions, resulting in an undercomplete control. If the number of active comparators could be reduced significantly below the number of states, this might give a considerable reduction in overall power consumption. Furthermore, we will look for an efficient way of including the LNA into the ADC system.
+
+It will be exiting to see how the total power consumption of this implementation compares to already existing solutions.
+
+\newpage
+\section*{Acknowledgement}
+\addcontentsline{toc}{chapter}{Acknowledgement}
+I would particularly like to thank Hampus Malmberg for the contributions to this work. He has provided invaluable assistance on debugging and implementation of the required simulation framework. I would also like to thank him for interesting and inspiring discussions. Most of the ideas presented in this thesis does somehow originate from a discussion with Hampus.
+
+I would also like to thank my supervisors Trond Ytterdal and Carsten Wulff for great support and feedback along the way.

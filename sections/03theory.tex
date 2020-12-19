@@ -8,7 +8,7 @@ An oversampling ADC is based on sampling the input signal at a frequency much hi
 \begin{equation}
     \text{OSR} \triangleq \frac{f_s}{2f_0}
 \end{equation}
-where $f_s$ is the sampling frequency of the ADC. Sampling at a higher frequency generates redundant signal information, and a single estimate of the input signal is \textcolor{red}{typically obtained by averaging several consecutive samples(?)}. The redundancy is this way utilized to give a higher resolution, or equivalently reduced requirements on the involved circuit components.
+where $f_s$ is the sampling frequency of the ADC. Sampling at a higher frequency generates redundant signal information, and a single estimate of the input signal is typically obtained through some kind of decimation filter. The redundancy is this way utilized to give a higher resolution, or equivalently reduced requirements on the involved circuit components.
 
 Straight forward oversampling will itself give an improved signal-to-noise ratio (SNR) of 3dB per doubling of OSR \cite{johns_martin}. The performance of the oversampling converter is further improved by noise shaping of the quantization noise, through a feedback loop with a loop filter. Such a system is known as a $\sd$ ADC and the part of the system that performs the noise shaping is called a $\sd$ modulator. Such a system is illustrated in figure \ref{fig:dtsdmod}.
 \begin{figure}[htbp]
@@ -17,7 +17,7 @@ Straight forward oversampling will itself give an improved signal-to-noise ratio
     \caption{A discrete-time $\sd$ ADC.}
     \label{fig:dtsdmod}
 \end{figure}
-In figure \ref{fig:dtsdmod}, the box labeled \enquote{S/H} performs the sample-and-hold operation, and passes a discrete-time signal to the $\sd$ modulator. The $\sd$ modulator performs a quantization of the signal, together with a noise shaping of the quantization noise. It is common to include an anti-aliasing filter in front of the S/H-operation. The output of the $\sd$ modulator is passed on to a digital decimation filter.\textcolor{red}{ This filter usually performs a combination low-pass filtering and down-sampling.}
+In figure \ref{fig:dtsdmod}, the box labeled \enquote{S/H} performs the sample-and-hold operation, and passes a discrete-time signal to the $\sd$ modulator. The $\sd$ modulator performs a quantization of the signal, together with a noise shaping of the quantization noise. It is common to include an anti-aliasing filter in front of the S/H-operation. The output of the $\sd$ modulator is passed on to a digital decimation filter. This filter usually performs a combination filtering and down-sampling.\footnote{The figure indicates a low-pass response for the decimation filter, but it could in the general case have any pass band.}
 
 The system shown in figure \ref{fig:dtsdmod} is called a discrete-time $\sd$ ADC because the $\sd$ modulator has a discrete-time input. A continuous-time $\sd$ converter is achieved by including the sampling in the feedback loop, as shown in figure \ref{fig:ctsdmod}. In this case, an eventual anti-aliasing filter is part of the loop filter $G(\omega)$.
 \begin{figure}[htbp]

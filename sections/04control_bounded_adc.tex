@@ -35,7 +35,8 @@ In this section, the operating principle of a control-bounded converter is descr
 
 
 \section{Overview}
-The control-bounded ADC approaches the A/D conversion problem differently compared to conventional A/D converters. The conceptual difference lies in the view on sampling. In a control-bounded converter, the analog input signal is never sampled in the traditional way. The circuit that constitutes a control-bounded ADC still contains quantizers, but the quantized signals are never treated as a sampled version of the input. Instead, they are intermediate digital signals that only indirectly relates to the input, and they are used by a digital estimation filter to perform the digital estimate of the input signal. This way, rather than the process of performing \textcolor{red}{(in)accurate} measurements of an analog signal using imperfect circuit components, sampling becomes the process of converting a redundant digital representation into an efficient one \cite{malmberg_thesis}. \textcolor{red}{Litt for tung setning?}
+\label{sec:cbc_overview}
+The control-bounded ADC approaches the A/D conversion problem differently compared to conventional A/D converters. The conceptual difference lies in the view on sampling. In a control-bounded converter, the analog input signal is never sampled in the traditional way. The circuit that constitutes a control-bounded ADC still contains quantizers, but the quantized signals are never treated as a sampled and quantized version of the input. Instead, they are intermediate digital signals that only indirectly relates to the input, and they are used by a digital estimation filter to perform the digital estimate of the input signal.
 
 To clarify this, consider the general block diagram shown in figure \ref{fig:cbadc1}.
 \begin{figure}[htbp]
@@ -56,7 +57,7 @@ Note that the output of the digital estimator is denoted as a continuous-time es
     \label{fig:cbadc2}
 \end{figure}
 
-Before going into detail on each of these building blocks, consider figure \ref{fig:cbadc2}, which shows the same block diagram, but with the DC box opened. From this figure it is evident that the structure of the control-bounded ADC is very similar to that of the continuous-time $\sd$ modulator in figure \ref{fig:ctsdmod}. The control-bounded converter may in fact be viewed as a generalization of the continuous-time $\sd$ ADC. As mentioned, the main difference between these architectures arises from the different interpretation of the control signal $\skv$. In the $\sd$ ADC, this signal is viewed as a filtered, sampled and quantized version of the input signal and the digital output is obtained by averaging this signal through a decimation filter. In the control-bounded perspective, the direct relation between $\skv$ and $\utv$ is ignored completely. Instead, we focus solely on the fact that $\stv$ is the contribution needed to stabilize the internal states of the analog system. This view leeds to a different estimation filter for the reconstruction of $\utvhat$.
+Before going into detail on each of these building blocks, consider figure \ref{fig:cbadc2}, which shows the same block diagram, but with the DC box opened. From this figure it is evident that the structure of the control-bounded ADC is very similar to that of the continuous-time $\sd$ modulator in figure \ref{fig:ctsdmod}. The control-bounded converter may in fact be viewed as a generalization of the continuous-time $\sd$ ADC. As mentioned, the main difference between these architectures arises from the different interpretation of the control signal $\skv$. In the $\sd$ ADC, this signal is viewed as a filtered, sampled and quantized version of the input signal and the digital output is obtained by averaging this signal through a decimation filter. In the control-bounded perspective, the direct relation between $\skv$ and $\utv$ is ignored completely. Instead, we focus solely on the fact that $\stv$ is the contribution needed to stabilize the internal states of the analog system. This view leads to a different estimation filter for the reconstruction of $\utvhat$.
 
 It should be noted that the contribution of the control-bounded ADC is not to provide an alternative decimation filter to already existing $\sd$ ADCs. Stepping away from the sampling oriented view of $\skv$, relaxes the requirements on the parts of the circuit that produces this signal. More importantly, the indirect relation between $\skv$ and $\utv$ enables a more general interaction between the analog and the digital parts of the system. There are for instance no need to require a one-to-one relation between the elements of these two signals, and they need not be of the same dimension. Each element of $\skv$ might contain information from all elements of $\utv$. These features are particularly interesting for multi-cannel systems which is of special interest in this thesis.
 
@@ -167,7 +168,7 @@ where $\exp$ denotes the matrix exponential.
 
 \section{Digital Control}
 \label{sec:04digcontrol}
-The digital control is a discrete time system which serves the purpose of stabilizing the analog system. It includes a sample-and-hold circuit, a one-bit quantizer and a D/A converter, as shown in figure \ref{fig:cbadc2}.\textcolor{red}{ The control observation $\stvtilde$ is sampled and quantized with a period $T$, resulting in the digital control signal $\skv$ which is passed on to the digital estimator. The D/A converter is in this thesis assumed to be a non-return to zero (NRZ) DAC generating the control contribution $\stv$.}
+The digital control is a discrete time system which serves the purpose of stabilizing the analog system. It includes a sample-and-hold circuit, a one-bit quantizer and a D/A converter, as shown in figure \ref{fig:cbadc2}. The control observation $\stvtilde$ is sampled and quantized with a period $T$, resulting in the digital control signal $\skv$ which is passed on to the digital estimator. The D/A converter is in this thesis assumed to be a non-return to zero (NRZ) DAC generating the control contribution $\stv$.
 
 The digital control is called effective if it manages to keep the state vector bounded, given a bounded input. The input vector $\utv$ is bounded if it satisfies
 \begin{equation}
@@ -178,7 +179,7 @@ Equivalently, the state vector $\xtv$ is bounded if it satisfies
     \label{eq:bx}
     ||\xtv||_{\infty} \leq b_{\bm{x}} \ \forall t.
 \end{equation}
-\textcolor{red}{In this thesis, the input signal will always be assumed bounded, and the boundary $b_{\bm{u}}$ is assumed to be determined by the application.} The boundary for the state vector, $b_{\bm{x}}$, is a free variable and determines the magnitude of the state vector of the analog system.
+In this thesis, the input signal will always be assumed bounded, and the boundary $b_{\bm{u}}$ is assumed to be determined by the application. The boundary for the state vector, $b_{\bm{x}}$, is a free variable and determines the magnitude of the state vector of the analog system.
 
 A thorough analysis of the criteria for an effective control is found in \cite{malmberg_thesis}. The analysis is useful for the theoretical understanding of the system, but not necessary for the design process and is therefore beyond the scope of this paper. Intuitively however, there are three quantities affecting the stability of the analog system. The sampling period $T$ of the digital control, the unity gain frequency of the analog system and the boundary $b_{\bm{x}}$. Increasing the speed of the analog system would require a shorter sampling period to counteract the faster growth of the system states. Reducing the boundary $b_{\bm{x}}$ would require either reducing the speed of the analog system or increasing the sampling frequency, in order to maintain a tighter bound.
 
@@ -237,7 +238,7 @@ Because the objective of the analog system is to greatly amplify the sought freq
             &= (\bm{h} * \bm{g} * \bm{u})(t) \label{eq:uhat_q_err2}
 \end{align}
 
-It is evident that $\utvhat$ could have been computed with arbitrary accuracy, if the output $\ytv$ was completely known to the digital estimator. This if statement is obvious, but it illustrates an important point. Instead of relying on an inevitably inaccurate measurement of $\ytv$, we choose to approximate this signal as constantly being zero. The accuracy of the estimate then relies on the validity of the approximation $\ytv \approx \bm{0}$, rather than the precision of a direct measurement of $\ytv$. This approximation is illustrated in figure \ref{fig:de_problem}, where it is indicated that the actual analog system output is disregarded and substituted with the fictional observation $\ytvtilde = \bm{0}$.
+It is evident that $\utvhat$ could have been computed with arbitrary accuracy, if the output $\ytv$ was completely known to the digital estimator. This if statement is obvious, but it illustrates an important point. Instead of relying on inevitably inaccurate measurement of $\ytv$ at fixed points in time, we choose to approximate this signal as being zero for all times $t$. The accuracy of the estimate then relies on the validity of the approximation $\ytv \approx \bm{0}$, rather than the precision of a direct measurement of $\ytv$ at some sampling points. This approximation is illustrated in figure \ref{fig:de_problem}, where it is indicated that the actual analog system output is disregarded and substituted with the fictional observation $\ytvtilde = \bm{0}$.
 
 Any deviation of $\ytv$ from $\bm{0}$ will result in a conversion error, meaning that $\ytv$ is the conversion error signal seen at the output of the analog system. This conversion error does not enter the estimate directly, but is filtered by $\htv$. From the Fourier transform of (\ref{eq:uhat_q_err2}),
 \begin{equation}
@@ -254,7 +255,7 @@ The error introduces by the approximation in (\ref{eq:uhat_approx}) is treated b
     \htv    & = \argmin_{\bar{\bm{h}}} \E[(\utvhat - \utv)^2] \\
             & = \argmin_{\bar{\bm{h}}} \E[((\bar{\bm{h}}*\bm{q})(t) - \utv)^2].
 \end{align}
-\textcolor{red}{This minimization problem is exactly the objective of the Wiener-filter \cite{optimal_filtering} and the impulse response matrix is given by the solution to the well-known Wiener-Hopf equations: - Går det litt fort her?}
+This minimization problem is exactly the objective of the Wiener-filter \cite{optimal_filtering} and the impulse response matrix is given by the solution to the well-known Wiener-Hopf equations:
 \begin{equation}
     \label{eq:wiener_hopf}
     (\bm{h}* \RqqT)(\tau) = \RuqT(-\tau)
@@ -288,6 +289,13 @@ In \cite{cbc_2011_loeliger} it was shown that the estimate $\utvhat$ can be comp
 As the algorithm is nothing more than an efficient way of computing (\ref{eq:uhat_conv_h_q}), a description of the implementation is not needed for understanding the behaviour of the digital estimator. It is however important for simulations and a concise description of the filter algorithm is provided in appendix \ref{a:de_filter_description}.
 
 
+
+
+
+
+
+
+
 \subsection{Practical Remarks}
 \label{sec:practical_remarks}
 We conclude this section with some practical considerations.
@@ -310,7 +318,7 @@ Assuming $||\Gw||_{\infty}$ is monotonically decreasing in $\omega$, the bandwid
 \end{equation}
 
 
-As the parameter $\eta$ appeared with a precise definition from the optimum filter derivation, it might sound strange that this parameter is now treated as a free variable. This may be understood as follows. In the derivation that lead to (\ref{eq:def_eta}), no assumptions where made on the bandwidth of the input signal $\utv$. If $||\Gw||_{\infty}$ is monotonically decreasing in $\omega$, then above a certain frequency, the error signal $\ytv$ will become comparable to $\utv$ in magnitude. Beyond this frequency, $\qtv$ contains more error than information, and the quality of the estimate is improved by reducing the influence of these higher frequency components. Therefore, with no prior knowledge of $\utv$, the optimum \enquote{cut-off} frequency of the estimation filter is given by $||\bm{G}(\omega_c)||_2 =\nicefrac{\sigma_{\bm{y}}^2}{\sigma_{\bm{u}}^2}.$
+As the parameter $\eta$ appeared with a precise definition from the optimum filter derivation, it might sound strange that this parameter is now treated as a free variable. This may be understood as follows. In the derivation that lead to (\ref{eq:def_eta}), no assumptions where made on the bandwidth of the input signal $\utv$. If $||\Gw||_{\infty}$ is monotonically decreasing in $\omega$, then above a certain frequency, the magnitude of the error signal, $\ytv$, and the input signal, $\utv$, will become comparable. Beyond this frequency, $\qtv$ contains more error than information, and the quality of the estimate is improved by reducing the influence of these higher frequency components. Therefore, with no prior knowledge of $\utv$, the optimum \enquote{cut-off} frequency of the estimation filter is given by $||\bm{G}(\omega_c)||_2 =\nicefrac{\sigma_{\bm{y}}^2}{\sigma_{\bm{u}}^2}.$
 
 In a practical application however, we usually know which frequency components of $\utv$ that contains the sought information. In this case the quality of the estimate would obviously be improved by choosing the cut-off frequency based on this prior knowledge.
 

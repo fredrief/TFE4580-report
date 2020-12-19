@@ -11,7 +11,12 @@
     Integrator gain          & $\beta$          & $\SI{315}{\mega\hertz}$               \\
     Sampling frequency       & $f_s$            & $\SI{650}{\mega\hertz}$                 \\
     Oversampling ratio       & $\text{OSR} \left( \frac{f_s}{2f_c} \right)$ & $32.5$     \\
-    Control gain             & $\kappa$          & $1$
+    System order             & $N$              & $5$                                     \\
+    Control gain             & $\kappa$          & $\SI{1}{\volt}$                                  \\
+    State boundary (input boundary)  & $b_{\bm{x}}$ ($b_{\bm{u}}$)    & $\SI{1}{\volt}$ ($\SI{1}{\volt}$)       \\
+    Input signal frequency   & $f_{in}$         & $\SI{650}{\kilo\hertz}$              \\
+    Input signal amplitude   & $a_{in}$         & $\SI{0.9}{\volt}$
+
     \end{tabular}
   \label{tab:CI_params}
 \end{table}

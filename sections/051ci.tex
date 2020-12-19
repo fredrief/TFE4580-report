@@ -2,7 +2,7 @@
 
 \chapter{The Chain-of-Integrators ADC}
 \label{sec:ciadc}
-\textcolor{red}{The simplest control-bounded ADC is the Chain-of-integrators ADC, as presented in \cite{cbc_2020_loeliger}.} This architecture consists of an integrator chain, where each integrator is stabilized by a local, independent digital control loop. A reader that is familiar with $\sd$ converters, might recognize this structure as very similar to a MASH $\sd$ modulator, and it is shown in \cite{malmberg_thesis} that the performance is also very similar. A block diagram of the full chain-of-integrators ADC is shown in figure \ref{fig:CI}.
+The simplest control-bounded ADC is the Chain-of-integrators ADC, as presented in \cite{cbc_2020_loeliger}. This architecture consists of an integrator chain, where each integrator is stabilized by a local, independent digital control loop. A reader that is familiar with $\sd$ converters, might recognize this structure as very similar to a MASH $\sd$ modulator, and it is shown in \cite{malmberg_thesis} that the performance is also very similar. A block diagram of the full chain-of-integrators ADC is shown in figure \ref{fig:CI}.
 
 This rather simple structure does not not utilize much of the mentioned design flexibility associated with control-bounded converters. However, the chain-of-integrators serves as an important starting point, and a thorough understand of its operating principle is helpful before considering more advanced architectures. The theoretical analysis is also rather straight forward and several important results from the analysis of the chain-of-integrators are directly applicable to other architectures. In addition, the simulations on the chain-of-integrators demonstrates the developed simulation framework which is an essential tool for further work on the topic.
 
@@ -21,7 +21,7 @@ This chapter is organized as follows. The first section presents a description o
 
 
 \section{Analog System}
-\textcolor{red}{The analog system of the chain-of-integrators ADC is part of the block diagram shown in figure \ref{fig:CI}.} The (ideal) integrators has a transfer function $\nicefrac{\beta}{s}$, and the parameter $\beta$ is referred to as the \textit{integrator gain}. The input signal $u(t)$ is passed through $N$ such integrators, each being controlled by a local, independent control loop. Note that the input signal and output estimates of this ADC are both scalars, as a multi-input chain-of-integrators would be nothing more than $L$ equal systems in parallel.
+The analog system of the chain-of-integrators ADC is part of the block diagram shown in figure \ref{fig:CI}. The (ideal) integrators has a transfer function $\nicefrac{\beta}{s}$, and the parameter $\beta$ is referred to as the \textit{integrator gain}. The input signal $u(t)$ is passed through $N$ such integrators, each being controlled by a local, independent control loop. Note that the input signal and output estimates of this ADC are both scalars, as a multi-input chain-of-integrators would be nothing more than $L$ equal systems in parallel.
 
 The system dynamics is described by the equation
 \begin{equation}
@@ -224,7 +224,7 @@ A plot of the estimated power spectral density is provided in figure \ref{fig:CI
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{figures/051chain/CI_SIM_N5.png}
-    \caption{Estimated PSD for a 5th order chain-of-integrator ADC.}
+    \caption{Estimated PSD for a 5th order chain-of-integrator ADC. $CI_m$ and $CI_s$ refers to multiple and single output reconstruction respectively.}
     \label{fig:CI_sim_N5}
 \end{figure}
 
@@ -252,5 +252,3 @@ A plot of the estimated power spectral density is provided in figure \ref{fig:CI
 %     \caption{A figure with two subfigures}
 %     \label{fig:1}
 %   \end{figure}
-
-\textcolor{red}{Noe mer å si om chain-of-integrators?}

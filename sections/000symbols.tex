@@ -14,11 +14,11 @@
         a_{(M-1)0} & \cdots & a_{(M-1)(N-1)}
     \end{pmatrix} \in R^{M \times N}
     $ \\
-    $\bm{A}_{i,j}$ & a sub-matrix, that is part of a block matrix, e.g.
+    $\bm{A}_{ij}$ & a sub-matrix, that is part of a block matrix, e.g.
     $\bm{A} =
     \begin{bmatrix}
-        \bm{A}_{0,0} & \bm{A}_{0,1} \\
-        \bm{A}_{1,0} & \bm{A}_{1,1}
+        \bm{A}_{00} & \bm{A}_{01} \\
+        \bm{A}_{10} & \bm{A}_{11}
     \end{bmatrix}
     $ \\
 
@@ -83,13 +83,13 @@
     $\Gmattilde$&  control observation matrix \\
     $\utv$      &  input signal \\
     $\utvhat$   &  estimated/reconstructed input signal \\
-    $\tilde{\bm{u}}(t)$   &  Hadamard transformed input signal  \\
+    $\tilde{\bm{u}}(t)$   &  normalized, Hadamard transformed input signal  \\
     $\xtv$      &  state vector \\
     $\skv$      &  control signal \\
     $\stv$      &  control contribution \\
     $\stvtilde$ &  control observation \\
     $\ytv$      &  signal observation \\
-    $\ytvbreve$ &  fictional signal observation \\
+    $\ytvbreve$ &  fictional, \enquote{open-loop}, signal observation \\
     $\qtv$      &  the control signal, seen at the output of the analog system \\
     $\Gw$       &  analog transfer function (ATF) matrix \\
     $\Hw$       &  noise transfer function (NTF) matrix \\
@@ -106,11 +106,13 @@
     DAC        &  digital to analog converter \\
     DC         &  digital control \\
     DE         &  digital estimator \\
+    LNA        &  low noise amplifier \\
     MIMO       &  multiple input, multiple output \\
     NTF        &  noise transfer function \\
     NRZ        &  non-return to zero \\
+    OTA        &  operational transconductance amplifier \\
     PSD        &  power spectral density \\
-    SAP        &  sub-aperture \\
+    SAP        &  sub-aperture processor \\
     STF        &  signal transfer function \\
 
 \end{tabular}
